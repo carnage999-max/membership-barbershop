@@ -1,0 +1,350 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import MembershipTierCard from "@/components/MembershipTierCard";
+import FrequencySliderCalculator from "@/components/FrequencySliderCalculator";
+import { Check, X } from "lucide-react";
+import { memberships as membershipsApi, tokenStorage } from "@/lib/api-client";
+
+interface MembershipPlan {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  cutsPerMonth: number;
+  mvpAccess: boolean;
+  priority: boolean;
+  location?: {
+    name: string;
+    city: string;
+    state: string;
+  };
+}
+
+const haircutOnlyTiers = [
+  {
+    name: "Essential",
+    price: 29,
+    visitsIncluded: 1,
+    rollover: false,
+    bookingPriority: false,
+    guestPasses: 0,
+    effectiveCostPerCut: 2.42,
+    track: "haircut-only" as const,
+  },
+  {
+    name: "Pro",
+    price: 49,
+    visitsIncluded: 2,
+    rollover: true,
+    bookingPriority: false,
+    guestPasses: 1,
+    effectiveCostPerCut: 2.04,
+    track: "haircut-only" as const,
+  },
+  {
+    name: "Elite",
+    price: 79,
+    visitsIncluded: 4,
+    rollover: true,
+    bookingPriority: true,
+    guestPasses: 2,
+    effectiveCostPerCut: 1.52,
+    track: "haircut-only" as const,
+  },
+  {
+    name: "Unlimited",
+    price: 99,
+    visitsIncluded: Infinity,
+    rollover: false,
+    bookingPriority: true,
+    guestPasses: 3,
+    effectiveCostPerCut: 1.24,
+    track: "haircut-only" as const,
+    isUnlimited: true,
+  },
+];
+
+const mvpTiers = [
+  {
+    name: "Essential MVP",
+    price: 49,
+    visitsIncluded: 1,
+    rollover: false,
+    bookingPriority: false,
+    guestPasses: 0,
+    effectiveCostPerCut: 4.08,
+    track: "mvp" as const,
+  },
+  {
+    name: "Pro MVP",
+    price: 79,
+    visitsIncluded: 2,
+    rollover: true,
+    bookingPriority: false,
+    guestPasses: 1,
+    effectiveCostPerCut: 3.29,
+    track: "mvp" as const,
+  },
+  {
+    name: "Elite MVP",
+    price: 119,
+    visitsIncluded: 4,
+    rollover: true,
+    bookingPriority: true,
+    guestPasses: 2,
+    effectiveCostPerCut: 2.29,
+    track: "mvp" as const,
+  },
+  {
+    name: "Unlimited MVP",
+    price: 149,
+    visitsIncluded: Infinity,
+    rollover: false,
+    bookingPriority: true,
+    guestPasses: 3,
+    effectiveCostPerCut: 1.87,
+    track: "mvp" as const,
+    isUnlimited: true,
+  },
+];
+
+export default function MembershipPage() {
+  const [plans, setPlans] = useState<MembershipPlan[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedTrack, setSelectedTrack] = useState<"haircut-only" | "mvp">("haircut-only");
+  const [recommendedTier, setRecommendedTier] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function loadPlans() {
+      try {
+        setLoading(true);
+        const result = await membershipsApi.getPlans();
+        setPlans(result.plans);
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to load membership plans:', error);
+        setLoading(false);
+      }
+    }
+
+    loadPlans();
+  }, []);
+
+  // Separate plans by MVP access
+  const haircutOnlyPlans = plans.filter(p => !p.mvpAccess);
+  const mvpPlans = plans.filter(p => p.mvpAccess);
+
+  const tiers = selectedTrack === "haircut-only" ? haircutOnlyPlans : mvpPlans;
+
+  if (loading) {
+    return (
+      <main className="min-h-screen pt-[60px] md:pt-0 bg-obsidian pb-32">
+        <div className="container mx-auto px-4 py-12">
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <div className="text-center">
+              <div className="w-16 h-16 border-4 border-gold-champagne/20 border-t-gold-champagne rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-bone/70">Loading membership plans...</p>
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
+  return (
+    <main className="min-h-screen pt-[60px] md:pt-0 bg-obsidian pb-32">
+      <div className="container mx-auto px-4 py-12">
+        <div className="text-center mb-12">
+          <h1 className="font-display text-5xl md:text-7xl font-bold text-bone mb-4">
+            Membership
+          </h1>
+          <p className="text-bone/70 text-lg max-w-2xl mx-auto">
+            Premium subscription product, not a haircut coupon. Choose your track and find your perfect plan.
+          </p>
+        </div>
+
+        {/* Track Selector */}
+        <div className="flex justify-center gap-4 mb-12">
+          <button
+            onClick={() => setSelectedTrack("haircut-only")}
+            className={`px-8 py-4 rounded-lg font-semibold transition-all duration-150 ${
+              selectedTrack === "haircut-only"
+                ? "bg-gold-champagne text-ink"
+                : "bg-slate/50 text-bone/70 hover:bg-slate/80"
+            }`}
+          >
+            Haircut-Only
+          </button>
+          <button
+            onClick={() => setSelectedTrack("mvp")}
+            className={`px-8 py-4 rounded-lg font-semibold transition-all duration-150 ${
+              selectedTrack === "mvp"
+                ? "bg-gold-champagne text-ink"
+                : "bg-slate/50 text-bone/70 hover:bg-slate/80"
+            }`}
+          >
+            MVP (includes wash + massage)
+          </button>
+        </div>
+
+        {/* Frequency Calculator */}
+        <div className="max-w-3xl mx-auto mb-16">
+          <FrequencySliderCalculator
+            onFrequencyChange={(visits, tier) => setRecommendedTier(tier)}
+          />
+        </div>
+
+        {/* Tier Cards */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {tiers.length > 0 ? (
+            tiers.map((plan) => (
+              <MembershipTierCard
+                key={plan.id}
+                name={plan.name}
+                price={plan.price}
+                visitsIncluded={plan.cutsPerMonth}
+                rollover={false}
+                bookingPriority={plan.priority}
+                guestPasses={0}
+                effectiveCostPerCut={plan.price / plan.cutsPerMonth}
+                track={plan.mvpAccess ? "mvp" : "haircut-only"}
+                isHighlighted={recommendedTier === plan.name}
+                onSelect={() => {
+                  const token = tokenStorage.get();
+                  if (!token) {
+                    alert('Please login to subscribe to a membership');
+                    return;
+                  }
+                  console.log(`Selected ${plan.name} - Plan ID: ${plan.id}`);
+                  // Implement subscription flow here
+                }}
+              />
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12">
+              <p className="text-bone/60">No plans available for this track</p>
+            </div>
+          )}
+        </div>
+
+        {/* Compare Table */}
+        <div className="bg-slate/50 backdrop-blur-sm rounded-xl p-8 border border-gold-champagne/20 mb-12">
+          <h2 className="font-display text-3xl font-bold text-bone mb-8 text-center">
+            Compare Plans
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-gold-champagne/20">
+                  <th className="text-left py-4 px-4 font-display text-lg font-bold text-bone">
+                    Feature
+                  </th>
+                  {tiers.map((tier) => (
+                    <th
+                      key={tier.name}
+                      className="text-center py-4 px-4 font-display text-lg font-bold text-bone"
+                    >
+                      {tier.name}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-gold-champagne/10">
+                  <td className="py-4 px-4 text-bone/80">Monthly Price</td>
+                  {tiers.map((tier) => (
+                    <td key={tier.name} className="py-4 px-4 text-center text-bone font-semibold">
+                      ${tier.price}
+                    </td>
+                  ))}
+                </tr>
+                <tr className="border-b border-gold-champagne/10">
+                  <td className="py-4 px-4 text-bone/80">Visits Included</td>
+                  {tiers.map((tier) => (
+                    <td key={tier.name} className="py-4 px-4 text-center text-bone">
+                      {tier.visitsIncluded === Infinity ? "Unlimited" : tier.visitsIncluded}
+                    </td>
+                  ))}
+                </tr>
+                <tr className="border-b border-gold-champagne/10">
+                  <td className="py-4 px-4 text-bone/80">Rollover</td>
+                  {tiers.map((tier) => (
+                    <td key={tier.name} className="py-4 px-4 text-center">
+                      {tier.rollover ? (
+                        <Check className="w-5 h-5 text-success mx-auto" />
+                      ) : (
+                        <X className="w-5 h-5 text-bone/30 mx-auto" />
+                      )}
+                    </td>
+                  ))}
+                </tr>
+                <tr className="border-b border-gold-champagne/10">
+                  <td className="py-4 px-4 text-bone/80">Booking Priority</td>
+                  {tiers.map((tier) => (
+                    <td key={tier.name} className="py-4 px-4 text-center">
+                      {tier.bookingPriority ? (
+                        <Check className="w-5 h-5 text-success mx-auto" />
+                      ) : (
+                        <X className="w-5 h-5 text-bone/30 mx-auto" />
+                      )}
+                    </td>
+                  ))}
+                </tr>
+                <tr>
+                  <td className="py-4 px-4 text-bone/80">Guest Passes</td>
+                  {tiers.map((tier) => (
+                    <td key={tier.name} className="py-4 px-4 text-center text-bone">
+                      {tier.guestPasses}
+                    </td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* FAQ */}
+        <div className="max-w-3xl mx-auto space-y-6">
+          <h2 className="font-display text-3xl font-bold text-bone mb-8 text-center">
+            Frequently Asked Questions
+          </h2>
+          {[
+            {
+              q: "Can I upgrade or downgrade my tier?",
+              a: "Yes, you can change your membership tier at any time. Changes take effect on your next billing cycle with proration applied.",
+            },
+            {
+              q: "What happens to unused visits?",
+              a: "Unused visits roll over on Pro and Elite tiers. Essential tier visits expire at the end of each month.",
+            },
+            {
+              q: "Can I pause my membership?",
+              a: "Yes, you can pause your membership for up to 3 months per year. Contact support to pause.",
+            },
+            {
+              q: "What is booking priority?",
+              a: "Elite and Unlimited members get priority access to busy-hour slots and MVP ritual appointments.",
+            },
+          ].map((faq, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+              className="bg-slate/50 backdrop-blur-sm rounded-xl p-6 border border-gold-champagne/20"
+            >
+              <h3 className="font-display text-xl font-bold text-bone mb-2">
+                {faq.q}
+              </h3>
+              <p className="text-bone/70">{faq.a}</p>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </main>
+  );
+}
+

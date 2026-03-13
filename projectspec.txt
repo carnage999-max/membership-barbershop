@@ -1,0 +1,213 @@
+Automotive Luxury Barbershop — Website Design Spec (Coder-Ready)
+Design + IA + UI Behaviors + Page-by-Page Wire Narrative • 2026-01-08
+
+Goal: Outperform Sports Clips online with a premium automotive identity, subscription-first conversion, real-time wait/queue transparency, and frictionless location + stylist selection.
+Non-negotiables: Car-themed luxury (dark woods, black/gold/red), Sports Clips-speed usability, membership-first pricing, map-first discovery, and best-in-class mobile experience.
+
+1) Brand & Visual System
+Style position: “Sports energy + private luxury garage lounge.” Fast, bold, confident. Premium materials. Clean typography. No clutter.
+Color tokens (CSS variables):
+Token
+Hex
+Usage
+--bg-obsidian
+#0B0C10
+Primary background
+--wood-espresso
+#2B1D14
+Wood tone anchor
+--gold-champagne
+#C8A24A
+Premium trim + highlights
+--red-crimson
+#B11226
+Action + urgency + accents
+--ink
+#111318
+Text on light surfaces
+--bone
+#F4F1EA
+Text on dark surfaces / cards
+--slate
+#2A2E36
+Secondary UI surfaces
+--success
+#1F8A70
+Available/ready
+--warning
+#F2B705
+Limited availability
+--danger
+#D62828
+High wait / closed
+Typography:
+• Display: Oswald / Bebas Neue (headlines, numbers, timers).
+• Body: Inter / Source Sans 3 (clarity, forms, legal).
+• Numeric timers: tabular-nums enabled.
+Iconography: thin-line + filled hybrid (automotive + barber). Use consistent stroke weight. Avoid playful cartoon icons.
+Imagery rules:
+• Use photo-real garage/supercar/classic car imagery as texture panels behind content (low opacity, vignette).
+• Feature interiors with dark wood + warm lighting + privacy dividers.
+• Avoid stock photos that look like salons. Everything should feel ‘motorsport lounge’ not beauty parlor.
+UI motion: subtle, premium. 120–180ms micro-interactions. Timer pulses in red as waits increase. Gold shimmer only on premium elements.
+
+2) Information Architecture
+Primary nav (desktop): Locations • Membership • Services • Stylists • Wait Times • Shop Experience • Gift • Login
+Mobile nav: bottom bar (Map, Wait, Book, Membership, Account).
+Core pages:
+• Home (conversion hub)
+• Locations Map (map-first discovery + wait times)
+• Location Detail (live queue + staff roster + book/check-in)
+• Membership (tiers + calculator + compare)
+• Services (haircut-only vs MVP add-ons)
+• Stylists (profiles + specialties + schedule + follow)
+• Shop Experience (cars theme, privacy booths, MVP ritual)
+• Gift Membership
+• Support (FAQ, policies, cancellations, billing)
+• Careers (hire barbers)
+• Franchise / Expansion (optional)
+• Legal (terms, privacy, auto-renew)
+
+3) Homepage — Page-by-Page Wire Narrative (Not Generic)
+Above-the-fold (desktop): split hero with a central “Garage Door” motif.
+Left: short headline + ‘Find My Shop’ + zipcode input. Right: live ‘Nearest Wait Time’ tile and ‘Join Membership’ price anchor.
+Hero background: dark wood + subtle supercar silhouette. Gold trim line under CTA.
+Section: Live Wait Grid
+• Horizontal ‘pit-lane’ strip of nearby shops with live wait: 5, 12, 25 minutes.
+• Each card shows: open/closed, next-available, top-rated stylist on shift, “check-in” button.
+Section: Membership First (with a ‘How often do you cut?’ slider)
+• Slider: 1x/mo, 2x/mo, weekly, unlimited.
+• Outputs: recommended tier + effective cost per cut + projected savings.
+• Two buttons: “Join” and “Try MVP Ritual.”
+Section: The MVP Ritual (car-themed)
+• Present haircut as the ‘tune-up’ and shampoo/massage as the ‘full detail.’
+• Steps shown as 5 premium tiles: Check-in → Cut → Hot Towel → Wash → Scalp/Neck Massage → Style.
+• Each tile has a tiny automotive metaphor (pit-stop, detailing, alignment) without cringe.
+Section: Privacy Booths
+• 3-panel story: Divider display, rear curtains, and quiet lighting.
+• Copy frames privacy as premium, not secrecy.
+Section: Cars Wall (Interactive)
+• “Choose your lane” carousel: Classics / Supercars / Track Day.
+• Each lane highlights seasonal decor packages and shop vibe.
+Section: Stylists You Can Follow
+• User can ‘follow’ a stylist to get alerts when they’re on shift.
+• “Next shift in 2 days” with add-to-calendar.
+Section: Reviews as lap times
+• Replace generic testimonials with “Best Fade,” “Fastest In/Out,” “Best MVP Wash.”
+• Show rating + last 30 days trend line.
+Footer: deep legal + locations index + membership billing links + app download CTA.
+
+4) Locations Map — The Core Differentiator
+Map-first layout like rideshare:
+• Left panel: results list with live wait timers and ‘check-in’ buttons.
+• Right: map pins color-coded by wait (green/yellow/red).
+• Top filters: Open now, <10 min, MVP available, Kids friendly, Quiet booths, Wheelchair access.
+• Pin hover shows: Next available, #stylists on shift, MVP slots, and ‘Route’ link.
+• “My Stylist” toggle moves preferred stylist locations to top.
+
+5) Location Detail — Live Queue + Staff Roster
+Header area: location photo + address + hours + live wait.
+Live Wait Module (centerpiece):
+• Shows: next available in minutes + confidence band (e.g., “12–16 min”).
+• Shows live roster: who is cutting now, who is finishing soon, who is on break.
+• “Check-in” creates a queue token; user sees countdown and can switch to another nearby shop.
+Stylist cards: photo, specialties (fade, beard, kids), average cut time, rating, on-shift indicator.
+Add-ons: MVP wash/massage toggle. Shows slot availability.
+Retail strip: featured products, ‘add to my pickup’ to be ready at checkout.
+
+6) Membership — Tier Design & UX
+Membership page must feel like a premium subscription product, not a haircut coupon.
+Tier layout: 3 columns + 1 ‘Unlimited’ spotlight card.
+Define two tracks: Haircut-Only and MVP (includes wash + massage each visit).
+Tier suggestion logic based on frequency slider (saved to user profile).
+Tier UI requirements:
+• Show visits included + rollover policy + booking priority + guest passes.
+• Show ‘effective $/cut’ at chosen frequency.
+• Show ‘busy-hour priority’ badge for higher tiers.
+• Use gold trim and red CTA for top tier; neutral for others.
+
+7) Services — Menu Without Looking Like a Menu
+Services page is a ‘build sheet’ like a car configurator:
+• Base: Haircut + style.
+• Options: Beard trim, line-up, hot towel, MVP wash + massage, kids cut.
+• Each option has an icon and time estimate, plus whether it’s included in each membership tier.
+• Toggle: “Show what my membership covers” when logged in.
+
+8) Account Experience (Web + App Parity)
+Account home cards:
+• My membership (tier, renewal date, manage billing)
+• My queue token (if checked-in)
+• My stylists (followed)
+• My visit history (notes: clipper guard, fade height, etc.)
+• Family members (profiles for kids)
+• Payment methods + receipts
+Visit notes UX: after each service, stylist selects presets (fade type, guard, neckline) and saves to profile.
+
+9) Developer Narrative — Functional Flow & System Behavior
+A) Real-time Wait Engine (web display requirements):
+• Each location publishes: active stylists, average service times by service type, current queue length, and in-progress cut elapsed time.
+• Wait time calculation combines: (queue length ÷ active stylists) × rolling average cut time, adjusted by active cut progress.
+• Frontend shows both exact minutes and a confidence band; updates every 15–30 seconds.
+• When user checks in: generate token, store ETA, push updates; allow switching locations (token transfer rules).
+B) Booking Model (choose one):
+• Walk-in check-in (Sports Clips style) as default.
+• Optional scheduled ‘MVP slots’ as premium benefit (limited blocks) to protect throughput.
+C) Membership Billing:
+• Stripe subscriptions with tiers, proration rules, upgrade/downgrade policies, pause, cancellation, and auto-renew compliance.
+• Membership entitlements stored server-side; frontend reads entitlements to enable/disable add-ons and priority.
+D) Location + Staff Model:
+• Locations: geofence, hours, service capabilities, chair count, price zone, holiday overrides.
+• Staff: shifts, specialties, avg cut time, rating, on-break flags, capacity constraints.
+E) Performance requirements:
+• LCP < 2.5s on mobile. Map + wait list must be usable in < 1.5s after first paint.
+• Real-time modules are lazy-loaded; use edge caching for static content and websocket/SSE for wait feed.
+
+10) Component Library (Build Once, Use Everywhere)
+• WaitTimeBadge (minutes + confidence band + status color)
+• LocationCard (live wait, open status, check-in, route)
+• StylistCard (on shift, specialties, avg time, follow)
+• MembershipTierCard (benefits, included services, CTA)
+• FrequencySliderCalculator (recommend tier + savings)
+• ConfiguratorOptionTile (service add-on + time + included flag)
+• QueueTokenWidget (countdown + instructions + switch location)
+• RetailPickupStrip (add to pickup)
+• PrivacyBoothFeaturePanel (divider + curtain story)
+• HeroGarageDoor (animated split hero module)
+
+11) Copy Starter Pack (Unique Tone, Not Generic)
+Hero headline options (pick one):
+• Your Cut. Your Crew. Your Lane.
+• Pit‑Stop Fast. Lounge‑Level Luxury.
+• A Better Cut—Built Like a Performance Shop.
+Microcopy examples:
+• “Next chair opens in”
+• “Check‑in now, walk in confident.”
+• “MVP Ritual available today.”
+• “Follow this stylist for on‑shift alerts.”
+• “Privacy curtain available on request.”
+
+12) Page Modules Checklist (for Sprint Planning)
+Page
+Modules
+Home
+HeroGarageDoor, LiveWaitGrid, MembershipCalculator, MVP_Ritual, PrivacyBooths, CarsWall, FollowStylists, ReviewsTrend
+Locations Map
+MapPins, Filters, LocationCardList, RouteLinks, MyStylistToggle
+Location Detail
+LiveWaitModule, StaffRoster, CheckInCTA, AddOnsToggle, RetailPickupStrip, Hours, Reviews
+Membership
+TierCards (Haircut-only + MVP), FrequencyCalculator, CompareTable, FAQ, StripeCheckout
+Services
+Configurator (base + add-ons), MembershipCoverageToggle
+Stylists
+Directory, StylistProfile, Follow + Alerts, Availability
+Shop Experience
+Gallery, CarThemeStory, PrivacyBoothsStory, MVP_RitualStory
+Support
+FAQ, Billing, Cancellations, Policies
+
+13) Implementation Notes (Coder Direction)
+Recommended stack (web): Next.js + Tailwind (tokens) + Mapbox/Google Maps + Stripe + Postgres + Redis + Websocket/SSE for wait feed.
+Design handoff: Figma file with tokens, components, and responsive variants (mobile-first).
+Accessibility: AA contrast; keyboard nav for all booking flows; motion-reduce option.
+Analytics: events for ‘Find Shop’, ‘Check-in’, ‘Join Membership’, ‘Follow Stylist’, ‘Switch Location’, ‘Upgrade Tier’.

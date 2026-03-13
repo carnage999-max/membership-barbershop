@@ -1,0 +1,328 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER & AUTH SERVICE
+// ============================================
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  phone         String?  @unique
+  passwordHash  String
+  firstName     String
+  lastName      String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  memberships   UserMembership[]
+  checkIns      CheckIn[]
+  reviews       Review[]
+  payments      Payment[]
+  stylistFollows StylistFollow[]
+
+  @@map("users")
+}
+
+// ============================================
+// LOCATION SERVICE
+// ============================================
+
+model Location {
+  id          String   @id @default(uuid())
+  name        String
+  address     String
+  city        String
+  state       String
+  zipCode     String
+  phone       String
+  latitude    Float?
+  longitude   Float?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Location Settings
+  openTime    String   
+  closeTime   String   
+  timezone    String   @default("America/New_York")
+
+  // Relations
+  stylists        Stylist[]
+  membershipPlans MembershipPlan[]
+  queue           QueueEntry[]
+  checkIns        CheckIn[]
+
+  @@map("locations")
+}
+
+// ============================================
+// MEMBERSHIP SERVICE
+// ============================================
+
+model MembershipPlan {
+  id          String   @id @default(uuid())
+  locationId  String
+  name        String   
+  description String
+  price       Float    
+  cutsPerMonth Int     
+  mvpAccess   Boolean  @default(false) 
+  priority    Boolean  @default(false) 
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  location    Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  memberships UserMembership[]
+
+  @@map("membership_plans")
+}
+
+model UserMembership {
+  id          String   @id @default(uuid())
+  userId      String
+  planId      String
+  status      MembershipStatus @default(ACTIVE)
+  startDate   DateTime @default(now())
+  endDate     DateTime?
+  billingCycle String  @default("monthly") 
+  cutsUsed    Int      @default(0)
+  cutsRemaining Int
+  autoRenew   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan    MembershipPlan @relation(fields: [planId], references: [id])
+
+  @@map("user_memberships")
+}
+
+enum MembershipStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  CANCELLED
+  EXPIRED
+}
+
+// ============================================
+// STYLIST SERVICE
+// ============================================
+
+model Stylist {
+  id          String   @id @default(uuid())
+  locationId  String
+  firstName   String
+  lastName    String
+  bio         String?
+  photoUrl    String?
+  specialties String[] 
+  avgCutTime  Int      
+  rating      Float    @default(4.5)
+  totalReviews Int     @default(0)
+  onShift     Boolean  @default(false)
+  onBreak     Boolean  @default(false)
+  nextShiftAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  location   Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  checkIns   CheckIn[]
+  reviews    Review[]
+  followers  StylistFollow[]
+
+  @@map("stylists")
+}
+
+model StylistFollow {
+  id         String   @id @default(uuid())
+  userId     String
+  stylistId  String
+  createdAt  DateTime @default(now())
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stylist Stylist @relation(fields: [stylistId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, stylistId])
+  @@map("stylist_follows")
+}
+
+// ============================================
+// QUEUE & ETA SERVICE
+// ============================================
+
+model QueueEntry {
+  id            String   @id @default(uuid())
+  locationId    String
+  userId        String?
+  guestName     String?  
+  guestPhone    String?
+  position      Int
+  estimatedWait Int      
+  confidenceBandMin Int  
+  confidenceBandMax Int  
+  status        QueueStatus @default(WAITING)
+  stylistId     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  calledAt      DateTime?
+  completedAt   DateTime?
+
+  // Relations
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@map("queue_entries")
+}
+
+enum QueueStatus {
+  WAITING
+  CALLED
+  IN_SERVICE
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+// ============================================
+// CHECK-IN SERVICE
+// ============================================
+
+model CheckIn {
+  id          String   @id @default(uuid())
+  userId      String
+  locationId  String
+  stylistId   String?
+  checkInTime DateTime @default(now())
+  startTime   DateTime?
+  endTime     DateTime?
+  services    String[] 
+  totalCost   Float?
+  paymentId   String?
+  status      CheckInStatus @default(CHECKED_IN)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  location Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  stylist  Stylist? @relation(fields: [stylistId], references: [id])
+
+  @@map("check_ins")
+}
+
+enum CheckInStatus {
+  CHECKED_IN
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+// ============================================
+// REVIEW SERVICE
+// ============================================
+
+model Review {
+  id         String   @id @default(uuid())
+  userId     String
+  stylistId  String
+  rating     Int      
+  comment    String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stylist Stylist @relation(fields: [stylistId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+// ============================================
+// PAYMENT & BILLING SERVICE
+// ============================================
+
+model Payment {
+  id              String   @id @default(uuid())
+  userId          String
+  amount          Float
+  currency        String   @default("usd")
+  status          PaymentStatus @default(PENDING)
+  stripePaymentId String?  @unique
+  paymentMethod   String?  
+  description     String?
+  metadata        Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+}
+
+// ============================================
+// NOTIFICATION SERVICE
+// ============================================
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String?
+  type      NotificationType
+  channel   NotificationChannel
+  recipient String   
+  subject   String?
+  message   String
+  status    NotificationStatus @default(PENDING)
+  sentAt    DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("notifications")
+}
+
+enum NotificationType {
+  MEMBERSHIP_ACTIVATED
+  MEMBERSHIP_EXPIRING
+  PAYMENT_SUCCESS
+  PAYMENT_FAILED
+  QUEUE_UPDATE
+  CHECK_IN_REMINDER
+  STYLIST_ON_SHIFT
+  GENERAL
+}
+
+enum NotificationChannel {
+  EMAIL
+  SMS
+  PUSH
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+  BOUNCED
+}
