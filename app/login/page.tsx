@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { auth, tokenStorage, session } from "@/lib/api-client";
+import { toast } from "react-hot-toast";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -26,9 +27,11 @@ export default function LoginPage() {
       session.setCurrentUser(result.user);
 
       // Redirect to account page
+      toast.success("Welcome back!");
       router.push("/account");
     } catch (err: any) {
       setError(err.message || "Login failed");
+      toast.error(err.message || "Failed to login");
       setLoading(false);
     }
   };

@@ -68,46 +68,46 @@ const haircutOnlyTiers = [
   },
 ];
 
-const mvpTiers = [
+const signatureTiers = [
   {
-    name: "Essential MVP",
+    name: "Essential Signature",
     price: 49,
     visitsIncluded: 1,
     rollover: false,
     bookingPriority: false,
     guestPasses: 0,
     effectiveCostPerCut: 4.08,
-    track: "mvp" as const,
+    track: "signature" as const,
   },
   {
-    name: "Pro MVP",
+    name: "Pro Signature",
     price: 79,
     visitsIncluded: 2,
     rollover: true,
     bookingPriority: false,
     guestPasses: 1,
     effectiveCostPerCut: 3.29,
-    track: "mvp" as const,
+    track: "signature" as const,
   },
   {
-    name: "Elite MVP",
+    name: "Elite Signature",
     price: 119,
     visitsIncluded: 4,
     rollover: true,
     bookingPriority: true,
     guestPasses: 2,
     effectiveCostPerCut: 2.29,
-    track: "mvp" as const,
+    track: "signature" as const,
   },
   {
-    name: "Unlimited MVP",
+    name: "Unlimited Signature",
     price: 149,
     visitsIncluded: Infinity,
     rollover: false,
     bookingPriority: true,
     guestPasses: 3,
     effectiveCostPerCut: 1.87,
-    track: "mvp" as const,
+    track: "signature" as const,
     isUnlimited: true,
   },
 ];
@@ -115,7 +115,7 @@ const mvpTiers = [
 export default function MembershipPage() {
   const [plans, setPlans] = useState<MembershipPlan[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedTrack, setSelectedTrack] = useState<"haircut-only" | "mvp">("haircut-only");
+  const [selectedTrack, setSelectedTrack] = useState<"haircut-only" | "signature">("haircut-only");
   const [recommendedTier, setRecommendedTier] = useState<string | null>(null);
   const [selectedPlan, setSelectedPlan] = useState<MembershipPlan | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -139,9 +139,9 @@ export default function MembershipPage() {
 
   // Separate plans by MVP access
   const haircutOnlyPlans = plans.filter(p => !p.mvpAccess);
-  const mvpPlans = plans.filter(p => p.mvpAccess);
+  const signaturePlans = plans.filter(p => p.mvpAccess);
 
-  const tiers = selectedTrack === "haircut-only" ? haircutOnlyPlans : mvpPlans;
+  const tiers = selectedTrack === "haircut-only" ? haircutOnlyPlans : signaturePlans;
 
   if (loading) {
     return (
@@ -183,9 +183,9 @@ export default function MembershipPage() {
             Haircut-Only
           </button>
           <button
-            onClick={() => setSelectedTrack("mvp")}
+            onClick={() => setSelectedTrack("signature")}
             className={`px-8 py-4 rounded-lg font-semibold transition-all duration-150 ${
-              selectedTrack === "mvp"
+              selectedTrack === "signature"
                 ? "bg-gold-champagne text-ink"
                 : "bg-slate/50 text-bone/70 hover:bg-slate/80"
             }`}
@@ -198,11 +198,15 @@ export default function MembershipPage() {
         <div className="max-w-3xl mx-auto mb-16">
           <FrequencySliderCalculator
             onFrequencyChange={(visits, tier) => setRecommendedTier(tier)}
+            onJoinClick={() => {
+              const el = document.getElementById("membership-tiers");
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
           />
         </div>
 
         {/* Tier Cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+        <div id="membership-tiers" className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
           {tiers.length > 0 ? (
             tiers.map((plan) => (
               <MembershipTierCard
@@ -214,7 +218,7 @@ export default function MembershipPage() {
                 bookingPriority={plan.priority}
                 guestPasses={0}
                 effectiveCostPerCut={plan.price / plan.cutsPerMonth}
-                track={plan.mvpAccess ? "mvp" : "haircut-only"}
+                track={plan.mvpAccess ? "signature" : "haircut-only"}
                 isHighlighted={recommendedTier === plan.name}
                 onSelect={() => {
                   const token = tokenStorage.get();

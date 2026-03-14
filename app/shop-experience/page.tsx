@@ -2,16 +2,16 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import PrivacyBoothFeaturePanel from "@/components/PrivacyBoothFeaturePanel";
+import SuiteFeaturePanel from "@/components/SuiteFeaturePanel";
 import { Scissors, Sparkles, Zap, Droplets, Hand, Sparkle } from "lucide-react";
 
-const mvpSteps = [
-  { icon: <Zap className="w-6 h-6" />, title: "Check-in", description: "Seamless entry" },
-  { icon: <Scissors className="w-6 h-6" />, title: "Cut", description: "Precision trim" },
-  { icon: <Droplets className="w-6 h-6" />, title: "Hot Towel", description: "Steam treatment" },
-  { icon: <Sparkles className="w-6 h-6" />, title: "Wash", description: "Deep clean" },
-  { icon: <Hand className="w-6 h-6" />, title: "Massage", description: "Scalp & neck" },
-  { icon: <Sparkle className="w-6 h-6" />, title: "Style", description: "Final finish" },
+const signatureSteps = [
+  { icon: <Zap className="w-6 h-6" />, title: "The Welcome", description: "Seamless concierge entry" },
+  { icon: <Scissors className="w-6 h-6" />, title: "The Architecture", description: "Bespoke profile design" },
+  { icon: <Droplets className="w-6 h-6" />, title: "Thermal Reset", description: "Ozone steam treatment" },
+  { icon: <Sparkles className="w-6 h-6" />, title: "Signature Wash", description: "Deep scalp conditioning" },
+  { icon: <Hand className="w-6 h-6" />, title: "Calibration", description: "Neck & shoulder release" },
+  { icon: <Sparkle className="w-6 h-6" />, title: "Final Polish", description: "Master artisan finish" },
 ];
 
 export default function ShopExperiencePage() {
@@ -23,21 +23,21 @@ export default function ShopExperiencePage() {
             The <span className="text-gold-champagne">Membership</span> Lounge
           </h1>
           <p className="text-bone/70 text-lg max-w-2xl mx-auto">
-            Automotive luxury meets barbershop excellence
+            Where bespoke grooming meets absolute lounge luxury
           </p>
         </div>
 
-        {/* Car Theme Story */}
+        {/* Atmosphere Story */}
         <section className="mb-20">
           <div className="relative h-96 rounded-2xl overflow-hidden bg-wood-espresso mb-8">
             <div className="absolute inset-0 bg-gradient-to-br from-obsidian/80 via-transparent to-wood-espresso/50" />
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center z-10">
-                <h2 className="font-display text-5xl md:text-7xl font-bold text-bone mb-4">
-                  Choose Your Lane
+              <div className="text-center z-10 px-4">
+                <h2 className="font-display text-5xl md:text-7xl font-bold text-bone mb-4 uppercase tracking-tighter">
+                  Choose Your <span className="text-gold-champagne">Atmosphere</span>
                 </h2>
-                <p className="text-bone/70 text-xl max-w-2xl">
-                  Each location features unique automotive themes: Classics, Supercars, and Track Day vibes
+                <p className="text-bone/70 text-xl max-w-2xl mx-auto">
+                  Select your preferred environment: Heritage, Prestige, or the exclusive Reserve suite
                 </p>
               </div>
             </div>
@@ -48,15 +48,15 @@ export default function ShopExperiencePage() {
         <section className="mb-20">
           <div className="text-center mb-12">
             <h2 className="font-display text-4xl md:text-6xl font-bold text-bone mb-4 italic uppercase tracking-tighter">
-              The <span className="text-gold-champagne">Concours</span> Detail
+              The Concours <span className="text-gold-champagne">Detail</span>
             </h2>
             <p className="text-bone/70 text-lg max-w-2xl mx-auto">
-              Haircut as the tune-up. Shampoo and massage as the full detail.
+              A meticulously curated grooming experience that values your time and your appearance.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {mvpSteps.map((step, index) => (
+            {signatureSteps.map((step, index) => (
               <motion.div
                 key={step.title}
                 initial={{ opacity: 0, y: 20 }}
@@ -77,30 +77,30 @@ export default function ShopExperiencePage() {
           </div>
         </section>
 
-        {/* Privacy Booths Story */}
+        {/* Private Suites Story */}
         <section className="space-y-16">
           <div className="text-center mb-12">
-            <h2 className="font-display text-4xl md:text-6xl font-bold text-bone mb-4">
-              Privacy Booths
+            <h2 className="font-display text-4xl md:text-6xl font-bold text-bone mb-4 italic uppercase tracking-tighter">
+              Private <span className="text-gold-champagne">Suites</span>
             </h2>
             <p className="text-bone/70 text-lg">
-              Premium privacy, not secrecy
+              Individual sanctuaries for the discerning member
             </p>
           </div>
 
-          <PrivacyBoothFeaturePanel
-            title="Divider Display"
-            description="Elegant dividers create intimate spaces while maintaining the open, luxurious atmosphere of our garage-inspired lounges."
+          <SuiteFeaturePanel
+            title="Suite Dividers"
+            description="Elegant dividers create intimate spaces while maintaining the open, luxurious atmosphere of our lounge environments."
             reverse={false}
           />
 
-          <PrivacyBoothFeaturePanel
-            title="Rear Curtains"
+          <SuiteFeaturePanel
+            title="Privacy Curtains"
             description="Optional privacy curtains provide complete seclusion when you need it, available on request for your comfort."
             reverse={true}
           />
 
-          <PrivacyBoothFeaturePanel
+          <SuiteFeaturePanel
             title="Quiet Lighting"
             description="Warm, focused lighting creates a calming environment that frames privacy as premium luxury, not isolation."
             reverse={false}

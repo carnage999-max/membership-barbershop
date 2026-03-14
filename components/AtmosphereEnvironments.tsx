@@ -4,32 +4,32 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Crown, Zap, Trophy } from "lucide-react";
 
-const lanes = [
+const environments = [
   {
-    id: "classics",
-    name: "Classics",
-    description: "Vintage elegance meets timeless style",
+    id: "heritage",
+    name: "Heritage",
+    description: "Classic barbershop elegance with modern comfort",
     color: "from-wood-espresso to-obsidian",
     icon: Crown,
   },
   {
-    id: "supercars",
-    name: "Supercars",
-    description: "Performance-driven luxury experience",
-    color: "from-red-crimson/20 to-obsidian",
+    id: "prestige",
+    name: "Prestige",
+    description: "High-performance luxury and contemporary style",
+    color: "from-slate/40 to-obsidian",
     icon: Zap,
   },
   {
-    id: "track-day",
-    name: "Track Day",
-    description: "Racing heritage and modern precision",
+    id: "reserve",
+    name: "Reserve",
+    description: "Exclusive intimacy and tailored precision",
     color: "from-gold-champagne/20 to-obsidian",
     icon: Trophy,
   },
 ];
 
-export default function CarsWall() {
-  const [activeLane, setActiveLane] = useState(0);
+export default function AtmosphereEnvironments() {
+  const [activeEnvironment, setActiveEnvironment] = useState(0);
 
   return (
     <section className="py-20 relative overflow-hidden">
@@ -49,32 +49,32 @@ export default function CarsWall() {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
-          <h2 className="font-display text-4xl md:text-6xl font-bold text-bone mb-4">
-            Choose Your Lane
+          <h2 className="font-display text-4xl md:text-6xl font-bold text-bone mb-4 italic uppercase tracking-tighter">
+            Choose Your <span className="text-gold-champagne">Atmosphere</span>
           </h2>
           <p className="text-bone/70 text-lg">
-            Each shop features seasonal decor packages and unique vibes
+            Each shop features curated decor packages and custom environments
           </p>
         </div>
 
         <div className="relative">
           {/* Carousel */}
           <div className="relative h-96 md:h-[500px] rounded-2xl overflow-hidden bg-slate/30">
-            {lanes.map((lane, index) => {
-              const Icon = lane.icon;
-              const isActive = index === activeLane;
+            {environments.map((env, index) => {
+              const Icon = env.icon;
+              const isActive = index === activeEnvironment;
 
               return (
                 <motion.div
-                  key={lane.id}
-                  initial={{ opacity: 0, x: index === activeLane ? 0 : index > activeLane ? 100 : -100 }}
+                  key={env.id}
+                  initial={{ opacity: 0, x: index === activeEnvironment ? 0 : index > activeEnvironment ? 100 : -100 }}
                   animate={{
                     opacity: isActive ? 1 : 0,
-                    x: (index - activeLane) * 100,
+                    x: (index - activeEnvironment) * 100,
                     scale: isActive ? 1 : 0.95,
                   }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
-                  className={`absolute inset-0 bg-linear-to-br ${lane.color} flex items-center justify-center`}
+                  className={`absolute inset-0 bg-linear-to-br ${env.color} flex items-center justify-center`}
                   style={{ pointerEvents: isActive ? 'auto' : 'none' }}
                 >
                   <div className="text-center space-y-6">
@@ -88,10 +88,10 @@ export default function CarsWall() {
                         <Icon className="w-12 h-12 md:w-16 md:h-16 text-gold-champagne" />
                       </div>
                     </motion.div>
-                    <h3 className="font-display text-5xl md:text-7xl font-bold text-bone mb-4">
-                      {lane.name}
+                    <h3 className="font-display text-5xl md:text-7xl font-bold text-bone mb-4 uppercase tracking-tighter">
+                      {env.name}
                     </h3>
-                    <p className="text-bone/70 text-xl max-w-2xl mx-auto px-4">{lane.description}</p>
+                    <p className="text-bone/70 text-xl max-w-2xl mx-auto px-4 italic">{env.description}</p>
                   </div>
                 </motion.div>
               );
@@ -101,32 +101,32 @@ export default function CarsWall() {
           {/* Navigation */}
           <div className="flex items-center justify-center gap-4 mt-8">
             <button
-              onClick={() => setActiveLane((prev) => (prev > 0 ? prev - 1 : lanes.length - 1))}
+              onClick={() => setActiveEnvironment((prev) => (prev > 0 ? prev - 1 : environments.length - 1))}
               className="p-3 bg-slate/50 hover:bg-slate/80 rounded-full transition-colors duration-150 border border-gold-champagne/20"
-              aria-label="Previous lane"
+              aria-label="Previous environment"
             >
               <ChevronLeft className="w-6 h-6 text-bone" />
             </button>
 
             <div className="flex gap-2">
-              {lanes.map((_, index) => (
+              {environments.map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => setActiveLane(index)}
+                  onClick={() => setActiveEnvironment(index)}
                   className={`w-2 h-2 rounded-full transition-all duration-150 ${
-                    index === activeLane
+                    index === activeEnvironment
                       ? "bg-gold-champagne w-8"
                       : "bg-bone/30 hover:bg-bone/50"
                   }`}
-                  aria-label={`Go to ${lanes[index].name}`}
+                  aria-label={`Go to ${environments[index].name}`}
                 />
               ))}
             </div>
 
             <button
-              onClick={() => setActiveLane((prev) => (prev < lanes.length - 1 ? prev + 1 : 0))}
+              onClick={() => setActiveEnvironment((prev) => (prev < environments.length - 1 ? prev + 1 : 0))}
               className="p-3 bg-slate/50 hover:bg-slate/80 rounded-full transition-colors duration-150 border border-gold-champagne/20"
-              aria-label="Next lane"
+              aria-label="Next environment"
             >
               <ChevronRight className="w-6 h-6 text-bone" />
             </button>

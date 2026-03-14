@@ -8,9 +8,16 @@ export function useUser() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const currentUser = session.getCurrentUser();
-    setUser(currentUser);
-    setLoading(false);
+    const updateSession = () => {
+      const currentUser = session.getCurrentUser();
+      setUser(currentUser);
+      setLoading(false);
+    };
+    
+    updateSession();
+    
+    window.addEventListener('auth-change', updateSession);
+    return () => window.removeEventListener('auth-change', updateSession);
   }, []);
 
   const isAdmin = user?.role === "ADMIN";

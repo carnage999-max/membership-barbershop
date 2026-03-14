@@ -14,10 +14,10 @@ interface ReviewMetric {
 const reviews: ReviewMetric[] = [
   { category: "Best Fade", rating: 4.9, trend: "up", trendValue: 0.2, last30Days: 127 },
   { category: "Fastest In/Out", rating: 4.8, trend: "up", trendValue: 0.1, last30Days: 98 },
-  { category: "Best MVP Wash", rating: 4.9, trend: "stable", trendValue: 0, last30Days: 89 },
+  { category: "Best Signature Wash", rating: 4.9, trend: "stable", trendValue: 0, last30Days: 89 },
 ];
 
-export default function ReviewsLapTimes() {
+export default function PerformanceMetrics() {
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case "up":
@@ -33,11 +33,11 @@ export default function ReviewsLapTimes() {
     <section className="py-20 bg-slate/20">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="font-display text-4xl md:text-6xl font-bold text-bone mb-4">
-            Reviews as Lap Times
+          <h2 className="font-display text-4xl md:text-6xl font-bold text-bone mb-4 italic uppercase tracking-tighter">
+            Signature <span className="text-gold-champagne">Performance</span>
           </h2>
           <p className="text-bone/70 text-lg">
-            Performance metrics, not paragraphs
+            Certified excellence in every category
           </p>
         </div>
 

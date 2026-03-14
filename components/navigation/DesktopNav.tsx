@@ -12,8 +12,7 @@ const navItems = [
   { href: "/locations", label: "Locations" },
   { href: "/membership", label: "Membership Barbershop" },
   { href: "/services", label: "Services" },
-  { href: "/stylists", label: "The Crew" },
-  { href: "/wait", label: "Waitlist" },
+  { href: "/stylists", label: "Stylists" },
   { href: "/shop-experience", label: "Shop Experience" },
   { href: "/gift", label: "Gift" },
 ];

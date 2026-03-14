@@ -166,6 +166,11 @@ export const payments = {
       body: { planId, amount },
       token,
     }),
+  createPortalSession: (token: string) =>
+    apiCall('/api/payments/create-portal', {
+      method: 'POST',
+      token,
+    }),
 };
 
 // ============================================
@@ -209,12 +214,14 @@ export const session = {
   setCurrentUser: (user: any) => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('current_user', JSON.stringify(user));
+      window.dispatchEvent(new Event('auth-change'));
     }
   },
 
   clearCurrentUser: () => {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('current_user');
+      window.dispatchEvent(new Event('auth-change'));
     }
   },
 

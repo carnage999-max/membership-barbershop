@@ -13,7 +13,7 @@ interface MembershipTierCardProps {
   effectiveCostPerCut: number;
   isHighlighted?: boolean;
   isUnlimited?: boolean;
-  track: "haircut-only" | "mvp";
+  track: "haircut-only" | "signature";
   onSelect?: () => void;
 }
 
@@ -73,7 +73,7 @@ export default function MembershipTierCard({
         <div className="flex items-center gap-2">
           <Check className="w-5 h-5 text-success flex-shrink-0" />
           <span className="text-bone/80 text-sm">
-            {isUnlimited ? "Unlimited" : visitsIncluded} {track === "mvp" ? "Concours Detail" : "Haircut"} visits
+            {isUnlimited ? "Unlimited" : visitsIncluded} {track === "signature" ? "Concours Detail" : "Haircut"} visits
           </span>
         </div>
         {rollover && (

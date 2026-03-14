@@ -29,13 +29,13 @@ const addOns = [
     name: "Hot Towel",
     icon: <Droplets className="w-6 h-6" />,
     timeEstimate: 5,
-    includedInTier: ["MVP Tiers"],
+    includedInTier: ["Signature Tiers"],
   },
   {
-    name: "MVP Wash + Massage",
+    name: "Signature Wash + Massage",
     icon: <Hand className="w-6 h-6" />,
     timeEstimate: 15,
-    includedInTier: ["MVP Tiers"],
+    includedInTier: ["Signature Tiers"],
   },
   {
     name: "Kids Cut",

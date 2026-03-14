@@ -2,17 +2,17 @@
 
 import { motion } from "framer-motion";
 
-interface PrivacyBoothFeaturePanelProps {
+interface SuiteFeaturePanelProps {
   title: string;
   description: string;
   reverse?: boolean;
 }
 
-export default function PrivacyBoothFeaturePanel({
+export default function SuiteFeaturePanel({
   title,
   description,
   reverse = false,
-}: PrivacyBoothFeaturePanelProps) {
+}: SuiteFeaturePanelProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}

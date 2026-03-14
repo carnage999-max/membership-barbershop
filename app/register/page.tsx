@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { auth, tokenStorage, session } from "@/lib/api-client";
+import { toast } from "react-hot-toast";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -38,9 +39,11 @@ export default function RegisterPage() {
       session.setCurrentUser(result.user);
 
       // Redirect to membership selection
+      toast.success("Account created successfully!");
       router.push("/membership");
     } catch (err: any) {
       setError(err.message || "Registration failed");
+      toast.error(err.message || "Failed to register");
       setLoading(false);
     }
   };

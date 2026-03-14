@@ -2,12 +2,30 @@
 
 import { motion } from "framer-motion";
 import { Search, MapPin } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { memberships as membershipsApi } from "@/lib/api-client";
 import WaitTimeBadge from "./WaitTimeBadge";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function HeroGarageDoor() {
+export default function HeroExperience() {
   const [zipCode, setZipCode] = useState("");
+  const [minPrice, setMinPrice] = useState<number | null>(null);
+
+  useEffect(() => {
+    async function fetchMinPrice() {
+      try {
+        const result = await membershipsApi.getPlans();
+        if (result.plans && result.plans.length > 0) {
+          const prices = result.plans.map((p: any) => p.price);
+          setMinPrice(Math.min(...prices));
+        }
+      } catch (error) {
+        console.error("Failed to fetch min price:", error);
+      }
+    }
+    fetchMinPrice();
+  }, []);
 
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
@@ -83,33 +101,35 @@ export default function HeroGarageDoor() {
               <div className="flex items-center gap-2 mb-4">
                 <MapPin className="w-5 h-5 text-gold-champagne" />
                 <h3 className="font-display text-xl font-bold text-bone">
-                  Nearest Shop
+                  Live Status
                 </h3>
               </div>
               <div className="flex items-center justify-between mb-4">
-                <p className="text-bone/70">Live wait time</p>
-                <WaitTimeBadge minutes={12} confidenceBand={[10, 15]} status="available" />
+                <p className="text-bone/70">Membership Status</p>
+                <div className="px-3 py-1 bg-gold-champagne/20 border border-gold-champagne text-gold-champagne rounded-full text-xs font-bold uppercase tracking-wider">
+                  Open Registration
+                </div>
               </div>
               <p className="text-sm text-bone/60">
-                2.3 miles away • Next chair in 12 min
+                Priority access for members at all locations.
               </p>
             </div>
 
             {/* Membership Price Anchor */}
             <div className="bg-wood-espresso/30 rounded-xl p-6 border-2 border-gold-champagne/40">
-              <p className="text-bone/70 text-sm mb-2">Join Membership</p>
+              <p className="text-bone/70 text-sm mb-2">Signature Access</p>
               <div className="flex items-baseline gap-2 mb-4">
-                <span className="font-display text-4xl font-bold text-gold-champagne">
-                  $29
+                <span className="font-display text-4xl font-bold text-bone">
+                  Exclusive
                 </span>
-                <span className="text-bone/60">/month</span>
+                <span className="text-gold-champagne font-bold">Tiers</span>
               </div>
               <p className="text-sm text-bone/80 mb-4">
-                Starting at <span className="font-semibold">$2.42</span> per cut
+                Join the circle of precision. <span className="text-gold-champagne">Starting from {minPrice ? `$${minPrice}` : "-"}.</span>
               </p>
-              <button className="w-full px-6 py-3 bg-gold-champagne hover:bg-gold-champagne/90 text-ink font-semibold rounded-lg transition-colors duration-150">
+              <Link href="/membership" className="block text-center w-full px-6 py-3 bg-gold-champagne hover:bg-gold-champagne/90 text-ink font-semibold rounded-lg transition-colors duration-150">
                 View Plans
-              </button>
+              </Link>
             </div>
           </motion.div>
         </div>

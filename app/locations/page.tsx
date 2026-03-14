@@ -5,7 +5,17 @@ import { motion } from "framer-motion";
 import { MapPin, Filter, X } from "lucide-react";
 import LocationCard from "@/components/LocationCard";
 import WaitTimeBadge from "@/components/WaitTimeBadge";
-import { locations as locationsApi } from "@/lib/api-client";
+import { locations as locationsApi, queue as queueApi, tokenStorage } from "@/lib/api-client";
+import dynamic from "next/dynamic";
+
+const MapComponent = dynamic(() => import("@/components/LocationMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 flex items-center justify-center bg-obsidian">
+      <div className="w-8 h-8 border-4 border-gold-champagne/20 border-t-gold-champagne rounded-full animate-spin"></div>
+    </div>
+  )
+});
 
 interface Location {
   id: string;
@@ -29,7 +39,7 @@ interface Location {
 const filters = [
   { id: "open-now", label: "Open now" },
   { id: "under-10", label: "<10 min" },
-  { id: "mvp", label: "Concours Detail" },
+  { id: "signature", label: "Concours Detail" },
   { id: "kids", label: "Kids friendly" },
   { id: "quiet", label: "Quiet booths" },
   { id: "wheelchair", label: "Wheelchair access" },
@@ -41,6 +51,8 @@ export default function LocationsPage() {
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
   const [myStylistToggle, setMyStylistToggle] = useState(false);
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [myQueuePosition, setMyQueuePosition] = useState<any>(null);
+  const [joiningQueue, setJoiningQueue] = useState(false);
 
   useEffect(() => {
     async function loadLocations() {
@@ -70,6 +82,19 @@ export default function LocationsPage() {
           setLocations(result.locations);
           setLoading(false);
         }
+
+        // Check if user is in queue
+        const token = tokenStorage.get();
+        if (token) {
+          try {
+            const queueResult = await queueApi.getMyPosition(token);
+            if (queueResult.queueEntry) {
+              setMyQueuePosition(queueResult.queueEntry);
+            }
+          } catch (err) {
+            // User not in queue, that's fine
+          }
+        }
       } catch (error) {
         console.error('Failed to load locations:', error);
         setLoading(false);
@@ -77,7 +102,49 @@ export default function LocationsPage() {
     }
 
     loadLocations();
+
+    // Poll for updates every 30 seconds
+    const interval = setInterval(loadLocations, 30000);
+    return () => clearInterval(interval);
   }, []);
+
+  async function handleJoinQueue(locationId: string) {
+    try {
+      const token = tokenStorage.get();
+      if (!token) {
+        alert('Please login to join the queue');
+        window.location.href = '/login?redirect=/locations';
+        return;
+      }
+
+      setJoiningQueue(true);
+      const result = await queueApi.join(locationId, token);
+      setMyQueuePosition(result.queueEntry);
+      setJoiningQueue(false);
+
+      alert(`You're #${result.queueEntry.position} in line at ${result.queueEntry.locationName}!`);
+    } catch (error: any) {
+      console.error('Failed to join queue:', error);
+      alert(error.message || 'Failed to join queue');
+      setJoiningQueue(false);
+    }
+  }
+
+  async function handleLeaveQueue() {
+    try {
+      const token = tokenStorage.get();
+      if (!token) return;
+
+      await queueApi.leave(token);
+      setMyQueuePosition(null);
+      alert('Left the queue successfully');
+      // Force reload to update wait times
+      window.location.reload();
+    } catch (error: any) {
+      console.error('Failed to leave queue:', error);
+      alert(error.message || 'Failed to leave queue');
+    }
+  }
 
   const toggleFilter = (filterId: string) => {
     setActiveFilters((prev) =>
@@ -158,56 +225,65 @@ export default function LocationsPage() {
           )}
         </div>
 
+        {/* My Queue Position */}
+        {myQueuePosition && (
+          <div className="mb-8 bg-gold-champagne/10 border-2 border-gold-champagne rounded-xl p-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h3 className="font-display text-2xl font-bold text-bone mb-2">
+                  Authorized in Shop
+                </h3>
+                <p className="text-bone/70 mb-2">
+                  Position <span className="text-gold-champagne font-bold text-3xl">#{myQueuePosition.position}</span> at {myQueuePosition.location.name}
+                </p>
+                <p className="text-bone/60">
+                  Estimated wait: <span className="text-bone font-semibold">{myQueuePosition.estimatedWait} minutes</span>
+                </p>
+              </div>
+              <button
+                onClick={handleLeaveQueue}
+                className="px-6 py-3 bg-danger hover:bg-danger/90 text-bone font-semibold rounded-lg transition-colors"
+              >
+                Leave Queue
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Map Placeholder + Results List */}
         <div className="grid md:grid-cols-2 gap-6">
           {/* Map Area */}
           <div className="relative h-[600px] rounded-xl overflow-hidden bg-slate/30 border border-gold-champagne/20">
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center">
-                <MapPin className="w-16 h-16 text-gold-champagne/30 mx-auto mb-4" />
-                <p className="text-bone/40 font-display text-xl">Map View</p>
-                <p className="text-bone/30 text-sm mt-2">
-                  Map integration with color-coded pins
-                </p>
-              </div>
-            </div>
-
-            {/* Map Pins (simulated) */}
-            {filteredLocations.map((location, index) => (
-              <motion.div
-                key={location.id}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1 }}
-                className={`absolute top-${20 + index * 10}% left-${30 + index * 15}% w-4 h-4 rounded-full border-2 border-bone ${
-                  location.status === "available"
-                    ? "bg-success"
-                    : location.status === "limited"
-                    ? "bg-warning"
-                    : "bg-danger"
-                }`}
-                title={location.name}
-              />
-            ))}
+            <MapComponent locations={filteredLocations} userLocation={userLocation} />
           </div>
 
           {/* Results List */}
           <div className="space-y-4">
             {filteredLocations.length > 0 ? (
               filteredLocations.map((location) => (
-                <LocationCard
-                  key={location.id}
-                  id={location.id}
-                  name={location.name}
-                  address={`${location.address}, ${location.city}, ${location.state}`}
-                  waitMinutes={location.currentWaitTime}
-                  confidenceBand={location.confidenceBand}
-                  status={location.status}
-                  rating={4.5}
-                  topStylist="Available"
-                  nextAvailable={`${location.currentWaitTime} min`}
-                  slug={location.slug}
-                />
+                <div key={location.id} className="relative">
+                  <LocationCard
+                    id={location.id}
+                    name={location.name}
+                    address={`${location.address}, ${location.city}, ${location.state}`}
+                    waitMinutes={location.currentWaitTime}
+                    confidenceBand={location.confidenceBand}
+                    status={location.status}
+                    rating={4.5}
+                    topStylist="Available"
+                    nextAvailable={`${location.currentWaitTime} min`}
+                    slug={location.slug}
+                  />
+                  {!myQueuePosition && location.status !== "closed" && (
+                    <button
+                      onClick={() => handleJoinQueue(location.id)}
+                      disabled={joiningQueue}
+                      className="mt-4 w-full px-6 py-3 bg-red-crimson hover:bg-red-crimson/90 disabled:bg-slate/50 text-bone font-semibold rounded-lg transition-colors"
+                    >
+                      {joiningQueue ? "Joining..." : "Join Queue"}
+                    </button>
+                  )}
+                </div>
               ))
             ) : (
               <div className="bg-slate/50 rounded-xl p-8 text-center">

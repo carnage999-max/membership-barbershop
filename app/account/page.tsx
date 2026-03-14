@@ -5,13 +5,16 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Crown, Clock, Bell, History, Users, CreditCard, LogOut } from "lucide-react";
 import Link from "next/link";
-import { memberships as membershipsApi, tokenStorage, session } from "@/lib/api-client";
+import { memberships as membershipsApi, queue as queueApi, checkIns as checkInsApi, stylists as stylistsApi, payments as paymentsApi, tokenStorage, session } from "@/lib/api-client";
 
 export default function AccountPage() {
   const router = useRouter();
   const [membership, setMembership] = useState<any>(null);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [myQueuePosition, setMyQueuePosition] = useState<any>(null);
+  const [visitHistory, setVisitHistory] = useState<any[]>([]);
+  const [followingStylistsCount, setFollowingStylistsCount] = useState(0);
 
   useEffect(() => {
     const token = tokenStorage.get();
@@ -28,12 +31,46 @@ export default function AccountPage() {
 
   async function loadMembership(token: string) {
     try {
-      const result = await membershipsApi.getMyMembership(token);
-      setMembership(result.membership);
-      setLoading(false);
+      const [membershipResult, queueResult, checkInsResult, stylistsResult] = await Promise.all([
+        membershipsApi.getMyMembership(token).catch(() => ({ membership: null })),
+        queueApi.getMyPosition(token).catch(() => ({ queueEntry: null })),
+        checkInsApi.getHistory(token, 5).catch(() => ({ checkIns: [] })),
+        stylistsApi.getAll(undefined, undefined, token).catch(() => ({ stylists: [] }))
+      ]);
+      setMembership(membershipResult.membership);
+      setMyQueuePosition(queueResult.queueEntry || null);
+      setVisitHistory(checkInsResult.checkIns || []);
+      
+      const followedCount = (stylistsResult.stylists || []).filter((s: any) => s.isFollowing).length;
+      setFollowingStylistsCount(followedCount);
     } catch (error) {
-      console.error('Failed to load membership:', error);
+      console.error('Failed to load dashboard data:', error);
+    } finally {
       setLoading(false);
+    }
+  }
+
+  async function handleLeaveQueue() {
+    try {
+      const token = tokenStorage.get();
+      if (!token) return;
+      await queueApi.leave(token);
+      setMyQueuePosition(null);
+    } catch (error) {
+    }
+  }
+
+  async function handleManagePayments() {
+    try {
+      const token = tokenStorage.get();
+      if (!token) return;
+      
+      const result = await paymentsApi.createPortalSession(token);
+      if (result.url) {
+        window.location.href = result.url;
+      }
+    } catch (err: any) {
+      alert(err.message || 'Failed to open billing portal');
     }
   }
 
@@ -146,15 +183,36 @@ export default function AccountPage() {
                 My Queue Token
               </h2>
             </div>
-            <p className="text-bone/60 text-sm mb-4">
-              You're not currently checked in
-            </p>
-            <Link
-              href="/book"
-              className="inline-block px-4 py-2 bg-red-crimson hover:bg-red-crimson/90 text-bone font-medium rounded-lg transition-colors duration-150 text-sm"
-            >
-              Check In Now
-            </Link>
+            {myQueuePosition ? (
+              <>
+                <p className="text-bone/80 mb-2">
+                  <span className="text-bone/60">Position:</span>{" "}
+                  <span className="font-semibold text-gold-champagne">#{myQueuePosition.position}</span> at {myQueuePosition.location.name}
+                </p>
+                <p className="text-bone/80 mb-4">
+                  <span className="text-bone/60">Wait:</span>{" "}
+                  <span className="font-semibold">{myQueuePosition.estimatedWait} minutes</span>
+                </p>
+                <button
+                  onClick={handleLeaveQueue}
+                  className="inline-block px-4 py-2 bg-slate hover:bg-slate/80 text-bone font-medium rounded-lg transition-colors duration-150 text-sm"
+                >
+                  Leave Queue
+                </button>
+              </>
+            ) : (
+              <>
+                <p className="text-bone/60 text-sm mb-4">
+                  You're not currently checked in
+                </p>
+                <Link
+                  href="/book"
+                  className="inline-block px-4 py-2 bg-red-crimson hover:bg-red-crimson/90 text-bone font-medium rounded-lg transition-colors duration-150 text-sm"
+                >
+                  Check In Now
+                </Link>
+              </>
+            )}
           </motion.div>
 
           {/* My Stylists */}
@@ -172,13 +230,13 @@ export default function AccountPage() {
               </h2>
             </div>
             <p className="text-bone/60 text-sm mb-4">
-              You're following 2 stylists
+              You're following {followingStylistsCount} stylist{followingStylistsCount === 1 ? '' : 's'}
             </p>
             <Link
               href="/stylists"
               className="inline-block px-4 py-2 bg-slate hover:bg-slate/80 text-bone font-medium rounded-lg transition-colors duration-150 text-sm"
             >
-              View All
+              View All Stylists
             </Link>
           </motion.div>
 
@@ -196,12 +254,26 @@ export default function AccountPage() {
                 Visit History
               </h2>
             </div>
-            <p className="text-bone/60 text-sm mb-4">
-              View your past visits and preferences
-            </p>
-            <button className="px-4 py-2 bg-slate hover:bg-slate/80 text-bone font-medium rounded-lg transition-colors duration-150 text-sm">
-              View History
-            </button>
+            {visitHistory.length > 0 ? (
+              <ul className="space-y-2 mb-4">
+                {visitHistory.slice(0, 2).map((visit: any) => (
+                  <li key={visit.id} className="text-bone/80 text-sm flex justify-between">
+                    <span>{new Date(visit.checkInTime).toLocaleDateString()}</span>
+                    <span className="text-gold-champagne">{visit.location.name}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-bone/60 text-sm mb-4">
+                No recent visits found
+              </p>
+            )}
+            <Link 
+              href="/account"
+              className="inline-block px-4 py-2 bg-slate hover:bg-slate/80 text-bone font-medium rounded-lg transition-colors duration-150 text-sm cursor-not-allowed opacity-50"
+            >
+              Full History (Coming Soon)
+            </Link>
           </motion.div>
 
           {/* Payment Methods */}
@@ -219,34 +291,13 @@ export default function AccountPage() {
               </h2>
             </div>
             <p className="text-bone/60 text-sm mb-4">
-              Manage your payment methods and receipts
+              Manage your payment methods and receipts securely via Stripe
             </p>
-            <button className="px-4 py-2 bg-slate hover:bg-slate/80 text-bone font-medium rounded-lg transition-colors duration-150 text-sm">
+            <button onClick={handleManagePayments} className="px-4 py-2 bg-slate hover:bg-slate/80 text-bone font-medium rounded-lg transition-colors duration-150 text-sm">
               Manage Payments
             </button>
           </motion.div>
 
-          {/* Family Members */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.5 }}
-            className="bg-slate/50 backdrop-blur-sm rounded-xl p-6 border border-gold-champagne/20"
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <Users className="w-6 h-6 text-bone/60" />
-              <h2 className="font-display text-2xl font-bold text-bone">
-                Family Members
-              </h2>
-            </div>
-            <p className="text-bone/60 text-sm mb-4">
-              Manage profiles for family members
-            </p>
-            <button className="px-4 py-2 bg-slate hover:bg-slate/80 text-bone font-medium rounded-lg transition-colors duration-150 text-sm">
-              Add Member
-            </button>
-          </motion.div>
         </div>
       </div>
     </main>

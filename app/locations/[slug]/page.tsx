@@ -17,7 +17,7 @@ export default function LocationDetailPage() {
   const [loading, setLoading] = useState(true);
   const [checkedIn, setCheckedIn] = useState(false);
   const [joiningQueue, setJoiningQueue] = useState(false);
-  const [mvpSelected, setMvpSelected] = useState(false);
+  const [signatureSelected, setSignatureSelected] = useState(false);
 
   useEffect(() => {
     async function loadLocation() {
@@ -241,14 +241,14 @@ export default function LocationDetailPage() {
                   <p className="text-[10px] text-bone/40 font-bold uppercase tracking-widest mt-1">Full Maintenance Protocol</p>
                 </div>
                 <button
-                  onClick={() => setMvpSelected(!mvpSelected)}
+                  onClick={() => setSignatureSelected(!signatureSelected)}
                   className={`relative w-14 h-8 rounded-full transition-all duration-300 ${
-                    mvpSelected ? "bg-gold-champagne" : "bg-obsidian border border-gold-champagne/20"
+                    signatureSelected ? "bg-gold-champagne" : "bg-obsidian border border-gold-champagne/20"
                   }`}
                 >
                   <motion.div
-                    className={`absolute top-1 w-6 h-6 rounded-full shadow-lg ${mvpSelected ? "bg-ink" : "bg-bone/20"}`}
-                    animate={{ x: mvpSelected ? 26 : 2 }}
+                    className={`absolute top-1 w-6 h-6 rounded-full shadow-lg ${signatureSelected ? "bg-ink" : "bg-bone/20"}`}
+                    animate={{ x: signatureSelected ? 26 : 2 }}
                     transition={{ duration: 0.2 }}
                   />
                 </button>
@@ -275,7 +275,7 @@ export default function LocationDetailPage() {
                 </div>
               </div>
 
-              {mvpSelected && (
+              {signatureSelected && (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}

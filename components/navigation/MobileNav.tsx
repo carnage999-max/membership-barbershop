@@ -6,28 +6,38 @@ import Image from "next/image";
 import { MapPin, Clock, Calendar, Crown, User, LogIn } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { tokenStorage } from "@/lib/api-client";
+import { useUser } from "@/lib/hooks";
 
 const baseNavItems = [
   { href: "/locations", icon: MapPin, label: "Map" },
-  { href: "/wait", icon: Clock, label: "Waitlist" },
-  { href: "/membership", icon: Crown, label: "Membership Barbershop" },
+  { href: "/membership", icon: Crown, label: "Membership" },
   { href: "/book", icon: Calendar, label: "Book" }, // Reordered slightly for better thumb flow
 ];
 
 export default function MobileNav() {
   const pathname = usePathname();
   const isHomePage = pathname === "/";
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { user } = useUser();
+  const isAuthenticated = !!user;
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   useEffect(() => {
-    // Check authentication status on mount and when pathname changes
-    const token = tokenStorage.get();
-    setIsAuthenticated(!!token);
+    const observer = new IntersectionObserver((entries) => {
+      setIsFooterVisible(entries[0].isIntersecting);
+    }, { threshold: 0.1 });
+
+    const footer = document.getElementById("global-footer");
+    if (footer) {
+      observer.observe(footer);
+    }
+
+    return () => observer.disconnect();
   }, [pathname]);
 
   return (
-    <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 md:hidden w-[90%] max-w-[400px]">
+    <nav className={`fixed left-1/2 -translate-x-1/2 z-50 md:hidden w-[90%] max-w-[400px] transition-all duration-300 ${
+      isFooterVisible ? "bottom-[-100px] opacity-0" : "bottom-8 opacity-100"
+    }`}>
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}

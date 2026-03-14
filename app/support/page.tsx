@@ -42,8 +42,8 @@ const faqs = [
     category: "Services",
     questions: [
       {
-        q: "What is the MVP Ritual?",
-        a: "The MVP Ritual includes your haircut plus hot towel treatment, premium wash, and scalp/neck massage. Available with MVP membership tiers.",
+        q: "What is the Signature Treatment?",
+        a: "The Signature Treatment includes your haircut plus hot towel treatment, premium wash, and scalp/neck massage. Available with Signature membership tiers.",
       },
       {
         q: "Can I bring my child?",

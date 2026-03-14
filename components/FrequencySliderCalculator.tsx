@@ -1,64 +1,80 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { memberships as membershipsApi } from "@/lib/api-client";
 
 interface FrequencySliderCalculatorProps {
   onFrequencyChange?: (frequency: number, recommendedTier: string) => void;
+  onJoinClick?: () => void;
 }
 
 const frequencies = [
   { value: 1, label: "1x/month", visits: 12 },
   { value: 2, label: "2x/month", visits: 24 },
   { value: 4, label: "Weekly", visits: 52 },
-  { value: 8, label: "Unlimited", visits: Infinity },
-];
-
-const tiers = [
-  { name: "Essential", price: 29, visits: 1, track: "haircut-only" },
-  { name: "Pro", price: 49, visits: 2, track: "haircut-only" },
-  { name: "Elite", price: 79, visits: 4, track: "haircut-only" },
-  { name: "Unlimited", price: 99, visits: Infinity, track: "haircut-only" },
+  { value: 8, label: "Unlimited", visits: 999 }, // 999 for infinity in math
 ];
 
 export default function FrequencySliderCalculator({
   onFrequencyChange,
+  onJoinClick
 }: FrequencySliderCalculatorProps) {
   const [selectedFrequency, setSelectedFrequency] = useState(2);
+  const [tiers, setTiers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchPlans() {
+      try {
+        const result = await membershipsApi.getPlans();
+        if (result.plans && result.plans.length > 0) {
+          // Sort plans by price/cuts to make sure we have a logical order
+          const sortedPlans = result.plans.sort((a: any, b: any) => a.price - b.price);
+          setTiers(sortedPlans);
+        }
+      } catch (error) {
+        console.error("Failed to fetch plans:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchPlans();
+  }, []);
 
   const handleFrequencyChange = (value: number) => {
     setSelectedFrequency(value);
     const freq = frequencies.find((f) => f.value === value);
     if (!freq) return;
 
-    let recommendedTier = "Essential";
-    if (freq.visits === Infinity) {
-      recommendedTier = "Unlimited";
-    } else if (freq.visits >= 52) {
-      recommendedTier = "Unlimited";
-    } else if (freq.visits >= 24) {
-      recommendedTier = "Elite";
-    } else if (freq.visits >= 12) {
-      recommendedTier = "Pro";
+    // Determine recommended tier based on cutsPerMonth
+    let recTier = "Essential";
+    if (tiers.length > 0) {
+      const cutsPerMonth = value; // value 1, 2, 4, 8 mapped to frequencies
+      const match = tiers.find(t => t.cutsPerMonth >= cutsPerMonth) || tiers[tiers.length - 1];
+      recTier = match?.name || "Essential";
     }
 
-    onFrequencyChange?.(freq.visits, recommendedTier);
+    onFrequencyChange?.(freq.visits, recTier);
   };
 
   const currentFreq = frequencies.find((f) => f.value === selectedFrequency);
-  const recommendedTier = tiers.find((t) => {
-    if (currentFreq?.visits === Infinity) return t.name === "Unlimited";
-    if (currentFreq && currentFreq.visits >= 52) return t.name === "Unlimited";
-    if (currentFreq && currentFreq.visits >= 24) return t.name === "Elite";
-    if (currentFreq && currentFreq.visits >= 12) return t.name === "Pro";
-    return t.name === "Essential";
-  });
+  
+  // Logic to find recommended tier from dynamic data
+  const recommendedTier = tiers.length > 0 
+    ? (tiers.find(t => t.cutsPerMonth >= selectedFrequency) || tiers[tiers.length - 1])
+    : null;
 
-  const effectiveCostPerCut = recommendedTier
-    ? currentFreq?.visits === Infinity
-      ? (recommendedTier.price / 8).toFixed(2)
-      : (recommendedTier.price / (currentFreq?.visits || 1)).toFixed(2)
-    : "0.00";
+  const calculateEffectiveCost = () => {
+    if (!recommendedTier || !currentFreq) return "-";
+    if (currentFreq.visits >= 999) {
+      // For unlimited, assume 8 visits/month for the math
+      return (recommendedTier.price / 8).toFixed(2);
+    }
+    return ((recommendedTier.price * 12) / currentFreq.visits).toFixed(2);
+  };
+
+  const effectiveCostPerCut = calculateEffectiveCost();
 
   return (
     <div className="bg-slate/50 backdrop-blur-sm rounded-xl p-6 border border-gold-champagne/20">
@@ -105,22 +121,22 @@ export default function FrequencySliderCalculator({
             Recommended: <span className="font-bold text-gold-champagne">{recommendedTier.name}</span>
           </p>
           <p className="text-bone/80 text-sm mb-2">
-            Effective cost per cut: <span className="font-bold text-gold-champagne">${effectiveCostPerCut}</span>
+            Effective cost per cut: <span className="font-bold text-gold-champagne">{effectiveCostPerCut !== "-" ? `$${effectiveCostPerCut}` : "-"}</span>
           </p>
-          {currentFreq.visits !== Infinity && (
-            <p className="text-bone/60 text-xs">
-              {currentFreq.visits} visits/year × ${recommendedTier.price}/month = ${effectiveCostPerCut} per cut
+          {currentFreq.visits < 999 && (
+            <p className="text-bone/60 text-xs text-balance">
+              (${recommendedTier.price} × 12 months) ÷ {currentFreq.visits} visits/year = ${effectiveCostPerCut} per cut
             </p>
           )}
         </motion.div>
       )}
 
       <div className="flex gap-3 mt-6">
-        <button className="flex-1 px-6 py-3 bg-red-crimson hover:bg-red-crimson/90 text-bone font-semibold rounded-lg transition-colors duration-150">
+        <button onClick={onJoinClick} className="flex-1 px-6 py-3 bg-red-crimson hover:bg-red-crimson/90 text-bone font-semibold rounded-lg transition-colors duration-150">
           Join Membership
         </button>
         <button className="flex-1 px-6 py-3 bg-slate hover:bg-slate/80 text-bone font-semibold rounded-lg transition-colors duration-150 border border-gold-champagne/30">
-          Try MVP Ritual
+          Try Signature Treatment
         </button>
       </div>
     </div>
