@@ -4,11 +4,17 @@ import { apiResponse, apiError } from '@/lib/middleware';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   try {
-    const location = await prisma.location.findUnique({
-      where: { id: params.id },
+    const location = await prisma.location.findFirst({
+      where: {
+        OR: [
+          { id: id },
+          { slug: id }
+        ] as any
+      },
       include: {
         stylists: {
           where: { onShift: true },
@@ -37,7 +43,7 @@ export async function GET(
           orderBy: { price: 'asc' },
         },
       },
-    });
+    }) as any;
 
     if (!location) {
       return apiError('Location not found', 404);

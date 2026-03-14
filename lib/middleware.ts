@@ -6,9 +6,9 @@ export interface AuthenticatedRequest extends NextRequest {
 }
 
 export function withAuth(
-  handler: (req: AuthenticatedRequest) => Promise<NextResponse>
+  handler: (req: AuthenticatedRequest, context: any) => Promise<NextResponse>
 ) {
-  return async (req: AuthenticatedRequest) => {
+  return async (req: AuthenticatedRequest, context: any) => {
     const authHeader = req.headers.get('authorization');
     const token = extractTokenFromHeader(authHeader);
 
@@ -29,8 +29,22 @@ export function withAuth(
     }
 
     req.user = payload;
-    return handler(req);
+    return handler(req, context);
   };
+}
+
+export function withAdmin(
+  handler: (req: AuthenticatedRequest, context: any) => Promise<NextResponse>
+) {
+  return withAuth(async (req: AuthenticatedRequest, context: any) => {
+    if (req.user?.role !== 'ADMIN') {
+      return NextResponse.json(
+        { error: 'Forbidden - Admin access required' },
+        { status: 403 }
+      );
+    }
+    return handler(req, context);
+  });
 }
 
 export function apiResponse(data: any, status: number = 200) {

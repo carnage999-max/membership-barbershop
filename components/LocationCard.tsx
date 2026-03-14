@@ -15,6 +15,7 @@ interface LocationCardProps {
   rating?: number;
   topStylist?: string;
   nextAvailable?: string;
+  slug?: string;
   onCheckIn?: () => void;
 }
 
@@ -27,6 +28,7 @@ export default function LocationCard({
   rating,
   topStylist,
   nextAvailable,
+  slug,
   onCheckIn,
 }: LocationCardProps) {
   return (
@@ -77,7 +79,7 @@ export default function LocationCard({
 
       <div className="flex items-center gap-2 mt-4">
         <Link
-          href={`/locations/${name.toLowerCase().replace(/\s+/g, "-")}`}
+          href={`/locations/${slug || name.toLowerCase().replace(/\s+/g, "-")}`}
           className="flex-1 px-4 py-2 bg-red-crimson hover:bg-red-crimson/90 text-bone font-semibold rounded-lg transition-colors duration-150 text-center text-sm"
         >
           Check-in

@@ -8,96 +8,53 @@ import CarsWall from "@/components/CarsWall";
 import StylistCard from "@/components/StylistCard";
 import ReviewsLapTimes from "@/components/ReviewsLapTimes";
 import { motion } from "framer-motion";
-import { Scissors, Sparkles, Zap, Droplets, Hand, Sparkle } from "lucide-react";
+import { Scissors, Sparkles, Zap, Droplets, Hand, Sparkle, Loader2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { locations as locationsApi, stylists as stylistsApi } from "@/lib/api-client";
 
 export default function Home() {
-  const nearbyShops = [
-    {
-      id: "1",
-      name: "Downtown Garage",
-      address: "123 Main St, Downtown",
-      waitMinutes: 5,
-      confidenceBand: [3, 8] as [number, number],
-      status: "available" as const,
-      rating: 4.9,
-      topStylist: "Mike",
-      nextAvailable: "5 minutes",
-    },
-    {
-      id: "2",
-      name: "Highway 101",
-      address: "456 Highway 101",
-      waitMinutes: 12,
-      confidenceBand: [10, 15] as [number, number],
-      status: "available" as const,
-      rating: 4.8,
-      topStylist: "Alex",
-      nextAvailable: "12 minutes",
-    },
-    {
-      id: "3",
-      name: "Riverside",
-      address: "789 Riverside Blvd",
-      waitMinutes: 25,
-      confidenceBand: [20, 30] as [number, number],
-      status: "limited" as const,
-      rating: 4.7,
-      topStylist: "Chris",
-      nextAvailable: "25 minutes",
-    },
-  ];
+  const [nearbyShops, setNearbyShops] = useState<any[]>([]);
+  const [featuredStylists, setFeaturedStylists] = useState<any[]>([]);
+  const [loadingShops, setLoadingShops] = useState(true);
+  const [loadingStylists, setLoadingStylists] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const shopsResult = await locationsApi.getAll();
+        setNearbyShops(shopsResult.locations.slice(0, 3));
+        setLoadingShops(false);
+
+        const stylistsResult = await stylistsApi.getAll();
+        setFeaturedStylists(stylistsResult.stylists.slice(0, 3));
+        setLoadingStylists(false);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+        setLoadingShops(false);
+        setLoadingStylists(false);
+      }
+    }
+    fetchData();
+  }, []);
 
   const mvpSteps = [
-    { icon: <Zap className="w-6 h-6" />, title: "Check-in", description: "Pit-stop entry" },
-    { icon: <Scissors className="w-6 h-6" />, title: "Cut", description: "Precision trim" },
-    { icon: <Droplets className="w-6 h-6" />, title: "Hot Towel", description: "Steam treatment" },
-    { icon: <Sparkles className="w-6 h-6" />, title: "Wash", description: "Deep clean" },
-    { icon: <Hand className="w-6 h-6" />, title: "Massage", description: "Scalp & neck" },
-    { icon: <Sparkle className="w-6 h-6" />, title: "Style", description: "Final finish" },
+    { icon: <Zap className="w-6 h-6" />, title: "Precision Entry", description: "Seamless intake" },
+    { icon: <Scissors className="w-6 h-6" />, title: "Precision Alignment", description: "Profile trim" },
+    { icon: <Droplets className="w-6 h-6" />, title: "Thermal Gasket Reset", description: "Steam treatment" },
+    { icon: <Sparkles className="w-6 h-6" />, title: "High-Pressure Degrease", description: "Deep clean" },
+    { icon: <Hand className="w-6 h-6" />, title: "Chassis Calibration", description: "Scalp & neck" },
+    { icon: <Sparkle className="w-6 h-6" />, title: "Clear Coat Polish", description: "Final finish" },
   ];
 
-  const featuredStylists = [
-    {
-      id: "1",
-      name: "Mike Rodriguez",
-      specialties: ["Fade", "Beard", "Kids"],
-      avgCutTime: 18,
-      rating: 4.9,
-      onShift: true,
-      onBreak: false,
-      isFollowing: false,
-    },
-    {
-      id: "2",
-      name: "Alex Chen",
-      specialties: ["Classic", "Line-up"],
-      avgCutTime: 15,
-      rating: 4.8,
-      onShift: true,
-      onBreak: false,
-      isFollowing: true,
-      nextShift: "2 days",
-    },
-    {
-      id: "3",
-      name: "Chris Johnson",
-      specialties: ["Fade", "Beard"],
-      avgCutTime: 20,
-      rating: 4.9,
-      onShift: false,
-      isFollowing: false,
-      nextShift: "Tomorrow",
-    },
-  ];
 
   return (
     <main className="min-h-screen pt-[60px] md:pt-0">
       {/* HeroGarageDoor */}
       <HeroGarageDoor />
 
-      {/* Live Wait Grid - Pit Lane Cards */}
+      {/* Live Wait Grid - Waitlist Cards */}
       <section className="py-20 bg-obsidian relative">
         {/* Curved divider */}
         <svg
@@ -123,9 +80,20 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {nearbyShops.map((shop, index) => (
-              <LocationCard key={shop.id} {...shop} />
-            ))}
+            {loadingShops ? (
+              <div className="col-span-full flex flex-col items-center justify-center py-20">
+                <Loader2 className="w-10 h-10 text-gold-champagne animate-spin mb-4" />
+                <p className="text-bone/60">Loading engine stats...</p>
+              </div>
+            ) : nearbyShops.length > 0 ? (
+              nearbyShops.map((shop, index) => (
+                <LocationCard key={shop.id} {...shop} waitMinutes={shop.currentWaitTime} address={`${shop.address}, ${shop.city}`} />
+              ))
+            ) : (
+              <div className="col-span-full text-center py-20 text-bone/40">
+                No locations available near you now.
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -149,7 +117,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="font-display text-4xl md:text-6xl font-bold text-bone mb-4">
-              Membership First
+              Membership Barbershop First
             </h2>
             <p className="text-bone/70 text-lg">
               Find your perfect plan based on how often you cut
@@ -180,7 +148,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="font-display text-4xl md:text-6xl font-bold text-bone mb-4">
-              The MVP Ritual
+              The Concours Detail
             </h2>
             <p className="text-bone/70 text-lg max-w-2xl mx-auto">
               Haircut as the tune-up. Shampoo and massage as the full detail.
@@ -285,13 +253,25 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {featuredStylists.map((stylist) => (
-              <StylistCard
-                key={stylist.id}
-                {...stylist}
-                onFollow={() => console.log(`Follow ${stylist.name}`)}
-              />
-            ))}
+            {loadingStylists ? (
+              <div className="col-span-full flex flex-col items-center justify-center py-20">
+                <Loader2 className="w-10 h-10 text-gold-champagne animate-spin mb-4" />
+                <p className="text-bone/60">Syncing crew roster...</p>
+              </div>
+            ) : featuredStylists.length > 0 ? (
+              featuredStylists.map((stylist) => (
+                <StylistCard
+                  key={stylist.id}
+                  {...stylist}
+                  name={`${stylist.firstName} ${stylist.lastName}`}
+                  onFollow={() => console.log(`Follow ${stylist.firstName}`)}
+                />
+              ))
+            ) : (
+              <div className="col-span-full text-center py-20 text-bone/40">
+                No crew members available now.
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -325,7 +305,7 @@ export default function Home() {
                 className="mb-4"
               />
               <p className="text-bone/60 text-sm">
-                Pit-Stop Fast. Lounge-Level Luxury.
+                Precision Fast. Lounge-Level Luxury.
               </p>
             </div>
 
@@ -342,7 +322,7 @@ export default function Home() {
 
             <div>
               <h3 className="font-display text-lg font-bold text-bone mb-4">
-                Membership
+                Membership Barbershop
               </h3>
               <ul className="space-y-2 text-sm text-bone/60">
                 <li><Link href="/membership" className="hover:text-gold-champagne transition-colors">View Plans</Link></li>
@@ -365,7 +345,7 @@ export default function Home() {
 
           <div className="pt-8 border-t border-gold-champagne/20">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-bone/60">
-              <p>© 2026 Automotive Luxury Barbershop. All rights reserved.</p>
+              <p>© 2026 Membership Barbershop. All rights reserved.</p>
               <div className="flex gap-6">
                 <Link href="/legal/terms" className="hover:text-gold-champagne transition-colors">Terms</Link>
                 <Link href="/legal/privacy" className="hover:text-gold-champagne transition-colors">Privacy</Link>

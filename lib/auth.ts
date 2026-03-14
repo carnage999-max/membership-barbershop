@@ -7,6 +7,7 @@ const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '7d';
 export interface JWTPayload {
   userId: string;
   email: string;
+  role: string;
 }
 
 export async function hashPassword(password: string): Promise<string> {
@@ -19,7 +20,7 @@ export async function verifyPassword(password: string, hashedPassword: string): 
 
 export function generateToken(payload: JWTPayload): string {
   return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: JWT_EXPIRATION,
+    expiresIn: JWT_EXPIRATION as any,
   });
 }
 

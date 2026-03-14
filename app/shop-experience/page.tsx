@@ -6,7 +6,7 @@ import PrivacyBoothFeaturePanel from "@/components/PrivacyBoothFeaturePanel";
 import { Scissors, Sparkles, Zap, Droplets, Hand, Sparkle } from "lucide-react";
 
 const mvpSteps = [
-  { icon: <Zap className="w-6 h-6" />, title: "Check-in", description: "Pit-stop entry" },
+  { icon: <Zap className="w-6 h-6" />, title: "Check-in", description: "Seamless entry" },
   { icon: <Scissors className="w-6 h-6" />, title: "Cut", description: "Precision trim" },
   { icon: <Droplets className="w-6 h-6" />, title: "Hot Towel", description: "Steam treatment" },
   { icon: <Sparkles className="w-6 h-6" />, title: "Wash", description: "Deep clean" },
@@ -19,8 +19,8 @@ export default function ShopExperiencePage() {
     <main className="min-h-screen pt-[60px] md:pt-0 bg-obsidian pb-32">
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-16">
-          <h1 className="font-display text-5xl md:text-7xl font-bold text-bone mb-4">
-            Shop Experience
+          <h1 className="font-display text-5xl md:text-7xl font-bold text-bone mb-4 italic uppercase tracking-tighter">
+            The <span className="text-gold-champagne">Membership</span> Lounge
           </h1>
           <p className="text-bone/70 text-lg max-w-2xl mx-auto">
             Automotive luxury meets barbershop excellence
@@ -47,8 +47,8 @@ export default function ShopExperiencePage() {
         {/* MVP Ritual Story */}
         <section className="mb-20">
           <div className="text-center mb-12">
-            <h2 className="font-display text-4xl md:text-6xl font-bold text-bone mb-4">
-              The MVP Ritual
+            <h2 className="font-display text-4xl md:text-6xl font-bold text-bone mb-4 italic uppercase tracking-tighter">
+              The <span className="text-gold-champagne">Concours</span> Detail
             </h2>
             <p className="text-bone/70 text-lg max-w-2xl mx-auto">
               Haircut as the tune-up. Shampoo and massage as the full detail.

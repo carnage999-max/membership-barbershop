@@ -99,11 +99,11 @@ export default function StylistsPage() {
     <main className="min-h-screen pt-[60px] md:pt-0 bg-obsidian pb-32">
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-12">
-          <h1 className="font-display text-5xl md:text-7xl font-bold text-bone mb-4">
-            Stylists
+          <h1 className="font-display text-5xl md:text-7xl font-bold text-bone mb-4 italic uppercase tracking-tighter">
+            The <span className="text-gold-champagne">Crew</span> Roster
           </h1>
           <p className="text-bone/70 text-lg max-w-2xl mx-auto">
-            Find your perfect stylist and follow them for on-shift alerts
+            Find your preferred crew member and follow them for on-shift alerts.
           </p>
         </div>
 
@@ -113,7 +113,7 @@ export default function StylistsPage() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-bone/40" />
             <input
               type="text"
-              placeholder="Search by name or specialty..."
+              placeholder="Search by crew member or specialty..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-4 bg-slate/50 backdrop-blur-sm border border-gold-champagne/20 rounded-lg text-bone placeholder:text-bone/40 focus:outline-none focus:border-gold-champagne transition-colors duration-150"
@@ -153,7 +153,7 @@ export default function StylistsPage() {
             ))
           ) : (
             <div className="col-span-full text-center py-12">
-              <p className="text-bone/60">No stylists found matching your criteria</p>
+              <p className="text-bone/60">No crew members found at this time.</p>
             </div>
           )}
         </div>

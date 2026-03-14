@@ -6,6 +6,8 @@ import MembershipTierCard from "@/components/MembershipTierCard";
 import FrequencySliderCalculator from "@/components/FrequencySliderCalculator";
 import { Check, X } from "lucide-react";
 import { memberships as membershipsApi, tokenStorage } from "@/lib/api-client";
+import SubscribeModal from "@/components/modals/SubscribeModal";
+import { useRouter } from "next/navigation";
 
 interface MembershipPlan {
   id: string;
@@ -115,6 +117,9 @@ export default function MembershipPage() {
   const [loading, setLoading] = useState(true);
   const [selectedTrack, setSelectedTrack] = useState<"haircut-only" | "mvp">("haircut-only");
   const [recommendedTier, setRecommendedTier] = useState<string | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<MembershipPlan | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     async function loadPlans() {
@@ -145,7 +150,7 @@ export default function MembershipPage() {
           <div className="flex items-center justify-center min-h-[60vh]">
             <div className="text-center">
               <div className="w-16 h-16 border-4 border-gold-champagne/20 border-t-gold-champagne rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-bone/70">Loading membership plans...</p>
+              <p className="text-bone/70">Loading Membership Barbershop plans...</p>
             </div>
           </div>
         </div>
@@ -158,7 +163,7 @@ export default function MembershipPage() {
       <div className="container mx-auto px-4 py-12">
         <div className="text-center mb-12">
           <h1 className="font-display text-5xl md:text-7xl font-bold text-bone mb-4">
-            Membership
+            Membership Barbershop
           </h1>
           <p className="text-bone/70 text-lg max-w-2xl mx-auto">
             Premium subscription product, not a haircut coupon. Choose your track and find your perfect plan.
@@ -185,7 +190,7 @@ export default function MembershipPage() {
                 : "bg-slate/50 text-bone/70 hover:bg-slate/80"
             }`}
           >
-            MVP (includes wash + massage)
+            Concours Detail (High-Pressure Wash + Massage)
           </button>
         </div>
 
@@ -214,17 +219,17 @@ export default function MembershipPage() {
                 onSelect={() => {
                   const token = tokenStorage.get();
                   if (!token) {
-                    alert('Please login to subscribe to a membership');
+                    router.push("/login?redirect=/membership");
                     return;
                   }
-                  console.log(`Selected ${plan.name} - Plan ID: ${plan.id}`);
-                  // Implement subscription flow here
+                  setSelectedPlan(plan);
+                  setIsModalOpen(true);
                 }}
               />
             ))
           ) : (
             <div className="col-span-full text-center py-12">
-              <p className="text-bone/60">No plans available for this track</p>
+              <p className="text-bone/60">No plans available to you now</p>
             </div>
           )}
         </div>
@@ -264,7 +269,7 @@ export default function MembershipPage() {
                   <td className="py-4 px-4 text-bone/80">Visits Included</td>
                   {tiers.map((tier) => (
                     <td key={tier.name} className="py-4 px-4 text-center text-bone">
-                      {tier.visitsIncluded === Infinity ? "Unlimited" : tier.visitsIncluded}
+                      {tier.cutsPerMonth >= 99 ? "Unlimited" : tier.cutsPerMonth}
                     </td>
                   ))}
                 </tr>
@@ -272,7 +277,7 @@ export default function MembershipPage() {
                   <td className="py-4 px-4 text-bone/80">Rollover</td>
                   {tiers.map((tier) => (
                     <td key={tier.name} className="py-4 px-4 text-center">
-                      {tier.rollover ? (
+                      {tier.cutsPerMonth > 1 ? (
                         <Check className="w-5 h-5 text-success mx-auto" />
                       ) : (
                         <X className="w-5 h-5 text-bone/30 mx-auto" />
@@ -284,7 +289,7 @@ export default function MembershipPage() {
                   <td className="py-4 px-4 text-bone/80">Booking Priority</td>
                   {tiers.map((tier) => (
                     <td key={tier.name} className="py-4 px-4 text-center">
-                      {tier.bookingPriority ? (
+                      {tier.priority ? (
                         <Check className="w-5 h-5 text-success mx-auto" />
                       ) : (
                         <X className="w-5 h-5 text-bone/30 mx-auto" />
@@ -296,7 +301,7 @@ export default function MembershipPage() {
                   <td className="py-4 px-4 text-bone/80">Guest Passes</td>
                   {tiers.map((tier) => (
                     <td key={tier.name} className="py-4 px-4 text-center text-bone">
-                      {tier.guestPasses}
+                      {tier.cutsPerMonth > 2 ? "1 / mo" : "0"}
                     </td>
                   ))}
                 </tr>
@@ -325,7 +330,7 @@ export default function MembershipPage() {
             },
             {
               q: "What is booking priority?",
-              a: "Elite and Unlimited members get priority access to busy-hour slots and MVP ritual appointments.",
+              a: "Elite and Unlimited members get priority access to busy-hour slots and Concours Detail appointments.",
             },
           ].map((faq, index) => (
             <motion.div
@@ -344,6 +349,15 @@ export default function MembershipPage() {
           ))}
         </div>
       </div>
+
+      <SubscribeModal
+        plan={selectedPlan}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSuccess={() => {
+          router.push("/account");
+        }}
+      />
     </main>
   );
 }

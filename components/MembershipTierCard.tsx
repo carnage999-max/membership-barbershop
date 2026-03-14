@@ -73,7 +73,7 @@ export default function MembershipTierCard({
         <div className="flex items-center gap-2">
           <Check className="w-5 h-5 text-success flex-shrink-0" />
           <span className="text-bone/80 text-sm">
-            {isUnlimited ? "Unlimited" : visitsIncluded} {track === "mvp" ? "MVP Ritual" : "Haircut"} visits
+            {isUnlimited ? "Unlimited" : visitsIncluded} {track === "mvp" ? "Concours Detail" : "Haircut"} visits
           </span>
         </div>
         {rollover && (

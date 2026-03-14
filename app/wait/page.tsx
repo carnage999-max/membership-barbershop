@@ -102,7 +102,7 @@ export default function WaitPage() {
           <div className="flex items-center justify-center min-h-[60vh]">
             <div className="text-center">
               <div className="w-16 h-16 border-4 border-gold-champagne/20 border-t-gold-champagne rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-bone/70">Loading wait times...</p>
+              <p className="text-bone/70">Synchronizing waitlist data...</p>
             </div>
           </div>
         </div>
@@ -114,8 +114,8 @@ export default function WaitPage() {
     <main className="min-h-screen pt-[60px] md:pt-0 bg-obsidian pb-32">
       <div className="container mx-auto px-4 py-12">
         <div className="mb-12">
-          <h1 className="font-display text-4xl md:text-6xl font-bold text-bone mb-4">
-            Wait Times
+          <h1 className="font-display text-4xl md:text-6xl font-bold text-bone mb-4 italic uppercase tracking-tighter">
+            Location <span className="text-gold-champagne">Wait Times</span>
           </h1>
           <p className="text-bone/70 text-lg">
             Real-time wait times at all locations
@@ -128,7 +128,7 @@ export default function WaitPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-display text-2xl font-bold text-bone mb-2">
-                  You're in the Queue!
+                  Authorized in Shop
                 </h3>
                 <p className="text-bone/70 mb-2">
                   Position <span className="text-gold-champagne font-bold text-3xl">#{myQueuePosition.position}</span> at {myQueuePosition.location.name}
@@ -160,13 +160,6 @@ export default function WaitPage() {
                 rating={4.5}
                 topStylist="Available"
                 nextAvailable={`${location.currentWaitTime} min`}
-                lat={0}
-                lng={0}
-                open={location.status !== "closed"}
-                mvpAvailable={true}
-                kidsFriendly={true}
-                quietBooths={true}
-                wheelchairAccess={true}
               />
               {!myQueuePosition && location.status !== "closed" && (
                 <button

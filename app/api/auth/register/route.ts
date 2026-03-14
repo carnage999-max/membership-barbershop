@@ -52,6 +52,7 @@ export async function POST(req: NextRequest) {
     const token = generateToken({
       userId: user.id,
       email: user.email,
+      role: 'USER',
     });
 
     return apiResponse({
@@ -61,7 +62,7 @@ export async function POST(req: NextRequest) {
     }, 201);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return apiError(`Validation error: ${error.errors.map(e => e.message).join(', ')}`, 400);
+      return apiError(`Validation error: ${error.issues.map(e => e.message).join(', ')}`, 400);
     }
 
     console.error('Registration error:', error);

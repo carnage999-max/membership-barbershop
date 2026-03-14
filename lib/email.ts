@@ -64,7 +64,7 @@ export function membershipActivatedEmail(firstName: string, planName: string, cu
       </div>
 
       <p style="font-size: 16px; line-height: 1.6; margin: 20px 0 0 0;">
-        You can now check in to any of our locations and enjoy pit-stop fast, lounge-level luxury service.
+        You can now check in to any of our locations and enjoy precision fast, lounge-level luxury service.
       </p>
     </div>
 
@@ -79,7 +79,7 @@ export function membershipActivatedEmail(firstName: string, planName: string, cu
     <!-- Footer -->
     <div style="text-align: center; color: #F4F1EA; opacity: 0.7; font-size: 14px; margin-top: 40px; padding-top: 20px; border-top: 1px solid #2A2E36;">
       <p style="margin: 0 0 10px 0;">Membership Barbershop</p>
-      <p style="margin: 0;">Pit-Stop Fast. Lounge-Level Luxury.</p>
+      <p style="margin: 0;">Precision Fast. Lounge-Level Luxury.</p>
     </div>
   </div>
 </body>

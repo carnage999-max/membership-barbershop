@@ -46,7 +46,7 @@ export default function GiftPage() {
             <Gift className="w-10 h-10 text-gold-champagne" />
           </div>
           <h1 className="font-display text-5xl md:text-7xl font-bold text-bone mb-4">
-            Gift Membership
+            Gift Membership Barbershop
           </h1>
           <p className="text-bone/70 text-lg max-w-2xl mx-auto">
             Give the gift of premium grooming. Perfect for any occasion.

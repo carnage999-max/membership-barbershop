@@ -30,8 +30,8 @@ const sourceSans3 = Source_Sans_3({
 });
 
 export const metadata: Metadata = {
-  title: "Automotive Luxury Barbershop",
-  description: "Pit-Stop Fast. Lounge-Level Luxury.",
+  title: "Membership Barbershop",
+  description: "Precision Fast. Lounge-Level Luxury.",
 };
 
 export default function RootLayout({

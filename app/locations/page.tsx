@@ -9,6 +9,7 @@ import { locations as locationsApi } from "@/lib/api-client";
 
 interface Location {
   id: string;
+  slug: string;
   name: string;
   address: string;
   city: string;
@@ -28,7 +29,7 @@ interface Location {
 const filters = [
   { id: "open-now", label: "Open now" },
   { id: "under-10", label: "<10 min" },
-  { id: "mvp", label: "MVP available" },
+  { id: "mvp", label: "Concours Detail" },
   { id: "kids", label: "Kids friendly" },
   { id: "quiet", label: "Quiet booths" },
   { id: "wheelchair", label: "Wheelchair access" },
@@ -205,18 +206,12 @@ export default function LocationsPage() {
                   rating={4.5}
                   topStylist="Available"
                   nextAvailable={`${location.currentWaitTime} min`}
-                  lat={location.latitude || 0}
-                  lng={location.longitude || 0}
-                  open={location.status !== "closed"}
-                  mvpAvailable={true}
-                  kidsFriendly={true}
-                  quietBooths={true}
-                  wheelchairAccess={true}
+                  slug={location.slug}
                 />
               ))
             ) : (
               <div className="bg-slate/50 rounded-xl p-8 text-center">
-                <p className="text-bone/60">No locations match your filters</p>
+                <p className="text-bone/60">No locations found near you now.</p>
                 <button
                   onClick={() => setActiveFilters([])}
                   className="mt-4 text-gold-champagne hover:text-gold-champagne/80 transition-colors"

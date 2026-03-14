@@ -2,11 +2,9 @@ import { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { apiResponse, apiError, withAuth } from '@/lib/middleware';
 
-export const POST = withAuth(async (req) => {
+export const POST = withAuth(async (req, { params }: { params: Promise<{ id: string }> }) => {
   try {
-    const url = new URL(req.url);
-    const pathParts = url.pathname.split('/');
-    const stylistId = pathParts[pathParts.length - 2];
+    const { id: stylistId } = await params;
 
     if (!req.user) {
       return apiError('Unauthorized', 401);
@@ -53,11 +51,9 @@ export const POST = withAuth(async (req) => {
   }
 });
 
-export const DELETE = withAuth(async (req) => {
+export const DELETE = withAuth(async (req, { params }: { params: Promise<{ id: string }> }) => {
   try {
-    const url = new URL(req.url);
-    const pathParts = url.pathname.split('/');
-    const stylistId = pathParts[pathParts.length - 2];
+    const { id: stylistId } = await params;
 
     if (!req.user) {
       return apiError('Unauthorized', 401);

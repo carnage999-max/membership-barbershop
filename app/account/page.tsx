@@ -89,7 +89,7 @@ export default function AccountPage() {
             <div className="flex items-center gap-3 mb-4">
               <Crown className="w-6 h-6 text-gold-champagne" />
               <h2 className="font-display text-2xl font-bold text-bone">
-                My Membership
+                My Membership Barbershop
               </h2>
             </div>
             {membership ? (
@@ -118,7 +118,7 @@ export default function AccountPage() {
                   href="/membership"
                   className="inline-block px-4 py-2 bg-red-crimson hover:bg-red-crimson/90 text-bone font-medium rounded-lg transition-colors duration-150 text-sm"
                 >
-                  Get Membership
+                  Get Membership Barbershop
                 </Link>
               </div>
             )}

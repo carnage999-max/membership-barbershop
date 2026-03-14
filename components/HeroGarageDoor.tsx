@@ -32,6 +32,14 @@ export default function HeroGarageDoor() {
             transition={{ duration: 0.6 }}
             className="space-y-8"
           >
+            <Image
+              src="/logo.png"
+              alt="Logo"
+              width={240}
+              height={80}
+              className="h-16 md:h-20 w-auto mb-12"
+              priority
+            />
             <h1 className="font-display text-5xl md:text-7xl font-bold text-bone leading-tight">
               Your Cut.
               <br />
@@ -41,7 +49,7 @@ export default function HeroGarageDoor() {
             </h1>
 
             <p className="text-bone/70 text-lg max-w-md">
-              Pit-Stop Fast. Lounge-Level Luxury.
+              Precision Fast. Lounge-Level Luxury.
             </p>
 
             <div className="space-y-4">

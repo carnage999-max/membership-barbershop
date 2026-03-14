@@ -10,9 +10,9 @@ import { tokenStorage } from "@/lib/api-client";
 
 const baseNavItems = [
   { href: "/locations", icon: MapPin, label: "Map" },
-  { href: "/wait", icon: Clock, label: "Wait" },
-  { href: "/book", icon: Calendar, label: "Book" },
-  { href: "/membership", icon: Crown, label: "Membership" },
+  { href: "/wait", icon: Clock, label: "Waitlist" },
+  { href: "/membership", icon: Crown, label: "Membership Barbershop" },
+  { href: "/book", icon: Calendar, label: "Book" }, // Reordered slightly for better thumb flow
 ];
 
 export default function MobileNav() {
@@ -27,31 +27,13 @@ export default function MobileNav() {
   }, [pathname]);
 
   return (
-    <nav className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 md:hidden">
+    <nav className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 md:hidden w-[90%] max-w-[400px]">
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-        className="flex items-center gap-2 px-4 py-3 bg-slate/90 backdrop-blur-xl rounded-[2rem] shadow-2xl border border-gold-champagne/20"
+        transition={{ type: "spring", damping: 25, stiffness: 200 }}
+        className="flex items-center justify-around px-2 py-2 bg-obsidian/85 backdrop-blur-2xl rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-gold-champagne/15 ring-1 ring-white/5"
       >
-        {/* Logo on the left */}
-        <Link
-          href="/"
-          className={`relative flex items-center justify-center w-14 h-14 transition-all duration-150 mr-1 border-2 rounded-2xl ${
-            isHomePage ? "border-red-crimson bg-red-crimson/10" : "border-wood-espresso/50 bg-wood-espresso/10"
-          }`}
-        >
-          <Image
-            src="/logo.png"
-            alt="Logo"
-            width={48}
-            height={48}
-            className="object-contain"
-          />
-        </Link>
-
-        {/* Vertical divider */}
-        <div className="w-px h-10 bg-gold-champagne/20" />
 
         {/* Navigation items */}
         {baseNavItems.map((item) => {
@@ -62,27 +44,27 @@ export default function MobileNav() {
             <Link
               key={item.href}
               href={item.href}
-              className="relative flex flex-col items-center justify-center w-14 h-14 rounded-2xl transition-all duration-150"
+              className="relative flex flex-col items-center justify-center flex-1 h-14 transition-all duration-150"
             >
               {isActive && (
                 <motion.div
                   layoutId="activeNav"
-                  className="absolute inset-0 bg-obsidian rounded-2xl border-2 border-gold-champagne"
+                  className="absolute inset-x-1 inset-y-0.5 bg-gold-champagne/10 rounded-[2rem] border border-gold-champagne/30"
                   transition={{
                     type: "spring",
-                    stiffness: 500,
+                    stiffness: 400,
                     damping: 30,
                   }}
                 />
               )}
               <Icon
-                className={`relative z-10 w-5 h-5 transition-colors duration-150 ${
-                  isActive ? "text-gold-champagne" : "text-bone/70"
+                className={`relative z-10 w-5 h-5 transition-all duration-150 ${
+                  isActive ? "text-gold-champagne scale-110" : "text-bone/50 hover:text-bone/80"
                 }`}
               />
               <span
-                className={`relative z-10 text-[10px] font-medium mt-0.5 transition-colors duration-150 ${
-                  isActive ? "text-gold-champagne" : "text-bone/50"
+                className={`relative z-10 text-[10px] font-bold mt-1 tracking-tight transition-colors duration-150 ${
+                  isActive ? "text-gold-champagne" : "text-bone/40"
                 }`}
               >
                 {item.label}
@@ -91,66 +73,6 @@ export default function MobileNav() {
           );
         })}
 
-        {/* Auth-dependent item: Account or Login */}
-        {isAuthenticated ? (
-          <Link
-            href="/account"
-            className="relative flex flex-col items-center justify-center w-14 h-14 rounded-2xl transition-all duration-150"
-          >
-            {pathname?.startsWith("/account") && (
-              <motion.div
-                layoutId="activeNav"
-                className="absolute inset-0 bg-obsidian rounded-2xl border-2 border-gold-champagne"
-                transition={{
-                  type: "spring",
-                  stiffness: 500,
-                  damping: 30,
-                }}
-              />
-            )}
-            <User
-              className={`relative z-10 w-5 h-5 transition-colors duration-150 ${
-                pathname?.startsWith("/account") ? "text-gold-champagne" : "text-bone/70"
-              }`}
-            />
-            <span
-              className={`relative z-10 text-[10px] font-medium mt-0.5 transition-colors duration-150 ${
-                pathname?.startsWith("/account") ? "text-gold-champagne" : "text-bone/50"
-              }`}
-            >
-              Account
-            </span>
-          </Link>
-        ) : (
-          <Link
-            href="/login"
-            className="relative flex flex-col items-center justify-center w-14 h-14 rounded-2xl transition-all duration-150"
-          >
-            {pathname?.startsWith("/login") && (
-              <motion.div
-                layoutId="activeNav"
-                className="absolute inset-0 bg-obsidian rounded-2xl border-2 border-gold-champagne"
-                transition={{
-                  type: "spring",
-                  stiffness: 500,
-                  damping: 30,
-                }}
-              />
-            )}
-            <LogIn
-              className={`relative z-10 w-5 h-5 transition-colors duration-150 ${
-                pathname?.startsWith("/login") ? "text-gold-champagne" : "text-bone/70"
-              }`}
-            />
-            <span
-              className={`relative z-10 text-[10px] font-medium mt-0.5 transition-colors duration-150 ${
-                pathname?.startsWith("/login") ? "text-gold-champagne" : "text-bone/50"
-              }`}
-            >
-              Login
-            </span>
-          </Link>
-        )}
       </motion.div>
     </nav>
   );

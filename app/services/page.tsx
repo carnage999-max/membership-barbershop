@@ -80,7 +80,7 @@ export default function ServicesPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-display text-xl font-bold text-bone mb-1">
-                  Show Membership Coverage
+                  Show Membership Barbershop Coverage
                 </h3>
                 <p className="text-sm text-bone/60">
                   See which services are included in your membership tier

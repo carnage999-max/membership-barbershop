@@ -114,7 +114,7 @@ export const POST = withAuth(async (req) => {
     }, 201);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return apiError(`Validation error: ${error.errors.map(e => e.message).join(', ')}`, 400);
+      return apiError(`Validation error: ${error.issues.map(e => e.message).join(', ')}`, 400);
     }
 
     console.error('Error joining queue:', error);
