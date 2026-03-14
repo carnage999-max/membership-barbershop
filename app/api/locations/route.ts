@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
     });
 
     // Calculate wait times and distances
-    const locationsWithData = locations.map(location => {
+    const locationsWithData = locations.map((location: any) => {
       const queueLength = location.queue.length;
       const stylistCount = location.stylists.length;
       const avgCutTime = 20; // Average cut time in minutes
