@@ -87,7 +87,7 @@ export async function GET(req: NextRequest) {
 
     // Sort by distance if coordinates provided
     if (lat && lng) {
-      locationsWithData.sort((a, b) => {
+      locationsWithData.sort((a: any, b: any) => {
         if (a.distance === undefined) return 1;
         if (b.distance === undefined) return -1;
         return a.distance - b.distance;
