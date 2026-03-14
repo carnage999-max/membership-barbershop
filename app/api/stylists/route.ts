@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
       ],
     });
 
-    const stylistsWithFollowStatus = stylists.map(stylist => {
+    const stylistsWithFollowStatus = stylists.map((stylist: any) => {
       const { followers, ...stylistData } = stylist;
       return {
         ...stylistData,
