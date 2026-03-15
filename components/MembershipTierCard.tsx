@@ -65,15 +65,27 @@ export default function MembershipTierCard({
           <span className="text-bone/60">/month</span>
         </div>
         <p className="text-sm text-bone/70">
-          Effective <span className="font-semibold text-gold-champagne">${effectiveCostPerCut}</span> per cut
+          {visitsIncluded === Infinity ? (
+            <span className="font-semibold text-gold-champagne uppercase tracking-widest text-xs">Unlimited Protocol Enabled</span>
+          ) : (
+            <>Effective <span className="font-semibold text-gold-champagne">${(price / visitsIncluded).toFixed(2)}</span> per visit</>
+          )}
         </p>
       </div>
 
       <div className="space-y-3 mb-6">
+        {track === "signature" && (
+          <div className="flex items-start gap-2 p-2 bg-gold-champagne/5 rounded-lg border border-gold-champagne/10 mb-2">
+            <Sparkles className="w-4 h-4 text-gold-champagne mt-0.5 flex-shrink-0" />
+            <span className="text-[10px] text-gold-champagne font-bold uppercase tracking-wider leading-relaxed">
+              Concours Detail: Includes Back Shave + Hot Towel + 5m Massage
+            </span>
+          </div>
+        )}
         <div className="flex items-center gap-2">
           <Check className="w-5 h-5 text-success flex-shrink-0" />
           <span className="text-bone/80 text-sm">
-            {isUnlimited ? "Unlimited" : visitsIncluded} {track === "signature" ? "Concours Detail" : "Haircut"} visits
+            {visitsIncluded === Infinity ? "Unlimited" : visitsIncluded} {track === "signature" ? "Concours Detail" : "Haircut"} visits
           </span>
         </div>
         {rollover && (

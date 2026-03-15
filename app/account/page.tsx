@@ -3,12 +3,17 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Crown, Clock, Bell, History, Users, CreditCard, LogOut } from "lucide-react";
+import { Crown, Clock, Bell, History, Users, CreditCard, LogOut, Shield } from "lucide-react";
 import Link from "next/link";
 import { memberships as membershipsApi, queue as queueApi, checkIns as checkInsApi, stylists as stylistsApi, payments as paymentsApi, tokenStorage, session } from "@/lib/api-client";
+import { useUser } from "@/lib/hooks";
+import { useConfirmation } from "@/context/ConfirmationContext";
+import { toast } from "react-hot-toast";
 
 export default function AccountPage() {
   const router = useRouter();
+  const { isAdmin } = useUser();
+  const { alert, confirm } = useConfirmation();
   const [membership, setMembership] = useState<any>(null);
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -51,12 +56,23 @@ export default function AccountPage() {
   }
 
   async function handleLeaveQueue() {
+    const isConfirmed = await confirm({
+      title: "Exit Queue",
+      message: "Are you sure you want to surrender your position in the queue? This action cannot be undone.",
+      confirmText: "Surrender Position",
+      isDanger: true
+    });
+
+    if (!isConfirmed) return;
+
     try {
       const token = tokenStorage.get();
       if (!token) return;
       await queueApi.leave(token);
       setMyQueuePosition(null);
-    } catch (error) {
+      toast.success("Position surrendered successfully");
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to leave queue');
     }
   }
 
@@ -70,7 +86,7 @@ export default function AccountPage() {
         window.location.href = result.url;
       }
     } catch (err: any) {
-      alert(err.message || 'Failed to open billing portal');
+      toast.error(err.message || 'Failed to open billing portal');
     }
   }
 
@@ -297,6 +313,33 @@ export default function AccountPage() {
               Manage Payments
             </button>
           </motion.div>
+
+          {/* Admin Dashboard - Only for Admins */}
+          {isAdmin && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5 }}
+              className="bg-gold-champagne/10 backdrop-blur-sm rounded-xl p-6 border border-gold-champagne/40"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <Shield className="w-6 h-6 text-gold-champagne" />
+                <h2 className="font-display text-2xl font-bold text-gold-champagne">
+                  Admin Control
+                </h2>
+              </div>
+              <p className="text-bone/70 text-sm mb-4">
+                Access the command center to manage shop locations, membership tiers, and system analytics.
+              </p>
+              <Link
+                href="/admin"
+                className="inline-block px-4 py-2 bg-gold-champagne hover:bg-gold-champagne/90 text-ink font-bold rounded-lg transition-colors duration-150 text-sm"
+              >
+                Enter Command Center
+              </Link>
+            </motion.div>
+          )}
 
         </div>
       </div>

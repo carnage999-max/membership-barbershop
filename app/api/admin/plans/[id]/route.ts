@@ -34,3 +34,19 @@ export const PATCH = withAdmin(async (req, { params }: { params: Promise<{ id: s
     return apiError('Failed to update plan', 500);
   }
 });
+
+export const DELETE = withAdmin(async (req, { params }: { params: Promise<{ id: string }> }) => {
+  try {
+    const { id } = await params;
+    if (!id) return apiError('Missing plan ID', 400);
+
+    await prisma.membershipPlan.delete({
+      where: { id },
+    });
+
+    return apiResponse({ message: 'Plan deleted successfully' });
+  } catch (error) {
+    console.error('Admin Plan Delete Error:', error);
+    return apiError('Failed to delete plan', 500);
+  }
+});

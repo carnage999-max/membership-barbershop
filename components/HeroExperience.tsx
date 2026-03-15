@@ -7,10 +7,21 @@ import { memberships as membershipsApi } from "@/lib/api-client";
 import WaitTimeBadge from "./WaitTimeBadge";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function HeroExperience() {
+  const router = useRouter();
   const [zipCode, setZipCode] = useState("");
   const [minPrice, setMinPrice] = useState<number | null>(null);
+
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (zipCode.trim()) {
+      router.push(`/locations?zip=${encodeURIComponent(zipCode.trim())}`);
+    } else {
+      router.push('/locations');
+    }
+  };
 
   useEffect(() => {
     async function fetchMinPrice() {
@@ -71,7 +82,7 @@ export default function HeroExperience() {
             </p>
 
             <div className="space-y-4">
-              <div className="flex gap-3">
+              <form onSubmit={handleSearch} className="flex gap-3">
                 <div className="relative flex-1">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-bone/40" />
                   <input
@@ -82,10 +93,13 @@ export default function HeroExperience() {
                     className="w-full pl-12 pr-4 py-4 bg-slate/50 backdrop-blur-sm border border-gold-champagne/20 rounded-lg text-bone placeholder:text-bone/40 focus:outline-none focus:border-gold-champagne transition-colors duration-150"
                   />
                 </div>
-                <button className="px-8 py-4 bg-red-crimson hover:bg-red-crimson/90 text-bone font-semibold rounded-lg transition-colors duration-150 whitespace-nowrap">
+                <button 
+                  type="submit"
+                  className="px-8 py-4 bg-red-crimson hover:bg-red-crimson/90 text-bone font-semibold rounded-lg transition-colors duration-150 whitespace-nowrap"
+                >
                   Find My Shop
                 </button>
-              </div>
+              </form>
             </div>
           </motion.div>
 

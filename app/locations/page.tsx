@@ -5,8 +5,12 @@ import { motion } from "framer-motion";
 import { MapPin, Filter, X } from "lucide-react";
 import LocationCard from "@/components/LocationCard";
 import WaitTimeBadge from "@/components/WaitTimeBadge";
+import { useConfirmation } from "@/context/ConfirmationContext";
 import { locations as locationsApi, queue as queueApi, tokenStorage } from "@/lib/api-client";
 import dynamic from "next/dynamic";
+import { toast } from "react-hot-toast";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 const MapComponent = dynamic(() => import("@/components/LocationMap"), {
   ssr: false,
@@ -45,7 +49,11 @@ const filters = [
   { id: "wheelchair", label: "Wheelchair access" },
 ];
 
-export default function LocationsPage() {
+function LocationsContent() {
+  const searchParams = useSearchParams();
+  const zipQuery = searchParams.get("zip");
+
+  const { alert, confirm } = useConfirmation();
   const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
@@ -53,11 +61,16 @@ export default function LocationsPage() {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [myQueuePosition, setMyQueuePosition] = useState<any>(null);
   const [joiningQueue, setJoiningQueue] = useState(false);
+  const [zipCode, setZipCode] = useState(zipQuery || "");
 
   useEffect(() => {
-    async function loadLocations() {
+    if (zipQuery) setZipCode(zipQuery);
+  }, [zipQuery]);
+
+  useEffect(() => {
+    async function loadLocations(isSilent = false) {
       try {
-        setLoading(true);
+        if (!isSilent && locations.length === 0) setLoading(true);
 
         // Try to get user's location
         if (navigator.geolocation) {
@@ -103,8 +116,8 @@ export default function LocationsPage() {
 
     loadLocations();
 
-    // Poll for updates every 30 seconds
-    const interval = setInterval(loadLocations, 30000);
+    // Poll for updates every 30 seconds (silent refresh)
+    const interval = setInterval(() => loadLocations(true), 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -112,7 +125,7 @@ export default function LocationsPage() {
     try {
       const token = tokenStorage.get();
       if (!token) {
-        alert('Please login to join the queue');
+        await alert({ title: "Authorization Required", message: "Please login to join the queue." });
         window.location.href = '/login?redirect=/locations';
         return;
       }
@@ -121,28 +134,36 @@ export default function LocationsPage() {
       const result = await queueApi.join(locationId, token);
       setMyQueuePosition(result.queueEntry);
       setJoiningQueue(false);
-
-      alert(`You're #${result.queueEntry.position} in line at ${result.queueEntry.locationName}!`);
+      toast.success(`Position #${result.queueEntry.position} secured at ${result.queueEntry.locationName}`);
     } catch (error: any) {
       console.error('Failed to join queue:', error);
-      alert(error.message || 'Failed to join queue');
+      toast.error(error.message || 'Failed to join queue');
       setJoiningQueue(false);
     }
   }
 
   async function handleLeaveQueue() {
+    const isConfirmed = await confirm({
+      title: "Exit Queue",
+      message: "Are you sure you want to surrender your position in the queue? This action cannot be undone.",
+      confirmText: "Surrender Position",
+      isDanger: true
+    });
+
+    if (!isConfirmed) return;
+
     try {
       const token = tokenStorage.get();
       if (!token) return;
 
       await queueApi.leave(token);
       setMyQueuePosition(null);
-      alert('Left the queue successfully');
+      toast.success("Position surrendered successfully");
       // Force reload to update wait times
       window.location.reload();
     } catch (error: any) {
       console.error('Failed to leave queue:', error);
-      alert(error.message || 'Failed to leave queue');
+      toast.error(error.message || 'Failed to leave queue');
     }
   }
 
@@ -157,8 +178,7 @@ export default function LocationsPage() {
   const filteredLocations = locations.filter((location) => {
     if (activeFilters.includes("open-now") && location.status === "closed") return false;
     if (activeFilters.includes("under-10") && location.currentWaitTime >= 10) return false;
-    // Note: MVP, kids, quiet, wheelchair filters require additional location metadata
-    // These can be added to the Location model later
+    if (zipCode.trim() && !location.zipCode.includes(zipCode.trim())) return false;
     return true;
   });
 
@@ -187,6 +207,20 @@ export default function LocationsPage() {
           <p className="text-bone/70 text-lg">
             Map-first discovery with live wait times
           </p>
+        </div>
+
+        {/* Zip Code Search */}
+        <div className="mb-8 max-w-md">
+          <div className="relative">
+            <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gold-champagne/40" />
+            <input
+              type="text"
+              placeholder="Filter by zip code..."
+              value={zipCode}
+              onChange={(e) => setZipCode(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 bg-slate/50 backdrop-blur-sm border border-gold-champagne/20 rounded-lg text-bone placeholder:text-bone/40 focus:outline-none focus:border-gold-champagne transition-colors duration-150"
+            />
+          </div>
         </div>
 
         {/* Filters */}
@@ -300,6 +334,20 @@ export default function LocationsPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function LocationsPage() {
+  return (
+    <Suspense fallback={
+      <main className="min-h-screen pt-[60px] md:pt-0 bg-obsidian pb-32">
+        <div className="container mx-auto px-4 py-12 flex items-center justify-center min-h-[60vh]">
+          <div className="w-12 h-12 border-4 border-gold-champagne/20 border-t-gold-champagne rounded-full animate-spin"></div>
+        </div>
+      </main>
+    }>
+      <LocationsContent />
+    </Suspense>
   );
 }
 

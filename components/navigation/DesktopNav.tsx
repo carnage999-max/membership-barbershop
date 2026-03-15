@@ -34,7 +34,10 @@ export default function DesktopNav() {
       </Link>
 
       <div className="flex items-center gap-1">
-        {navItems.map((item) => {
+        {[
+          ...navItems,
+          ...(isAdmin ? [{ href: "/admin", label: "Admin" }] : [])
+        ].map((item) => {
           const isActive = pathname?.startsWith(item.href);
           return (
             <Link
@@ -42,7 +45,7 @@ export default function DesktopNav() {
               href={item.href}
               className={`relative px-4 py-2 rounded-lg font-medium text-sm transition-colors duration-150 ${
                 isActive
-                  ? "text-gold-champagne"
+                  ? "text-gold-champagne font-bold"
                   : "text-bone/70 hover:text-bone"
               }`}
             >
@@ -61,14 +64,6 @@ export default function DesktopNav() {
             </Link>
           );
         })}
-        {isAdmin && (
-          <Link
-            href="/admin"
-            className={`relative px-4 py-2 rounded-lg font-bold text-sm text-gold-champagne hover:bg-gold-champagne/10 transition-colors duration-150`}
-          >
-            Admin
-          </Link>
-        )}
       </div>
 
       <div className="flex items-center gap-4">

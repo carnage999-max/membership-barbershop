@@ -31,6 +31,11 @@ export default function LocationCard({
   slug,
   onCheckIn,
 }: LocationCardProps) {
+  const handleGetDirections = () => {
+    const encodedAddress = encodeURIComponent(address);
+    window.open(`https://www.google.com/maps/search/?api=1&query=${encodedAddress}`, "_blank");
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -85,6 +90,7 @@ export default function LocationCard({
           Check-in
         </Link>
         <button
+          onClick={handleGetDirections}
           className="p-2 bg-slate hover:bg-slate/80 rounded-lg transition-colors duration-150"
           aria-label="Get directions"
         >

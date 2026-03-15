@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import StylistCard from "@/components/StylistCard";
 import { Search } from "lucide-react";
+import { useConfirmation } from "@/context/ConfirmationContext";
 import { stylists as stylistsApi, tokenStorage } from "@/lib/api-client";
+import { toast } from "react-hot-toast";
 
 interface Stylist {
   id: string;
@@ -22,6 +24,7 @@ interface Stylist {
 }
 
 export default function StylistsPage() {
+  const { alert } = useConfirmation();
   const [allStylists, setAllStylists] = useState<Stylist[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -48,14 +51,16 @@ export default function StylistsPage() {
     try {
       const token = tokenStorage.get();
       if (!token) {
-        alert('Please login to follow stylists');
+        await alert({ title: "Authorization Required", message: "Please login to follow stylists." });
         return;
       }
 
       if (isCurrentlyFollowing) {
         await stylistsApi.unfollow(stylistId, token);
+        toast.success("Unfollowed successfully");
       } else {
         await stylistsApi.follow(stylistId, token);
+        toast.success("Now following for shift alerts");
       }
 
       // Reload stylists to update follow status
@@ -63,7 +68,7 @@ export default function StylistsPage() {
       setAllStylists(result.stylists);
     } catch (error) {
       console.error('Failed to update follow status:', error);
-      alert('Failed to update follow status');
+      toast.error("Failed to update follow status");
     }
   };
 

@@ -8,8 +8,14 @@ const planSchema = z.object({
   description: z.string().min(1),
   price: z.number().positive(),
   visitsPerMonth: z.number().int().nonnegative(),
+  isUnlimited: z.boolean().default(false),
+  includesBackShave: z.boolean().default(false),
+  includesMassage: z.boolean().default(false),
+  includesHotTowel: z.boolean().default(false),
+  queuePriorityLevel: z.number().int().default(1),
+  maxVisitsPerDay: z.number().int().default(1),
   mvpAccess: z.boolean().default(false),
-  priority: z.boolean().default(false),
+  isActive: z.boolean().default(true),
   locationId: z.string().optional(),
 });
 

@@ -6,6 +6,8 @@ import { Calendar, Clock, MapPin, Loader2, CheckCircle2 } from "lucide-react";
 import LocationCard from "@/components/LocationCard";
 import { locations as locationsApi, queue as queueApi, tokenStorage } from "@/lib/api-client";
 import { useRouter } from "next/navigation";
+import { useConfirmation } from "@/context/ConfirmationContext";
+import { toast } from "react-hot-toast";
 
 export default function BookPage() {
   const [locations, setLocations] = useState<any[]>([]);
@@ -14,6 +16,7 @@ export default function BookPage() {
   const [joining, setJoining] = useState(false);
   const [success, setSuccess] = useState(false);
   const router = useRouter();
+  const { alert } = useConfirmation();
 
   useEffect(() => {
     async function loadLocations() {
@@ -45,8 +48,9 @@ export default function BookPage() {
       setTimeout(() => {
         router.push("/account");
       }, 2000);
+      toast.success("Security clearance granted. En route to shop...");
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Failed to join queue");
+      toast.error(error instanceof Error ? error.message : "Failed to join queue");
     } finally {
       setJoining(false);
     }

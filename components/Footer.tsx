@@ -1,6 +1,12 @@
+"use client";
+
 import Image from "next/image";
+import Link from "next/link";
+import { useUser } from "@/lib/hooks";
 
 export default function Footer() {
+  const { user, isAdmin } = useUser();
+
   return (
     <footer id="global-footer" className="bg-obsidian border-t border-gold-champagne/10 py-16 px-6 mt-12 bg-[url('/bg-noise.png')] opacity-95">
       <div className="container mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -12,18 +18,28 @@ export default function Footer() {
         <div>
           <h4 className="font-bold text-bone mb-4 uppercase tracking-wider text-sm">Platform</h4>
           <ul className="space-y-3 text-sm text-bone/60">
-            <li><a href="/locations" className="hover:text-gold-champagne transition-colors">Locations</a></li>
-            <li><a href="/membership" className="hover:text-gold-champagne transition-colors">Membership Barbershop</a></li>
-            <li><a href="/services" className="hover:text-gold-champagne transition-colors">Services</a></li>
-            <li><a href="/stylists" className="hover:text-gold-champagne transition-colors">Stylists</a></li>
+            <li><Link href="/locations" className="hover:text-gold-champagne transition-colors">Locations</Link></li>
+            <li><Link href="/membership" className="hover:text-gold-champagne transition-colors">Membership Barbershop</Link></li>
+            <li><Link href="/services" className="hover:text-gold-champagne transition-colors">Services</Link></li>
+            <li><Link href="/stylists" className="hover:text-gold-champagne transition-colors">Stylists</Link></li>
           </ul>
         </div>
         <div>
           <h4 className="font-bold text-bone mb-4 uppercase tracking-wider text-sm">Account</h4>
           <ul className="space-y-3 text-sm text-bone/60">
-            <li><a href="/account" className="hover:text-gold-champagne transition-colors">Dashboard</a></li>
-            <li><a href="/book" className="hover:text-gold-champagne transition-colors">Book Now</a></li>
-            <li><a href="/login" className="hover:text-gold-champagne transition-colors">Login / Register</a></li>
+            {user && (
+              <li><Link href="/account" className="hover:text-gold-champagne transition-colors">Dashboard</Link></li>
+            )}
+            {isAdmin && (
+              <li><Link href="/admin" className="hover:text-gold-champagne transition-colors">Command Center</Link></li>
+            )}
+            <li><Link href="/book" className="hover:text-gold-champagne transition-colors">Book Now</Link></li>
+            {!user && (
+              <>
+                <li><Link href="/login" className="hover:text-gold-champagne transition-colors">Login</Link></li>
+                <li><Link href="/register" className="hover:text-gold-champagne transition-colors">Register</Link></li>
+              </>
+            )}
           </ul>
         </div>
         <div className="col-span-2 md:col-span-1">

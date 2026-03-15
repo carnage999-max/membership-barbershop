@@ -15,6 +15,7 @@ interface MembershipPlan {
   description: string;
   price: number;
   visitsPerMonth: number;
+  isUnlimited: boolean;
   mvpAccess: boolean;
   priority: boolean;
   location?: {
@@ -26,43 +27,39 @@ interface MembershipPlan {
 
 const haircutOnlyTiers = [
   {
-    name: "Essential",
-    price: 29,
+    name: "Basic",
+    price: 29.99,
     visitsIncluded: 1,
     rollover: false,
     bookingPriority: false,
     guestPasses: 0,
-    effectiveCostPerCut: 2.42,
     track: "haircut-only" as const,
   },
   {
-    name: "Pro",
-    price: 49,
+    name: "Standard",
+    price: 39.99,
     visitsIncluded: 2,
     rollover: true,
     bookingPriority: false,
     guestPasses: 1,
-    effectiveCostPerCut: 2.04,
     track: "haircut-only" as const,
   },
   {
-    name: "Elite",
-    price: 79,
+    name: "Premium",
+    price: 49.99,
     visitsIncluded: 4,
     rollover: true,
     bookingPriority: true,
     guestPasses: 2,
-    effectiveCostPerCut: 1.52,
     track: "haircut-only" as const,
   },
   {
     name: "Unlimited",
-    price: 99,
+    price: 65.99,
     visitsIncluded: Infinity,
     rollover: false,
     bookingPriority: true,
     guestPasses: 3,
-    effectiveCostPerCut: 1.24,
     track: "haircut-only" as const,
     isUnlimited: true,
   },
@@ -70,43 +67,39 @@ const haircutOnlyTiers = [
 
 const signatureTiers = [
   {
-    name: "Essential Signature",
-    price: 49,
+    name: "MVP Basic",
+    price: 39.99,
     visitsIncluded: 1,
     rollover: false,
     bookingPriority: false,
     guestPasses: 0,
-    effectiveCostPerCut: 4.08,
     track: "signature" as const,
   },
   {
-    name: "Pro Signature",
-    price: 79,
+    name: "MVP Standard",
+    price: 49.99,
     visitsIncluded: 2,
     rollover: true,
     bookingPriority: false,
     guestPasses: 1,
-    effectiveCostPerCut: 3.29,
     track: "signature" as const,
   },
   {
-    name: "Elite Signature",
-    price: 119,
+    name: "MVP Premium",
+    price: 59.99,
     visitsIncluded: 4,
     rollover: true,
     bookingPriority: true,
     guestPasses: 2,
-    effectiveCostPerCut: 2.29,
     track: "signature" as const,
   },
   {
-    name: "Unlimited Signature",
-    price: 149,
+    name: "MVP Unlimited",
+    price: 79.99,
     visitsIncluded: Infinity,
     rollover: false,
     bookingPriority: true,
     guestPasses: 3,
-    effectiveCostPerCut: 1.87,
     track: "signature" as const,
     isUnlimited: true,
   },
@@ -217,8 +210,9 @@ export default function MembershipPage() {
                 rollover={false}
                 bookingPriority={plan.priority}
                 guestPasses={0}
-                effectiveCostPerCut={plan.price / plan.visitsPerMonth}
+                effectiveCostPerCut={plan.isUnlimited ? 0 : plan.price / plan.visitsPerMonth}
                 track={plan.mvpAccess ? "signature" : "haircut-only"}
+                isUnlimited={plan.isUnlimited}
                 isHighlighted={recommendedTier === plan.name}
                 onSelect={() => {
                   const token = tokenStorage.get();
@@ -281,7 +275,31 @@ export default function MembershipPage() {
                   <td className="py-4 px-4 text-bone/80">Rollover</td>
                   {tiers.map((tier) => (
                     <td key={tier.name} className="py-4 px-4 text-center">
-                      {tier.visitsPerMonth > 1 ? (
+                      {(tier as any).rollover || tier.visitsPerMonth > 1 && tier.visitsPerMonth < 99 ? (
+                        <Check className="w-5 h-5 text-success mx-auto" />
+                      ) : (
+                        <X className="w-5 h-5 text-bone/30 mx-auto" />
+                      )}
+                    </td>
+                  ))}
+                </tr>
+                <tr className="border-b border-gold-champagne/10">
+                  <td className="py-4 px-4 text-bone/80">Back Shave + Hot Towel</td>
+                  {tiers.map((tier) => (
+                    <td key={tier.name} className="py-4 px-4 text-center">
+                      {tier.mvpAccess ? (
+                        <Check className="w-5 h-5 text-success mx-auto" />
+                      ) : (
+                        <X className="w-5 h-5 text-bone/30 mx-auto" />
+                      )}
+                    </td>
+                  ))}
+                </tr>
+                <tr className="border-b border-gold-champagne/10">
+                  <td className="py-4 px-4 text-bone/80">5m Stress Recovery</td>
+                  {tiers.map((tier) => (
+                    <td key={tier.name} className="py-4 px-4 text-center">
+                      {tier.mvpAccess ? (
                         <Check className="w-5 h-5 text-success mx-auto" />
                       ) : (
                         <X className="w-5 h-5 text-bone/30 mx-auto" />

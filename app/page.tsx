@@ -7,6 +7,7 @@ import SuiteFeaturePanel from "@/components/SuiteFeaturePanel";
 import AtmosphereEnvironments from "@/components/AtmosphereEnvironments";
 import StylistCard from "@/components/StylistCard";
 import PerformanceMetrics from "@/components/PerformanceMetrics";
+import PricingComparison from "@/components/PricingComparison";
 import { motion } from "framer-motion";
 import { Scissors, Sparkles, Zap, Droplets, Hand, Sparkle, Loader2 } from "lucide-react";
 import Link from "next/link";
@@ -98,6 +99,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Pricing Comparison */}
+      <PricingComparison />
+
       {/* Membership First with Calculator */}
       <section className="py-20 bg-slate/10 relative">
         {/* Curved divider */}
@@ -155,7 +159,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {signatureSteps.map((step, index) => (
               <motion.div
                 key={step.title}

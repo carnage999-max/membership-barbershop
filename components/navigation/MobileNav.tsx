@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { MapPin, Clock, Calendar, Crown, User, LogIn } from "lucide-react";
+import { MapPin, Clock, Calendar, Crown, User, LogIn, Shield } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useUser } from "@/lib/hooks";
@@ -11,13 +11,18 @@ import { useUser } from "@/lib/hooks";
 const baseNavItems = [
   { href: "/locations", icon: MapPin, label: "Map" },
   { href: "/membership", icon: Crown, label: "Membership" },
-  { href: "/book", icon: Calendar, label: "Book" }, // Reordered slightly for better thumb flow
+  { href: "/book", icon: Calendar, label: "Book" },
 ];
 
 export default function MobileNav() {
   const pathname = usePathname();
   const isHomePage = pathname === "/";
-  const { user } = useUser();
+  const { user, isAdmin } = useUser();
+
+  const navItems = [...baseNavItems];
+  if (isAdmin) {
+    navItems.push({ href: "/admin", icon: Shield, label: "Admin" });
+  }
   const isAuthenticated = !!user;
   const [isFooterVisible, setIsFooterVisible] = useState(false);
 
@@ -46,7 +51,7 @@ export default function MobileNav() {
       >
 
         {/* Navigation items */}
-        {baseNavItems.map((item) => {
+        {navItems.map((item) => {
           const isActive = pathname?.startsWith(item.href);
           const Icon = item.icon;
 

@@ -7,6 +7,7 @@ import DesktopNav from "@/components/navigation/DesktopNav";
 import ToastProvider from "@/components/ToastProvider";
 import Footer from "@/components/Footer";
 import Script from "next/script";
+import { ConfirmationProvider } from "@/context/ConfirmationContext";
 
 const oswald = Oswald({
   variable: "--font-oswald",
@@ -80,13 +81,15 @@ export default function RootLayout({
       <body
         className={`${oswald.variable} ${bebasNeue.variable} ${inter.variable} ${sourceSans3.variable} antialiased overflow-x-hidden`}
       >
-        <DesktopNav />
-        <MobileTopHeader />
-        <ToastProvider />
-        {children}
-        <Script src="https://now-hiring-eta.vercel.app/widget.js" strategy="afterInteractive" />
-        <Footer />
-        <MobileNav />
+        <ConfirmationProvider>
+          <DesktopNav />
+          <MobileTopHeader />
+          <ToastProvider />
+          {children}
+          <Script src="https://now-hiring-eta.vercel.app/widget.js" strategy="afterInteractive" />
+          <Footer />
+          <MobileNav />
+        </ConfirmationProvider>
       </body>
     </html>
   );

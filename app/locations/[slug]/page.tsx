@@ -9,10 +9,13 @@ import QueueTokenWidget from "@/components/QueueTokenWidget";
 import Image from "next/image";
 import { locations as locationsApi, tokenStorage, queue as queueApi } from "@/lib/api-client";
 import { useParams, useRouter } from "next/navigation";
+import { useConfirmation } from "@/context/ConfirmationContext";
+import { toast } from "react-hot-toast";
 
 export default function LocationDetailPage() {
   const { slug } = useParams();
   const router = useRouter();
+  const { alert } = useConfirmation();
   const [location, setLocation] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [checkedIn, setCheckedIn] = useState(false);
@@ -55,8 +58,9 @@ export default function LocationDetailPage() {
     try {
       await queueApi.join(location.id, token);
       setCheckedIn(true);
+      toast.success(`Welcome to the queue at ${location.name}`);
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Failed to join queue");
+      toast.error(error instanceof Error ? error.message : "Failed to join queue");
     } finally {
       setJoiningQueue(false);
     }
@@ -107,7 +111,7 @@ export default function LocationDetailPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent" />
             <div className="absolute bottom-8 left-8 right-8">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold-champagne text-ink text-[10px] font-bold uppercase rounded-full mb-4 mt-2">
-                Flagship Lounge
+                Signature Lounge
               </div>
               <h1 className="font-display text-5xl md:text-8xl font-bold text-bone mb-3 italic uppercase tracking-tighter">
                 {location.name}
@@ -148,9 +152,9 @@ export default function LocationDetailPage() {
               <div className="flex items-center justify-between mb-8">
                 <div>
                   <h2 className="font-display text-3xl font-bold text-bone uppercase italic mb-1">
-                    Waitlist <span className="text-gold-champagne">Stats</span>
+                    Membership <span className="text-gold-champagne">Status</span>
                   </h2>
-                  <p className="text-xs text-bone/40 font-bold uppercase tracking-widest">Real-time Telemetry</p>
+                  <p className="text-xs text-bone/40 font-bold uppercase tracking-widest">Real-time Capacity</p>
                 </div>
                 <div className="text-right">
                   <p className="text-[10px] text-bone/40 font-bold uppercase tracking-widest mb-1">Active Queue</p>
@@ -179,7 +183,7 @@ export default function LocationDetailPage() {
                     </p>
                   </div>
                   <div className="bg-obsidian/20 rounded-xl p-4 border border-gold-champagne/5">
-                    <p className="text-[10px] text-bone/40 font-bold uppercase tracking-widest mb-1">Avg Align Time</p>
+                    <p className="text-[10px] text-bone/40 font-bold uppercase tracking-widest mb-1">Avg Precision Time</p>
                     <p className="font-display text-2xl font-bold text-bone">
                       20m
                     </p>
@@ -236,7 +240,7 @@ export default function LocationDetailPage() {
               <div className="flex items-center justify-between mb-6">
                 <div>
                   <h3 className="font-display text-2xl font-bold text-bone uppercase italic">
-                    <span className="text-gold-champagne">Concours</span> Detail
+                    <span className="text-gold-champagne">Signature</span> Artisan Ritual
                   </h3>
                   <p className="text-[10px] text-bone/40 font-bold uppercase tracking-widest mt-1">Full Maintenance Protocol</p>
                 </div>
@@ -254,24 +258,42 @@ export default function LocationDetailPage() {
                 </button>
               </div>
               
-              <div className="space-y-4 mb-6">
-                <div className="flex items-center gap-3 text-sm text-bone/70">
-                  <div className="w-5 h-5 rounded-full bg-gold-champagne/10 flex items-center justify-center">
+              <div className="grid grid-cols-2 md:grid-cols-1 gap-x-4 gap-y-4 mb-8">
+                <div className="flex items-center gap-2 text-[13px] text-bone/70">
+                  <div className="w-5 h-5 rounded-full bg-gold-champagne/10 flex items-center justify-center flex-shrink-0">
                     <Check className="w-3 h-3 text-gold-champagne" />
                   </div>
-                  <span>High-Pressure Steam Treatment</span>
+                  <span>Precision Haircut</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-bone/70">
-                  <div className="w-5 h-5 rounded-full bg-gold-champagne/10 flex items-center justify-center">
+                <div className="flex items-center gap-2 text-[13px] text-bone/70">
+                  <div className="w-5 h-5 rounded-full bg-gold-champagne/10 flex items-center justify-center flex-shrink-0">
                     <Check className="w-3 h-3 text-gold-champagne" />
                   </div>
-                  <span>Chassis (Scalp) Calibration</span>
+                  <span>Back Shave / Neck</span>
                 </div>
-                <div className="flex items-center gap-3 text-sm text-bone/70">
-                  <div className="w-5 h-5 rounded-full bg-gold-champagne/10 flex items-center justify-center">
+                <div className="flex items-center gap-2 text-[13px] text-bone/70">
+                  <div className="w-5 h-5 rounded-full bg-gold-champagne/10 flex items-center justify-center flex-shrink-0">
                     <Check className="w-3 h-3 text-gold-champagne" />
                   </div>
-                  <span>Concours Polish (Styling)</span>
+                  <span>Steamed Towel</span>
+                </div>
+                <div className="flex items-center gap-2 text-[13px] text-bone/70">
+                  <div className="w-5 h-5 rounded-full bg-gold-champagne/10 flex items-center justify-center flex-shrink-0">
+                    <Check className="w-3 h-3 text-gold-champagne" />
+                  </div>
+                  <span>Neck Massage</span>
+                </div>
+                <div className="flex items-center gap-2 text-[13px] text-bone/70">
+                  <div className="w-5 h-5 rounded-full bg-gold-champagne/10 flex items-center justify-center flex-shrink-0">
+                    <Check className="w-3 h-3 text-gold-champagne" />
+                  </div>
+                  <span>Scalp Revitalization</span>
+                </div>
+                <div className="flex items-center gap-2 text-[13px] text-bone/70">
+                  <div className="w-5 h-5 rounded-full bg-gold-champagne/10 flex items-center justify-center flex-shrink-0">
+                    <Check className="w-3 h-3 text-gold-champagne" />
+                  </div>
+                  <span>Finishing Protocol</span>
                 </div>
               </div>
 
@@ -304,13 +326,13 @@ export default function LocationDetailPage() {
               <div className="flex items-center gap-3 mb-6">
                 <ShoppingBag className="w-6 h-6 text-gold-champagne" />
                 <h3 className="font-display text-2xl font-bold text-bone uppercase italic">
-                  Barbershop <span className="text-gold-champagne">Retail</span>
+                  Apothecary <span className="text-gold-champagne">& Provisions</span>
                 </h3>
               </div>
               <div className="space-y-6">
                 {[
-                  { name: "Chassis Wax", price: 24, cat: "Hair Product" },
-                  { name: "Clear Coat Shine", price: 18, cat: "Finishing Spray" }
+                  { name: "Artisan Styling Clay", price: 24, cat: "Hair Product" },
+                  { name: "Premium Matte Spray", price: 18, cat: "Finishing Spray" }
                 ].map((product, i) => (
                   <div
                     key={i}

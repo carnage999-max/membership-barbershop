@@ -42,13 +42,13 @@ async function main() {
   console.log('Creating flagship location...');
   const location = await prisma.location.create({
     data: {
-      name: 'The Vintage Garage (Flagship)',
-      slug: 'vintage-garage-flagship',
-      address: '101 Rev Avenue',
+      name: 'The Heritage Lounge (Flagship)',
+      slug: 'heritage-lounge-flagship',
+      address: '444 Artisan Way',
       city: 'Detroit',
       state: 'MI',
       zipCode: '48201',
-      phone: '313-555-0199',
+      phone: '313-555-0100',
       latitude: 42.3314,
       longitude: -83.0458,
       openTime: '08:00',
@@ -62,32 +62,32 @@ async function main() {
   const plansData = [
     // Haircut-Only Tracks
     {
-      name: 'Basic Haircut',
-      slug: 'basic-haircut',
+      name: 'Basic',
+      slug: 'basic',
       price: 29.99,
       visitsPerMonth: 1,
       description: '1 Precision haircut per month',
       locationId: location.id,
     },
     {
-      name: 'Standard Haircut',
-      slug: 'standard-haircut',
+      name: 'Standard',
+      slug: 'standard',
       price: 39.99,
       visitsPerMonth: 2,
       description: '2 Precision haircuts per month',
       locationId: location.id,
     },
     {
-      name: 'Premium Haircut',
-      slug: 'premium-haircut',
+      name: 'Premium',
+      slug: 'premium',
       price: 49.99,
       visitsPerMonth: 4,
       description: '4 Precision haircuts per month',
       locationId: location.id,
     },
     {
-      name: 'Unlimited Haircut',
-      slug: 'unlimited-haircut',
+      name: 'Unlimited',
+      slug: 'unlimited',
       price: 65.99,
       visitsPerMonth: 31,
       isUnlimited: true,
@@ -104,7 +104,7 @@ async function main() {
       includesBackShave: true,
       includesHotTowel: true,
       includesMassage: true,
-      description: '1 Concours Detail (Haircut + Shave + Towel + Massage)',
+      description: '1 MVP visit per month (Haircut + Shave + Towel + 5m Massage)',
       locationId: location.id,
     },
     {
@@ -116,7 +116,7 @@ async function main() {
       includesBackShave: true,
       includesHotTowel: true,
       includesMassage: true,
-      description: '2 Concours Details per month',
+      description: '2 MVP visits per month',
       locationId: location.id,
     },
     {
@@ -128,7 +128,7 @@ async function main() {
       includesBackShave: true,
       includesHotTowel: true,
       includesMassage: true,
-      description: '4 Concours Details per month',
+      description: '4 MVP visits per month',
       locationId: location.id,
     },
     {
@@ -141,7 +141,7 @@ async function main() {
       includesBackShave: true,
       includesHotTowel: true,
       includesMassage: true,
-      description: 'Unlimited Concours Details (Fair use policy applies)',
+      description: 'Unlimited MVP visits (Fair use policy applies)',
       locationId: location.id,
     },
   ];
@@ -155,10 +155,10 @@ async function main() {
   await prisma.stylist.create({
     data: {
       locationId: location.id,
-      firstName: 'Enzo',
-      lastName: 'Ferrari',
-      bio: 'Master of the precision fade and classic Italian styles.',
-      specialties: ['Precision Fade', 'Beard Sculpting'],
+      firstName: 'Julian',
+      lastName: 'Thorne',
+      bio: 'Master of the precision taper and classic artisan styles.',
+      specialties: ['Artisan Taper', 'Beard Sculpture'],
       avgCutTime: 25,
       rating: 4.9,
       onShift: true,
@@ -168,11 +168,11 @@ async function main() {
   await prisma.stylist.create({
     data: {
       locationId: location.id,
-      firstName: 'Ayrton',
-      lastName: 'Senna',
-      bio: 'Fastest shears in the pit lane. Expert in modern sport styles.',
-      specialties: ['Speed Cuts', 'Modern Tapers'],
-      avgCutTime: 20,
+      firstName: 'Marcus',
+      lastName: 'Reed',
+      bio: 'Expert in modern texture and bespoke grooming rituals.',
+      specialties: ['Textured Cuts', 'Signature Rituals'],
+      avgCutTime: 30,
       rating: 5.0,
       onShift: true,
     },

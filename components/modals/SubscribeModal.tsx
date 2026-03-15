@@ -4,6 +4,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, CreditCard, ChevronRight, Check, ShieldCheck, Loader2 } from "lucide-react";
 import { memberships, tokenStorage } from "@/lib/api-client";
+import { useConfirmation } from "@/context/ConfirmationContext";
+import { toast } from "react-hot-toast";
 
 interface SubscribeModalProps {
   plan: {
@@ -18,6 +20,7 @@ interface SubscribeModalProps {
 }
 
 export default function SubscribeModal({ plan, isOpen, onClose, onSuccess }: SubscribeModalProps) {
+  const { alert } = useConfirmation();
   const [loading, setLoading] = useState(false);
   const [cardHolder, setCardHolder] = useState("");
   const [success, setSuccess] = useState(false);
@@ -38,12 +41,13 @@ export default function SubscribeModal({ plan, isOpen, onClose, onSuccess }: Sub
       await memberships.subscribe(plan.id, mockPaymentMethodId, token);
       
       setSuccess(true);
+      toast.success(`${plan.name} Tier Activated`);
       setTimeout(() => {
         onSuccess();
         onClose();
       }, 2000);
     } catch (error) {
-      alert(error instanceof Error ? error.message : "Subscription failed");
+      toast.error(error instanceof Error ? error.message : "Subscription failed");
     } finally {
       setLoading(false);
     }
