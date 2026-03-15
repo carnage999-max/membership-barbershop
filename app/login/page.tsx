@@ -113,15 +113,6 @@ export default function LoginPage() {
                 </p>
               </div>
 
-              <div className="mt-6 pt-6 border-t border-gold-champagne/20">
-                <p className="text-bone/60 text-sm text-center">
-                  Demo Account:
-                  <br />
-                  Email: <span className="text-gold-champagne">demo@example.com</span>
-                  <br />
-                  Password: <span className="text-gold-champagne">password123</span>
-                </p>
-              </div>
             </div>
           </motion.div>
         </div>

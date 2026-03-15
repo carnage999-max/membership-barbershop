@@ -67,7 +67,7 @@ export default function HeroExperience() {
             </h1>
 
             <p className="text-bone/70 text-lg max-w-md">
-              Precision Fast. Lounge-Level Luxury.
+              The high-performance grooming experience. Lamborghini speed. Bugatti luxury.
             </p>
 
             <div className="space-y-4">

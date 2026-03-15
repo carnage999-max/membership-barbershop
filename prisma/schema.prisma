@@ -52,22 +52,41 @@ model Location {
 }
 
 model MembershipPlan {
-  id           String           @id @default(uuid())
-  slug         String?          @unique
-  locationId   String
-  name         String
-  description  String
-  price        Float
-  cutsPerMonth Int
-  mvpAccess    Boolean          @default(false)
-  priority     Boolean          @default(false)
-  isActive     Boolean          @default(true)
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
-  location     Location         @relation(fields: [locationId], references: [id], onDelete: Cascade)
-  memberships  UserMembership[]
+  id                  String           @id @default(uuid())
+  slug                String?          @unique
+  locationId          String
+  name                String
+  description         String
+  price               Float
+  visitsPerMonth      Int              @default(1)
+  isUnlimited         Boolean          @default(false)
+  includesBackShave   Boolean          @default(false)
+  includesMassage     Boolean          @default(false)
+  includesHotTowel    Boolean          @default(false)
+  queuePriorityLevel  Int              @default(1)
+  maxVisitsPerDay     Int              @default(1)
+  mvpAccess           Boolean          @default(false)
+  isActive            Boolean          @default(true)
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  location            Location         @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  memberships         UserMembership[]
 
   @@map("membership_plans")
+}
+
+model Service {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  basePrice   Float
+  duration    Int      @default(30) // in minutes
+  isActive    Boolean  @default(true)
+  category    String   @default("Standard") // e.g., "Haircut", "Add-on", "MVP"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("services")
 }
 
 model UserMembership {

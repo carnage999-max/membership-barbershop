@@ -47,11 +47,11 @@ export default function FrequencySliderCalculator({
     const freq = frequencies.find((f) => f.value === value);
     if (!freq) return;
 
-    // Determine recommended tier based on cutsPerMonth
+    // Determine recommended tier based on visitsPerMonth
     let recTier = "Essential";
     if (tiers.length > 0) {
-      const cutsPerMonth = value; // value 1, 2, 4, 8 mapped to frequencies
-      const match = tiers.find(t => t.cutsPerMonth >= cutsPerMonth) || tiers[tiers.length - 1];
+      const visitsPerMonth = value; // value 1, 2, 4, 8 mapped to frequencies
+      const match = tiers.find(t => t.visitsPerMonth >= visitsPerMonth) || tiers[tiers.length - 1];
       recTier = match?.name || "Essential";
     }
 
@@ -62,7 +62,7 @@ export default function FrequencySliderCalculator({
   
   // Logic to find recommended tier from dynamic data
   const recommendedTier = tiers.length > 0 
-    ? (tiers.find(t => t.cutsPerMonth >= selectedFrequency) || tiers[tiers.length - 1])
+    ? (tiers.find(t => t.visitsPerMonth >= selectedFrequency) || tiers[tiers.length - 1])
     : null;
 
   const calculateEffectiveCost = () => {

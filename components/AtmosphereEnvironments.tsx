@@ -6,24 +6,24 @@ import { ChevronLeft, ChevronRight, Crown, Zap, Trophy } from "lucide-react";
 
 const environments = [
   {
-    id: "heritage",
-    name: "Heritage",
-    description: "Classic barbershop elegance with modern comfort",
+    id: "classics",
+    name: "Classics",
+    description: "Vintage elegance with dark woods and the soul of the open road",
     color: "from-wood-espresso to-obsidian",
     icon: Crown,
   },
   {
-    id: "prestige",
-    name: "Prestige",
-    description: "High-performance luxury and contemporary style",
-    color: "from-slate/40 to-obsidian",
+    id: "supercars",
+    name: "Supercars",
+    description: "Aerodynamic luxury focusing on Ferrari red and Lamborghini black",
+    color: "from-red-crimson/20 to-obsidian",
     icon: Zap,
   },
   {
-    id: "reserve",
-    name: "Reserve",
-    description: "Exclusive intimacy and tailored precision",
-    color: "from-gold-champagne/20 to-obsidian",
+    id: "track-day",
+    name: "Track Day",
+    description: "High-adrenaline precision inspired by Bugatti and track engineering",
+    color: "from-slate/40 to-obsidian",
     icon: Trophy,
   },
 ];
