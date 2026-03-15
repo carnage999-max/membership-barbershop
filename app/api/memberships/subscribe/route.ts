@@ -77,7 +77,7 @@ export const POST = withAuth(async (req) => {
         planId: plan.id,
         status: 'ACTIVE',
         startDate: new Date(),
-        cutsRemaining: plan.cutsPerMonth,
+        cutsRemaining: plan.visitsPerMonth,
         billingCycle: 'monthly',
         autoRenew: true,
       },
@@ -104,7 +104,7 @@ export const POST = withAuth(async (req) => {
         html: membershipActivatedEmail(
           user.firstName,
           plan.name,
-          plan.cutsPerMonth
+          plan.visitsPerMonth
         ),
       });
     }

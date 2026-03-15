@@ -14,7 +14,7 @@ interface MembershipPlan {
   name: string;
   description: string;
   price: number;
-  cutsPerMonth: number;
+  visitsPerMonth: number;
   mvpAccess: boolean;
   priority: boolean;
   location?: {
@@ -213,11 +213,11 @@ export default function MembershipPage() {
                 key={plan.id}
                 name={plan.name}
                 price={plan.price}
-                visitsIncluded={plan.cutsPerMonth}
+                visitsIncluded={plan.visitsPerMonth}
                 rollover={false}
                 bookingPriority={plan.priority}
                 guestPasses={0}
-                effectiveCostPerCut={plan.price / plan.cutsPerMonth}
+                effectiveCostPerCut={plan.price / plan.visitsPerMonth}
                 track={plan.mvpAccess ? "signature" : "haircut-only"}
                 isHighlighted={recommendedTier === plan.name}
                 onSelect={() => {
@@ -273,7 +273,7 @@ export default function MembershipPage() {
                   <td className="py-4 px-4 text-bone/80">Visits Included</td>
                   {tiers.map((tier) => (
                     <td key={tier.name} className="py-4 px-4 text-center text-bone">
-                      {tier.cutsPerMonth >= 99 ? "Unlimited" : tier.cutsPerMonth}
+                      {tier.visitsPerMonth >= 99 ? "Unlimited" : tier.visitsPerMonth}
                     </td>
                   ))}
                 </tr>
@@ -281,7 +281,7 @@ export default function MembershipPage() {
                   <td className="py-4 px-4 text-bone/80">Rollover</td>
                   {tiers.map((tier) => (
                     <td key={tier.name} className="py-4 px-4 text-center">
-                      {tier.cutsPerMonth > 1 ? (
+                      {tier.visitsPerMonth > 1 ? (
                         <Check className="w-5 h-5 text-success mx-auto" />
                       ) : (
                         <X className="w-5 h-5 text-bone/30 mx-auto" />
@@ -305,7 +305,7 @@ export default function MembershipPage() {
                   <td className="py-4 px-4 text-bone/80">Guest Passes</td>
                   {tiers.map((tier) => (
                     <td key={tier.name} className="py-4 px-4 text-center text-bone">
-                      {tier.cutsPerMonth > 2 ? "1 / mo" : "0"}
+                      {tier.visitsPerMonth > 2 ? "1 / mo" : "0"}
                     </td>
                   ))}
                 </tr>

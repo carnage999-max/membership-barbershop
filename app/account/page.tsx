@@ -136,8 +136,8 @@ export default function AccountPage() {
                   <span className="font-semibold text-gold-champagne">{membership.plan.name}</span>
                 </p>
                 <p className="text-bone/80">
-                  <span className="text-bone/60">Cuts Remaining:</span>{" "}
-                  <span className="font-semibold">{membership.cutsRemaining}/{membership.plan.cutsPerMonth}</span>
+                  <span className="text-bone/60">Sessions Remaining:</span>{" "}
+                  <span className="font-semibold">{membership.cutsRemaining}/{membership.plan.visitsPerMonth}</span>
                 </p>
                 <p className="text-bone/80">
                   <span className="text-bone/60">Status:</span>{" "}

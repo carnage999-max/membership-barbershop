@@ -21,7 +21,7 @@ export default function AdminDashboard() {
     name: "",
     description: "",
     price: 29,
-    cutsPerMonth: 2,
+    visitsPerMonth: 2,
     mvpAccess: false,
     priority: false,
     locationId: ""
@@ -111,7 +111,7 @@ export default function AdminDashboard() {
       if (res.ok) {
         setShowPlanModal(false);
         fetchData();
-        setNewPlan({ name: "", description: "", price: 29, cutsPerMonth: 2, mvpAccess: false, priority: false, locationId: "" });
+        setNewPlan({ name: "", description: "", price: 29, visitsPerMonth: 2, mvpAccess: false, priority: false, locationId: "" });
       }
     } catch (error) {
       alert("Failed to add plan");
@@ -188,7 +188,7 @@ export default function AdminDashboard() {
                   <div key={plan.id} className="p-4 bg-obsidian/40 rounded-xl border border-gold-champagne/5 flex justify-between items-center text-bone">
                     <div>
                       <h3 className="font-bold">{plan.name}</h3>
-                      <p className="text-sm text-bone/50">{plan.cutsPerMonth} sessions • {plan.mvpAccess ? "Concours" : "Standard"}</p>
+                      <p className="text-sm text-bone/50">{plan.visitsPerMonth} sessions • {plan.mvpAccess ? "Concours" : "Standard"}</p>
                     </div>
                     <div className="text-right">
                       <p className="font-display text-xl font-bold text-gold-champagne">${plan.price}</p>
@@ -253,7 +253,7 @@ export default function AdminDashboard() {
                 </div>
                 <div className="space-y-1">
                   <label className="text-xs text-bone/50 uppercase font-bold px-1">Visits per Mo</label>
-                  <input type="number" required placeholder="Cuts" className="w-full bg-obsidian border border-gold-champagne/20 rounded-lg p-3 text-bone focus:border-gold-champagne outline-none" value={newPlan.cutsPerMonth} onChange={e => setNewPlan({...newPlan, cutsPerMonth: Number(e.target.value)})} />
+                  <input type="number" required placeholder="Visits" className="w-full bg-obsidian border border-gold-champagne/20 rounded-lg p-3 text-bone focus:border-gold-champagne outline-none" value={newPlan.visitsPerMonth} onChange={e => setNewPlan({...newPlan, visitsPerMonth: Number(e.target.value)})} />
                 </div>
               </div>
               <div className="flex items-center gap-6 p-3 bg-obsidian/50 rounded-xl">

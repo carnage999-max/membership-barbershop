@@ -10,7 +10,7 @@ interface SubscribeModalProps {
     id: string;
     name: string;
     price: number;
-    cutsPerMonth: number;
+    visitsPerMonth: number;
   } | null;
   isOpen: boolean;
   onClose: () => void;
@@ -106,7 +106,7 @@ export default function SubscribeModal({ plan, isOpen, onClose, onSuccess }: Sub
                   </div>
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-bone/60">Monthly Sessions</span>
-                    <span className="text-bone">{plan.cutsPerMonth} sessions</span>
+                    <span className="text-bone">{plan.visitsPerMonth} sessions</span>
                   </div>
                   <div className="pt-2 mt-2 border-t border-gold-champagne/10 flex justify-between items-center">
                     <span className="text-bone font-bold">Total Due Now</span>

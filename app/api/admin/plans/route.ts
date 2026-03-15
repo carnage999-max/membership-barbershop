@@ -7,7 +7,7 @@ const planSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
   price: z.number().positive(),
-  cutsPerMonth: z.number().int().nonnegative(),
+  visitsPerMonth: z.number().int().nonnegative(),
   mvpAccess: z.boolean().default(false),
   priority: z.boolean().default(false),
   locationId: z.string().optional(),

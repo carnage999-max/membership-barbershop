@@ -29,7 +29,7 @@ export async function sendEmail({ to, subject, html }: EmailOptions) {
 // EMAIL TEMPLATES
 // ============================================
 
-export function membershipActivatedEmail(firstName: string, planName: string, cutsPerMonth: number) {
+export function membershipActivatedEmail(firstName: string, planName: string, visitsPerMonth: number) {
   return `
 <!DOCTYPE html>
 <html>
@@ -56,7 +56,7 @@ export function membershipActivatedEmail(firstName: string, planName: string, cu
       <div style="background-color: #0B0C10; border-left: 4px solid #C8A24A; padding: 20px; margin: 20px 0;">
         <p style="font-size: 16px; line-height: 1.6; margin: 0 0 10px 0;"><strong>Your Plan Includes:</strong></p>
         <ul style="margin: 0; padding-left: 20px;">
-          <li style="margin-bottom: 8px;">${cutsPerMonth} cuts per month</li>
+          <li style="margin-bottom: 8px;">${visitsPerMonth} cuts per month</li>
           <li style="margin-bottom: 8px;">Real-time queue tracking</li>
           <li style="margin-bottom: 8px;">Priority check-in access</li>
           <li style="margin-bottom: 8px;">Follow your favorite stylists</li>
