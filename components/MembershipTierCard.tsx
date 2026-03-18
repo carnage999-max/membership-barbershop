@@ -1,122 +1,108 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Check, Crown, Sparkles } from "lucide-react";
+import { Check, Zap, Gauge, Settings, Shield, Award } from "lucide-react";
 
 interface MembershipTierCardProps {
   name: string;
   price: number;
   visitsIncluded: number;
-  rollover: boolean;
-  bookingPriority: boolean;
-  guestPasses: number;
-  effectiveCostPerCut: number;
+  description?: string;
   isHighlighted?: boolean;
   isUnlimited?: boolean;
-  track: "haircut-only" | "signature";
   onSelect?: () => void;
 }
 
 export default function MembershipTierCard({
   name,
   price,
-  visitsIncluded,
-  rollover,
-  bookingPriority,
-  guestPasses,
-  effectiveCostPerCut,
+  description,
   isHighlighted = false,
   isUnlimited = false,
-  track,
   onSelect,
 }: MembershipTierCardProps) {
+  // Map names to icons
+  const getIcon = (tierName: string) => {
+    const n = tierName.toUpperCase();
+    if (n === "STOCK") return <Settings className="w-6 h-6" />;
+    if (n === "MODIFIED") return <Gauge className="w-6 h-6" />;
+    if (n === "TURBO") return <Zap className="w-6 h-6" />;
+    if (n === "SUPERCHARGED") return <Award className="w-6 h-6" />;
+    return <Shield className="w-6 h-6" />;
+  };
+
+  const getTierColor = (tierName: string) => {
+    const n = tierName.toUpperCase();
+    if (n === "SUPERCHARGED") return "text-neon-red shadow-neon-red";
+    return "text-chrome";
+  };
+
+  const features = description?.split(',').map(f => f.trim()) || [];
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.3 }}
-      className={`relative rounded-xl p-6 border-2 transition-all duration-150 ${
+      className={`relative rounded-2xl p-8 border-2 transition-all duration-300 overflow-hidden flex flex-col h-full ${
         isHighlighted
-          ? "bg-wood-espresso/30 border-gold-champagne shadow-lg shadow-gold-champagne/20"
-          : "bg-slate/50 border-gold-champagne/20"
+          ? "bg-carbon border-neon-red shadow-[0_0_30px_rgba(255,49,49,0.15)] scale-105 z-10"
+          : "bg-steel-dark/80 border-white/10 hover:border-white/30"
       }`}
     >
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+
       {isHighlighted && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gold-champagne text-ink font-display text-sm font-bold rounded-full">
-          RECOMMENDED
+        <div className="absolute top-0 right-0 px-6 py-1.5 bg-neon-red text-white font-display text-[10px] font-black uppercase tracking-[0.2em] -rotate-0 rounded-bl-xl shadow-neon-red">
+          Recommended Gear
         </div>
       )}
 
-      {isUnlimited && (
-        <div className="absolute top-4 right-4">
-          <Sparkles className="w-5 h-5 text-gold-champagne" />
+      <div className="flex items-center gap-3 mb-6 relative">
+        <div className={`p-3 rounded-xl bg-white/5 border border-white/10 ${isHighlighted ? "border-neon-red/50 text-neon-red" : "text-chrome"}`}>
+          {getIcon(name)}
         </div>
-      )}
-
-      <div className="flex items-center gap-2 mb-4">
-        <Crown className={`w-6 h-6 ${isHighlighted ? "text-gold-champagne" : "text-bone/60"}`} />
-        <h3 className="font-display text-2xl font-bold text-bone">{name}</h3>
+        <div>
+          <h3 className={`font-display text-3xl font-black uppercase italic tracking-tighter ${isHighlighted ? "text-white" : "text-chrome"}`}>
+            {name}
+          </h3>
+          <p className="text-[10px] text-chrome/40 font-bold uppercase tracking-[0.2em]">Grade Level</p>
+        </div>
       </div>
 
-      <div className="mb-6">
+      <div className="mb-8 relative">
         <div className="flex items-baseline gap-2 mb-1">
-          <span className="font-display text-4xl font-bold text-bone">${price}</span>
-          <span className="text-bone/60">/month</span>
+          <span className="font-display text-5xl font-black text-white italic tracking-tighter">${price}</span>
+          <span className="text-chrome/50 font-display italic">/mo</span>
         </div>
-        <p className="text-sm text-bone/70">
-          {visitsIncluded === Infinity ? (
-            <span className="font-semibold text-gold-champagne uppercase tracking-widest text-xs">Unlimited Protocol Enabled</span>
-          ) : (
-            <>Effective <span className="font-semibold text-gold-champagne">${(price / visitsIncluded).toFixed(2)}</span> per visit</>
-          )}
+        <p className="text-xs text-chrome/60 uppercase font-bold tracking-widest italic">
+          High Performance Protocol
         </p>
       </div>
 
-      <div className="space-y-3 mb-6">
-        {track === "signature" && (
-          <div className="flex items-start gap-2 p-2 bg-gold-champagne/5 rounded-lg border border-gold-champagne/10 mb-2">
-            <Sparkles className="w-4 h-4 text-gold-champagne mt-0.5 flex-shrink-0" />
-            <span className="text-[10px] text-gold-champagne font-bold uppercase tracking-wider leading-relaxed">
-              Concours Detail: Includes Back Shave + Hot Towel + 5m Massage
+      <div className="space-y-4 mb-10 flex-1 relative">
+        {features.map((feature, idx) => (
+          <div key={idx} className="flex items-start gap-3 group">
+            <div className={`mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0 transition-all duration-300 ${isHighlighted ? "bg-neon-red shadow-neon-red" : "bg-chrome/30 group-hover:bg-chrome"}`} />
+            <span className={`text-sm font-body transition-colors duration-300 ${isHighlighted ? "text-white" : "text-chrome/70 group-hover:text-chrome"}`}>
+              {feature}
             </span>
           </div>
-        )}
-        <div className="flex items-center gap-2">
-          <Check className="w-5 h-5 text-success flex-shrink-0" />
-          <span className="text-bone/80 text-sm">
-            {visitsIncluded === Infinity ? "Unlimited" : visitsIncluded} {track === "signature" ? "Concours Detail" : "Haircut"} visits
-          </span>
-        </div>
-        {rollover && (
-          <div className="flex items-center gap-2">
-            <Check className="w-5 h-5 text-success flex-shrink-0" />
-            <span className="text-bone/80 text-sm">Unused visits roll over</span>
-          </div>
-        )}
-        {bookingPriority && (
-          <div className="flex items-center gap-2">
-            <Check className="w-5 h-5 text-success flex-shrink-0" />
-            <span className="text-bone/80 text-sm">Busy-hour priority booking</span>
-          </div>
-        )}
-        {guestPasses > 0 && (
-          <div className="flex items-center gap-2">
-            <Check className="w-5 h-5 text-success flex-shrink-0" />
-            <span className="text-bone/80 text-sm">{guestPasses} guest pass{guestPasses > 1 ? "es" : ""}</span>
-          </div>
-        )}
+        ))}
       </div>
 
       <button
         onClick={onSelect}
-        className={`w-full px-6 py-3 rounded-lg font-semibold transition-all duration-150 ${
+        className={`w-full py-4 rounded-xl font-display text-lg font-black uppercase italic tracking-widest transition-all duration-300 relative overflow-hidden group/btn ${
           isHighlighted
-            ? "bg-gold-champagne hover:bg-gold-champagne/90 text-ink"
-            : "bg-red-crimson hover:bg-red-crimson/90 text-bone"
+            ? "bg-neon-red text-white shadow-neon-red hover:bg-racing-red"
+            : "bg-white/5 hover:bg-white/10 text-white border border-white/20 hover:border-white"
         }`}
       >
-        Join {name}
+        <div className="absolute inset-0 w-1/2 h-full bg-white/10 skew-x-[-20deg] -translate-x-full group-hover/btn:translate-x-[250%] transition-transform duration-700" />
+        Select {name}
       </button>
     </motion.div>
   );

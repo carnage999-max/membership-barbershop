@@ -77,21 +77,23 @@ export default function FrequencySliderCalculator({
   const effectiveCostPerCut = calculateEffectiveCost();
 
   return (
-    <div className="bg-slate/50 backdrop-blur-sm rounded-xl p-6 border border-gold-champagne/20">
-      <h3 className="font-display text-2xl font-bold text-bone mb-6">
-        How often do you cut?
+    <div className="bg-steel-dark/40 backdrop-blur-2xl rounded-3xl p-6 md:p-10 border border-white/10 shadow-2xl relative overflow-hidden group">
+      <div className="absolute top-0 right-0 w-32 h-32 bg-neon-red/5 rounded-full blur-3xl -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+      
+      <h3 className="font-display text-2xl md:text-3xl font-black text-white mb-8 uppercase italic tracking-tighter">
+        How often do you <span className="text-neon-red text-shadow-neon">Pit Stop?</span>
       </h3>
 
-      <div className="mb-8">
-        <div className="flex justify-between mb-4">
+      <div className="mb-10">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
           {frequencies.map((freq) => (
             <button
               key={freq.value}
               onClick={() => handleFrequencyChange(freq.value)}
-              className={`px-3 py-2 rounded-lg font-medium text-sm transition-all duration-150 ${
+              className={`px-4 py-3 rounded-xl font-black text-[10px] uppercase italic tracking-[0.2em] transition-all duration-300 border ${
                 selectedFrequency === freq.value
-                  ? "bg-gold-champagne text-ink"
-                  : "bg-slate text-bone/60 hover:text-bone"
+                  ? "bg-neon-red text-white border-neon-red shadow-neon-red translate-y-[-2px]"
+                  : "bg-obsidian/60 text-chrome/40 border-white/5 hover:border-white/20 hover:text-white"
               }`}
             >
               {freq.label}
@@ -99,44 +101,60 @@ export default function FrequencySliderCalculator({
           ))}
         </div>
 
-        <div className="relative h-2 bg-wood-espresso rounded-full">
+        <div className="relative h-2 bg-obsidian rounded-full overflow-hidden border border-white/5">
           <motion.div
-            className="absolute h-full bg-gold-champagne rounded-full"
+            className="absolute h-full bg-neon-red shadow-neon-red"
             initial={{ width: "50%" }}
             animate={{
               width: `${((selectedFrequency - 1) / 7) * 100}%`,
             }}
-            transition={{ duration: 0.3 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
           />
         </div>
       </div>
 
       {recommendedTier && currentFreq && (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-wood-espresso/30 rounded-lg p-4 border border-gold-champagne/30"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-obsidian/60 rounded-2xl p-6 border border-white/5 mb-10"
         >
-          <p className="text-bone/80 text-sm mb-2">
-            Recommended: <span className="font-bold text-gold-champagne">{recommendedTier.name}</span>
-          </p>
-          <p className="text-bone/80 text-sm mb-2">
-            Effective cost per cut: <span className="font-bold text-gold-champagne">{effectiveCostPerCut !== "-" ? `$${effectiveCostPerCut}` : "-"}</span>
-          </p>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <p className="text-[10px] text-chrome/40 font-black uppercase tracking-widest mb-1 italic">Recommended Grade</p>
+              <p className="font-display text-3xl font-black text-white italic uppercase tracking-tighter">
+                {recommendedTier.name}
+              </p>
+            </div>
+            <div className="text-left md:text-right">
+              <p className="text-[10px] text-chrome/40 font-black uppercase tracking-widest mb-1 italic">Effective Value</p>
+              <p className="font-display text-4xl font-black text-neon-red italic tracking-tighter shadow-neon-red">
+                {effectiveCostPerCut !== "-" ? `$${effectiveCostPerCut}` : "-"}
+                <span className="text-xs text-chrome/40 ml-2 uppercase">/ Cut</span>
+              </p>
+            </div>
+          </div>
+          
           {currentFreq.visits < 999 && (
-            <p className="text-bone/60 text-xs text-balance">
-              (${recommendedTier.price} × 12 months) ÷ {currentFreq.visits} visits/year = ${effectiveCostPerCut} per cut
-            </p>
+            <div className="mt-6 pt-6 border-t border-white/5">
+              <p className="text-[9px] text-chrome/30 font-bold italic tracking-widest leading-relaxed uppercase">
+                Optimization Formula: (${recommendedTier.price} × 12m) ÷ {currentFreq.visits} visits/yr 
+              </p>
+            </div>
           )}
         </motion.div>
       )}
 
-      <div className="flex gap-3 mt-6">
-        <button onClick={onJoinClick} className="flex-1 px-6 py-3 bg-red-crimson hover:bg-red-crimson/90 text-bone font-semibold rounded-lg transition-colors duration-150">
-          Join Membership
+      <div className="flex flex-col md:flex-row gap-4">
+        <button 
+          onClick={onJoinClick} 
+          className="flex-1 relative group px-8 py-5 bg-neon-red hover:bg-racing-red text-white font-display text-xl font-black rounded-xl transition-all duration-300 overflow-hidden shadow-neon-red"
+        >
+          <div className="absolute inset-0 bg-white/10 skew-x-[-20deg] -translate-x-full group-hover:translate-x-[300%] transition-transform duration-700" />
+          <span className="relative z-10 italic uppercase tracking-widest">INITIALIZE GRADE</span>
         </button>
-        <button className="flex-1 px-6 py-3 bg-slate hover:bg-slate/80 text-bone font-semibold rounded-lg transition-colors duration-150 border border-gold-champagne/30">
-          Try Signature Treatment
+        <button className="flex-1 px-8 py-5 bg-white/5 hover:bg-white/10 text-white font-display text-xl font-black rounded-xl transition-all duration-300 border border-white/10 italic uppercase tracking-widest">
+          VIEW FULL SPECS
         </button>
       </div>
     </div>

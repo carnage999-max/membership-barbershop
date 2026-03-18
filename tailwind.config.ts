@@ -1,16 +1,18 @@
 import type { Config } from "tailwindcss";
 
 const colors = {
-  obsidian: "#0B0C10",
-  "wood-espresso": "#2B1D14",
-  "gold-champagne": "#C8A24A",
-  "red-crimson": "#B11226",
-  ink: "#111318",
-  bone: "#F4F1EA",
-  slate: "#2A2E36",
-  success: "#1F8A70",
-  warning: "#F2B705",
-  danger: "#D62828",
+  obsidian: "#050505",
+  "racing-red": "#FF0000",
+  "neon-red": "#FF3131",
+  "chrome": "#E2E8F0",
+  "steel-dark": "#1A1A1B",
+  "steel-light": "#4A4A48",
+  "carbon": "#111111",
+  ink: "#0A0A0A",
+  white: "#FFFFFF",
+  success: "#00FF41",
+  warning: "#FFD700",
+  danger: "#FF0000",
 };
 
 const config = {
@@ -18,6 +20,10 @@ const config = {
   theme: {
     extend: {
       colors,
+      backgroundImage: {
+        'carbon-pattern': "radial-gradient(circle, #1a1a1a 0%, #0a0a0a 100%)",
+        'steel-gradient': "linear-gradient(180deg, #4A4A48 0%, #1A1A1B 100%)",
+      },
       fontFamily: {
         display: [
           "var(--font-oswald)",
@@ -28,12 +34,19 @@ const config = {
         ],
         body: [
           "var(--font-inter)",
-          "var(--font-source-sans)",
           "Inter",
-          "Source Sans 3",
+          "sans-serif",
+        ],
+        racing: [
+          "var(--font-racing)",
+          "Racing Sans One",
           "sans-serif",
         ],
       },
+      boxShadow: {
+        'neon-red': '0 0 10px rgba(255, 49, 49, 0.5), 0 0 20px rgba(255, 49, 49, 0.3)',
+        'chrome': '0 0 15px rgba(226, 232, 240, 0.2)',
+      }
     },
   },
 } satisfies Config;

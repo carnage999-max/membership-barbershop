@@ -1,153 +1,111 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Search, MapPin } from "lucide-react";
-import { useState, useEffect } from "react";
-import { memberships as membershipsApi } from "@/lib/api-client";
-import WaitTimeBadge from "./WaitTimeBadge";
+import { Zap, Gauge, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 export default function HeroExperience() {
-  const router = useRouter();
-  const [zipCode, setZipCode] = useState("");
-  const [minPrice, setMinPrice] = useState<number | null>(null);
-
-  const handleSearch = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    if (zipCode.trim()) {
-      router.push(`/locations?zip=${encodeURIComponent(zipCode.trim())}`);
-    } else {
-      router.push('/locations');
-    }
-  };
-
-  useEffect(() => {
-    async function fetchMinPrice() {
-      try {
-        const result = await membershipsApi.getPlans();
-        if (result.plans && result.plans.length > 0) {
-          const prices = result.plans.map((p: any) => p.price);
-          setMinPrice(Math.min(...prices));
-        }
-      } catch (error) {
-        console.error("Failed to fetch min price:", error);
-      }
-    }
-    fetchMinPrice();
-  }, []);
-
   return (
-    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-      {/* Background with dark wood + supercar silhouette effect */}
-      <div className="absolute inset-0 bg-wood-espresso">
-        <div className="absolute inset-0 bg-gradient-to-b from-obsidian/80 via-obsidian/60 to-obsidian/80" />
-        <div className="absolute inset-0 opacity-10">
-          {/* Subtle pattern/texture */}
-          <div className="w-full h-full bg-[radial-gradient(circle_at_50%_50%,rgba(200,162,74,0.1)_0%,transparent_70%)]" />
-        </div>
+    <section className="relative min-h-screen flex items-center overflow-hidden">
+      {/* Background Image with Overlay */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/images/high-performance-haircuts-branded-design.png"
+          alt="High Performance Garage"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-obsidian/50" />
       </div>
 
-      {/* Gold trim line */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-gold-champagne to-transparent" />
+      {/* Red Neon Accent Line */}
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-neon-red shadow-neon-red z-20" />
 
-      <div className="container mx-auto px-4 py-20 relative z-10">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Left: Headline + Find Shop */}
+      <div className="container mx-auto px-4 relative z-10 pt-20">
+        <div className="max-w-3xl">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="space-y-8"
-          >
-            <Image
-              src="/logo.png"
-              alt="Logo"
-              width={240}
-              height={80}
-              className="h-16 md:h-20 w-auto mb-12"
-              priority
-            />
-            <h1 className="font-display text-5xl md:text-7xl font-bold text-bone leading-tight">
-              Your Cut.
-              <br />
-              Your Crew.
-              <br />
-              <span className="text-gold-champagne">Your Lane.</span>
-            </h1>
-
-            <p className="text-bone/70 text-lg max-w-md">
-              The high-performance grooming experience. Lamborghini speed. Bugatti luxury.
-            </p>
-
-            <div className="space-y-4">
-              <form onSubmit={handleSearch} className="flex gap-3">
-                <div className="relative flex-1">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-bone/40" />
-                  <input
-                    type="text"
-                    placeholder="Enter zip code"
-                    value={zipCode}
-                    onChange={(e) => setZipCode(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 bg-slate/50 backdrop-blur-sm border border-gold-champagne/20 rounded-lg text-bone placeholder:text-bone/40 focus:outline-none focus:border-gold-champagne transition-colors duration-150"
-                  />
-                </div>
-                <button 
-                  type="submit"
-                  className="px-8 py-4 bg-red-crimson hover:bg-red-crimson/90 text-bone font-semibold rounded-lg transition-colors duration-150 whitespace-nowrap"
-                >
-                  Find My Shop
-                </button>
-              </form>
-            </div>
-          </motion.div>
-
-          {/* Right: Live Wait + Membership Anchor */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
             className="space-y-6"
           >
-            {/* Nearest Wait Tile */}
-            <div className="bg-slate/50 backdrop-blur-sm rounded-xl p-6 border border-gold-champagne/20">
-              <div className="flex items-center gap-2 mb-4">
-                <MapPin className="w-5 h-5 text-gold-champagne" />
-                <h3 className="font-display text-xl font-bold text-bone">
-                  Live Status
-                </h3>
-              </div>
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-bone/70">Membership Status</p>
-                <div className="px-3 py-1 bg-gold-champagne/20 border border-gold-champagne text-gold-champagne rounded-full text-xs font-bold uppercase tracking-wider">
-                  Open Registration
-                </div>
-              </div>
-              <p className="text-sm text-bone/60">
-                Priority access for members at all locations.
-              </p>
+            <div className="flex items-center gap-3 mb-8">
+               <div className="h-0.5 w-12 bg-neon-red" />
+               <span className="text-neon-red font-display tracking-[0.3em] uppercase text-sm font-bold">
+                 Est. Precision 2026
+               </span>
             </div>
 
-            {/* Membership Price Anchor */}
-            <div className="bg-wood-espresso/30 rounded-xl p-6 border-2 border-gold-champagne/40">
-              <p className="text-bone/70 text-sm mb-2">Signature Access</p>
-              <div className="flex items-baseline gap-2 mb-4">
-                <span className="font-display text-4xl font-bold text-bone">
-                  Exclusive
-                </span>
-                <span className="text-gold-champagne font-bold">Tiers</span>
-              </div>
-              <p className="text-sm text-bone/80 mb-4">
-                Join the circle of precision. <span className="text-gold-champagne">Starting from {minPrice ? `$${minPrice}` : "-"}.</span>
-              </p>
-              <Link href="/membership" className="block text-center w-full px-6 py-3 bg-gold-champagne hover:bg-gold-champagne/90 text-ink font-semibold rounded-lg transition-colors duration-150">
-                View Plans
+            <Image
+              src="/images/new-logo.png"
+              alt="Man Cave Barber Shops"
+              width={400}
+              height={120}
+              className="h-24 md:h-32 w-auto mb-8 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]"
+              priority
+            />
+
+            <h1 className="font-display text-5xl md:text-8xl font-black text-white leading-[0.9] uppercase italic tracking-tighter">
+              High Performance<br />
+              <span className="chrome-text">Haircuts</span>
+            </h1>
+
+            <p className="text-chrome/80 text-xl md:text-2xl font-body max-w-xl italic">
+              Two Ways to Drive Your Style. 
+              <br className="hidden md:block" />
+              Engineered for the modern man.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 pt-8">
+              <Link 
+                href="/book" 
+                className="group relative px-8 py-5 bg-neon-red hover:bg-racing-red text-white font-display text-xl font-bold uppercase italic tracking-wider transition-all duration-300 flex items-center justify-center gap-3 overflow-hidden"
+              >
+                <div className="absolute inset-0 w-1/2 h-full bg-white/10 skew-x-[-20deg] -translate-x-full group-hover:translate-x-[250%] transition-transform duration-700" />
+                <Gauge className="w-6 h-6" />
+                Book Standard Cut
               </Link>
+
+              <Link 
+                href="/membership" 
+                className="group px-8 py-5 border-2 border-white/20 hover:border-white text-white font-display text-xl font-bold uppercase italic tracking-wider transition-all duration-300 flex items-center justify-center gap-3 bg-white/5 backdrop-blur-sm"
+              >
+                Join Membership
+                <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+
+            <div className="flex items-center gap-6 pt-12">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                <span className="text-chrome/60 text-sm uppercase tracking-widest font-bold">
+                  Pit Crew Ready
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Zap className="w-4 h-4 text-neon-red" />
+                <span className="text-chrome/60 text-sm uppercase tracking-widest font-bold">
+                  Express Lanes Open
+                </span>
+              </div>
             </div>
           </motion.div>
         </div>
       </div>
+
+      {/* Scroll Indicator */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 1 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
+      >
+        <span className="text-[10px] uppercase tracking-[0.4em] text-white/30 font-bold">Scroll to Inspect</span>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-neon-red to-transparent" />
+      </motion.div>
     </section>
   );
 }

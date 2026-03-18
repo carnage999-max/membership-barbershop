@@ -18,37 +18,33 @@ async function main() {
   await prisma.location.deleteMany();
   await prisma.service.deleteMany();
 
-  // 2. Create Services (Walk-In Pricing)
-  console.log('Creating services (walk-in pricing)...');
+  // 2. Create Services (Standard Pricing)
+  console.log('Creating services (standard pricing)...');
   const servicesData = [
     { name: 'Standard Haircut', basePrice: 19.99, category: 'Haircut', duration: 30 },
-    { name: 'Back Shave / Neck Cleanup', basePrice: 5.00, category: 'Add-on', duration: 10 },
+    { name: 'Beard Trim', basePrice: 5.00, category: 'Shave', duration: 15 },
     { name: 'Ear Wax', basePrice: 15.00, category: 'Add-on', duration: 15 },
-    { name: 'Nose Wax', basePrice: 15.00, category: 'Add-on', duration: 15 },
-    { name: '5 Minute Neck / Shoulder Massage', basePrice: 10.00, category: 'Add-on', duration: 5 },
-    { name: '15 Minute Massage Upgrade', basePrice: 20.00, category: 'Add-on', duration: 15 },
-    { name: 'Beard Trim / Line Up', basePrice: 10.00, category: 'Shave', duration: 20 },
-    { name: 'Beard Sculpt / Razor Line', basePrice: 15.00, category: 'Shave', duration: 30 },
-    { name: 'Hot Towel Treatment', basePrice: 5.00, category: 'Add-on', duration: 10 },
-    { name: 'Kids Cut (under 12)', basePrice: 17.99, category: 'Haircut', duration: 25 },
-    { name: 'Senior Cut', basePrice: 17.99, category: 'Haircut', duration: 30 },
+    { name: '5 Minute Massage', basePrice: 10.00, category: 'Add-on', duration: 5 },
+    { name: '15 Minute Massage', basePrice: 20.00, category: 'Add-on', duration: 15 },
+    { name: 'Neck Shave', basePrice: 5.00, category: 'Add-on', duration: 10 },
+    { name: 'Hot Towel', basePrice: 5.00, category: 'Add-on', duration: 10 },
   ];
 
   for (const service of servicesData) {
     await prisma.service.create({ data: service });
   }
 
-  // 3. Create a Location (Flagship Garage)
-  console.log('Creating flagship location...');
+  // 3. Create a Location (The Garage)
+  console.log('Creating flagship garage...');
   const location = await prisma.location.create({
     data: {
-      name: 'The Heritage Lounge (Flagship)',
-      slug: 'heritage-lounge-flagship',
-      address: '444 Artisan Way',
+      name: 'Man Cave Barber Shop (The Garage)',
+      slug: 'man-cave-garage',
+      address: '123 Performance Way',
       city: 'Detroit',
       state: 'MI',
       zipCode: '48201',
-      phone: '313-555-0100',
+      phone: '313-555-9111',
       latitude: 42.3314,
       longitude: -83.0458,
       openTime: '08:00',
@@ -60,89 +56,50 @@ async function main() {
   // 4. Create Membership Plans
   console.log('Creating membership plans...');
   const plansData = [
-    // Haircut-Only Tracks
     {
-      name: 'Basic',
-      slug: 'basic',
+      name: 'STOCK',
+      slug: 'stock',
       price: 29.99,
-      visitsPerMonth: 1,
-      description: '1 Precision haircut per month',
+      visitsPerMonth: 31,
+      isUnlimited: true,
+      description: 'Unlimited Haircuts, Member Scheduling, Priority Booking, Member Pricing on Add-ons',
       locationId: location.id,
+      queuePriorityLevel: 2,
     },
     {
-      name: 'Standard',
-      slug: 'standard',
+      name: 'MODIFIED',
+      slug: 'modified',
       price: 39.99,
-      visitsPerMonth: 2,
-      description: '2 Precision haircuts per month',
+      visitsPerMonth: 31,
+      isUnlimited: true,
+      includesHotTowel: true,
+      description: 'Everything in Stock, Neck Shave, Hot Towel, Express Member Lane',
       locationId: location.id,
+      queuePriorityLevel: 3,
     },
     {
-      name: 'Premium',
-      slug: 'premium',
+      name: 'TURBO',
+      slug: 'turbo',
       price: 49.99,
-      visitsPerMonth: 4,
-      description: '4 Precision haircuts per month',
+      visitsPerMonth: 31,
+      isUnlimited: true,
+      includesHotTowel: true,
+      description: 'Everything in Modified, Beard Trim Included, Hot Towel Every Visit, 10% Product Discount',
       locationId: location.id,
+      queuePriorityLevel: 4,
     },
     {
-      name: 'Unlimited',
-      slug: 'unlimited',
+      name: 'SUPERCHARGED',
+      slug: 'supercharged',
       price: 65.99,
       visitsPerMonth: 31,
       isUnlimited: true,
-      description: 'Unlimited haircuts (Fair use policy applies)',
-      locationId: location.id,
-    },
-    // MVP Tracks
-    {
-      name: 'MVP Basic',
-      slug: 'mvp-basic',
-      price: 39.99,
-      visitsPerMonth: 1,
-      mvpAccess: true,
-      includesBackShave: true,
       includesHotTowel: true,
       includesMassage: true,
-      description: '1 MVP visit per month (Haircut + Shave + Towel + 5m Massage)',
+      description: 'Everything in Turbo, 5 Minute Massage, VIP Scheduling, Free Birthday Haircut, 15% Product Discount',
       locationId: location.id,
-    },
-    {
-      name: 'MVP Standard',
-      slug: 'mvp-standard',
-      price: 49.99,
-      visitsPerMonth: 2,
+      queuePriorityLevel: 5,
       mvpAccess: true,
-      includesBackShave: true,
-      includesHotTowel: true,
-      includesMassage: true,
-      description: '2 MVP visits per month',
-      locationId: location.id,
-    },
-    {
-      name: 'MVP Premium',
-      slug: 'mvp-premium',
-      price: 59.99,
-      visitsPerMonth: 4,
-      mvpAccess: true,
-      includesBackShave: true,
-      includesHotTowel: true,
-      includesMassage: true,
-      description: '4 MVP visits per month',
-      locationId: location.id,
-    },
-    {
-      name: 'MVP Unlimited',
-      slug: 'mvp-unlimited',
-      price: 79.99,
-      visitsPerMonth: 31,
-      isUnlimited: true,
-      mvpAccess: true,
-      includesBackShave: true,
-      includesHotTowel: true,
-      includesMassage: true,
-      description: 'Unlimited MVP visits (Fair use policy applies)',
-      locationId: location.id,
     },
   ];
 

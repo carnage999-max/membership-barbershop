@@ -100,7 +100,7 @@ export const POST = withAuth(async (req) => {
     if (user) {
       await sendEmail({
         to: user.email,
-        subject: 'Welcome to Membership Barbershop!',
+        subject: 'Welcome to Man Cave Barber Shop!',
         html: membershipActivatedEmail(
           user.firstName,
           plan.name,
@@ -116,8 +116,8 @@ export const POST = withAuth(async (req) => {
         type: 'MEMBERSHIP_ACTIVATED',
         channel: 'EMAIL',
         recipient: user?.email || '',
-        subject: 'Welcome to Membership Barbershop!',
-        message: `Your ${plan.name} membership is now active.`,
+        subject: 'Welcome to Man Cave Barber Shop!',
+        message: `Your ${plan.name} grade is now active.`,
         status: 'SENT',
         sentAt: new Date(),
       },

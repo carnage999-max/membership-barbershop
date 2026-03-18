@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Oswald, Bebas_Neue, Inter, Source_Sans_3 } from "next/font/google";
+import { Oswald, Bebas_Neue, Inter, Source_Sans_3, Racing_Sans_One } from "next/font/google";
 import "./globals.css";
 import MobileNav from "@/components/navigation/MobileNav";
 import MobileTopHeader from "@/components/navigation/MobileTopHeader";
@@ -33,37 +33,43 @@ const sourceSans3 = Source_Sans_3({
   weight: ["400", "500", "600", "700"],
 });
 
+const racingSansOne = Racing_Sans_One({
+  variable: "--font-racing",
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
 export const metadata: Metadata = {
   title: {
-    default: "Membership Barbershop | Exclusive Grooming & Lounge",
-    template: "%s | Membership Barbershop"
+    default: "Man Cave Barber Shops | High Performance Haircuts",
+    template: "%s | Man Cave Barber Shops"
   },
-  description: "Experience precision fast haircuts and lounge-level luxury. Join our exclusive membership for bespoke grooming, private suites, and curated artisan services.",
-  keywords: ["barbershop", "membership barbershop", "luxury haircut", "private barbershop", "grooming lounge", "artisan barbers", "bespoke grooming"],
-  authors: [{ name: "Membership Barbershop" }],
-  creator: "Membership Barbershop",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://membershipbarbershop.com"),
+  description: "Experience high-performance grooming at Man Cave Barber Shops. Engineered for speed and precision with an automotive performance theme.",
+  keywords: ["barbershop", "man cave", "performance haircuts", "automotive theme", "grooming garage", "precision grooming", "mancave", "tuning shop"],
+  authors: [{ name: "Man Cave Barber Shops" }],
+  creator: "Man Cave Barber Shops",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://mancavebarbershops.com"),
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "/",
-    siteName: "Membership Barbershop",
-    title: "Membership Barbershop | Exclusive Grooming & Lounge",
-    description: "Precision Fast. Lounge-Level Luxury. Join the circle of precision with our exclusive membership tiers.",
+    siteName: "Man Cave Barber Shops",
+    title: "Man Cave Barber Shops | High Performance Haircuts",
+    description: "High speed, high precision grooming. Engineered for the modern driver.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/images/high-performance-haircuts-branded-design.png",
         width: 1200,
         height: 630,
-        alt: "Membership Barbershop - Exclusive Grooming Lounge",
+        alt: "Man Cave Barber Shops",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Membership Barbershop | Exclusive Grooming & Lounge",
-    description: "Precision Fast. Lounge-Level Luxury. Join the circle of precision.",
-    images: ["/og-image.png"],
+    title: "Man Cave Barber Shops | High Performance Haircuts",
+    description: "High speed, high precision grooming.",
+    images: ["/images/high-performance-haircuts-branded-design.png"],
   },
   robots: {
     index: true,
@@ -79,13 +85,15 @@ export default function RootLayout({
   return (
     <html lang="en" className="overflow-x-hidden">
       <body
-        className={`${oswald.variable} ${bebasNeue.variable} ${inter.variable} ${sourceSans3.variable} antialiased overflow-x-hidden`}
+        className={`${oswald.variable} ${bebasNeue.variable} ${inter.variable} ${sourceSans3.variable} ${racingSansOne.variable} antialiased overflow-x-hidden bg-obsidian`}
       >
         <ConfirmationProvider>
           <DesktopNav />
           <MobileTopHeader />
           <ToastProvider />
-          {children}
+          <div className="min-h-screen">
+            {children}
+          </div>
           <Script src="https://now-hiring-eta.vercel.app/widget.js" strategy="afterInteractive" />
           <Footer />
           <MobileNav />

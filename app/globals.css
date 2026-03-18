@@ -1,24 +1,27 @@
 @import "tailwindcss";
 
 @theme {
-  --color-obsidian: #0B0C10;
-  --color-wood-espresso: #2B1D14;
-  --color-gold-champagne: #C8A24A;
-  --color-red-crimson: #B11226;
-  --color-ink: #111318;
-  --color-bone: #F4F1EA;
-  --color-slate: #2A2E36;
-  --color-success: #1F8A70;
-  --color-warning: #F2B705;
-  --color-danger: #D62828;
+  --color-obsidian: #050505;
+  --color-racing-red: #FF0000;
+  --color-neon-red: #FF3131;
+  --color-chrome: #E2E8F0;
+  --color-steel-dark: #1A1A1B;
+  --color-steel-light: #4A4A48;
+  --color-carbon: #111111;
+  --color-ink: #0A0A0A;
   
   --font-family-display: var(--font-oswald), var(--font-bebas), system-ui, sans-serif;
-  --font-family-body: var(--font-inter), var(--font-source-sans), system-ui, sans-serif;
+  --font-family-body: var(--font-inter), system-ui, sans-serif;
+  --font-family-racing: var(--font-racing), cursive;
 }
 
 body {
-  background-color: #0B0C10;
-  color: #F4F1EA;
+  background-color: #050505;
+  color: #E2E8F0;
+  background-image: 
+    linear-gradient(rgba(5, 5, 5, 0.8), rgba(5, 5, 5, 0.8)),
+    url("https://www.transparenttextures.com/patterns/carbon-fibre.png");
+  background-attachment: fixed;
 }
 
 .font-display {
@@ -26,5 +29,21 @@ body {
 }
 
 .font-body {
-  font-family: var(--font-inter), var(--font-source-sans), system-ui, sans-serif !important;
+  font-family: var(--font-inter), system-ui, sans-serif !important;
+}
+
+.neon-border-red {
+  border: 1px solid #FF3131;
+  box-shadow: 0 0 10px rgba(255, 49, 49, 0.5), inset 0 0 10px rgba(255, 49, 49, 0.2);
+}
+
+.neon-text-red {
+  color: #FF3131;
+  text-shadow: 0 0 8px rgba(255, 49, 49, 0.6);
+}
+
+.chrome-text {
+  background: linear-gradient(180deg, #FFFFFF 0%, #A1A1A1 50%, #FFFFFF 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }

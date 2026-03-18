@@ -48,9 +48,9 @@ export default function BookPage() {
       setTimeout(() => {
         router.push("/account");
       }, 2000);
-      toast.success("Security clearance granted. En route to shop...");
+      toast.success("Pit lane access granted. Heading to bay...");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to join queue");
+      toast.error(error instanceof Error ? error.message : "Diagnostics failed");
     } finally {
       setJoining(false);
     }
@@ -58,21 +58,24 @@ export default function BookPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-obsidian flex items-center justify-center">
-        <Loader2 className="w-12 h-12 text-gold-champagne animate-spin" />
+      <div className="min-h-screen bg-obsidian flex flex-col items-center justify-center">
+        <div className="w-16 h-16 border-4 border-neon-red/20 border-t-neon-red rounded-full animate-spin mb-6 shadow-neon-red" />
+        <p className="text-chrome/50 font-black italic uppercase tracking-[0.3em] text-xs animate-pulse">Scanning Garages...</p>
       </div>
     );
   }
 
   return (
-    <main className="min-h-screen pt-[60px] md:pt-0 bg-obsidian pb-32">
-      <div className="container mx-auto px-4 py-12">
-        <div className="mb-12">
-          <h1 className="font-display text-4xl md:text-6xl font-bold text-bone mb-4 italic uppercase tracking-tighter">
-            Book <span className="text-gold-champagne">Appointment</span>
+    <main className="min-h-screen pt-[60px] md:pt-0 bg-obsidian pb-32 relative overflow-hidden">
+      <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
+
+      <div className="container mx-auto px-4 py-16 relative z-10">
+        <div className="mb-16">
+          <h1 className="font-display text-5xl md:text-8xl font-black text-white mb-4 italic uppercase tracking-tighter leading-none">
+            Enter <span className="text-neon-red">The Bay</span>
           </h1>
-          <p className="text-bone/70 text-lg">
-            Secure your spot in the Membership Barbershop waitlist.
+          <p className="text-chrome/60 text-lg italic uppercase tracking-widest font-bold">
+            Secure your spot in the Man Cave Barber Shops pit lane.
           </p>
         </div>
 
@@ -80,25 +83,25 @@ export default function BookPage() {
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="max-w-xl mx-auto py-16 text-center bg-slate/20 rounded-3xl border border-success/30"
+            className="max-w-xl mx-auto py-24 text-center bg-steel-dark border border-neon-red/30 rounded-3xl shadow-neon-red"
           >
-            <CheckCircle2 className="w-20 h-20 text-success mx-auto mb-6" />
-            <h2 className="text-3xl font-display font-bold text-bone mb-2">Check-in Confirmed</h2>
-            <p className="text-bone/60">Heading to your dashboard...</p>
+            <CheckCircle2 className="w-24 h-24 text-neon-red mx-auto mb-8 drop-shadow-[0_0_15px_rgba(255,49,49,0.5)]" />
+            <h2 className="text-4xl font-display font-black text-white mb-2 uppercase italic tracking-tighter">Pit Spot Reserved</h2>
+            <p className="text-chrome/60 italic">Navigating to driver dashboard...</p>
           </motion.div>
         ) : (
           <>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
               {locations.length > 0 ? (
                 locations.map((location) => (
                   <motion.div
                     key={location.id}
-                    whileHover={{ y: -4 }}
+                    whileHover={{ y: -8 }}
                     onClick={() => setSelectedLocation(location.id)}
-                    className={`cursor-pointer transition-all duration-300 rounded-2xl overflow-hidden ${
+                    className={`cursor-pointer transition-all duration-300 rounded-2xl overflow-hidden group ${
                       selectedLocation === location.id
-                        ? "ring-4 ring-gold-champagne shadow-2xl shadow-gold-champagne/20"
-                        : "opacity-70 hover:opacity-100"
+                        ? "ring-4 ring-neon-red shadow-neon-red"
+                        : "opacity-80 hover:opacity-100 border border-white/5"
                     }`}
                   >
                     <LocationCard 
@@ -109,54 +112,57 @@ export default function BookPage() {
                   </motion.div>
                 ))
               ) : (
-                <div className="col-span-full py-20 text-center bg-slate/10 rounded-3xl border border-gold-champagne/5">
-                  <p className="text-bone/40">No Membership Barbershop locations found near you now.</p>
+                <div className="col-span-full py-24 text-center bg-steel-dark rounded-3xl border border-white/5">
+                  <p className="text-chrome/40 uppercase font-black italic tracking-widest">No service bays detected in your sector.</p>
                 </div>
               )}
             </div>
 
             {selectedLocation && (
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 40 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="max-w-2xl mx-auto bg-slate/80 backdrop-blur-xl rounded-3xl p-8 border border-gold-champagne/30 shadow-2xl"
+                className="max-w-2xl mx-auto bg-steel-dark/95 backdrop-blur-2xl rounded-3xl p-10 border border-white/10 shadow-2xl relative overflow-hidden"
               >
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-12 h-12 bg-red-crimson rounded-xl flex items-center justify-center shadow-lg shadow-red-crimson/30">
-                    <Clock className="text-bone w-6 h-6" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-neon-red/5 rounded-full blur-3xl -mr-16 -mt-16" />
+                
+                <div className="flex items-center gap-6 mb-10 relative z-10">
+                  <div className="w-16 h-16 bg-neon-red rounded-2xl flex items-center justify-center shadow-neon-red group overflow-hidden relative">
+                    <div className="absolute inset-0 bg-white/10 skew-x-[-20deg] -translate-x-full animate-[shimmer_2s_infinite]" />
+                    <Clock className="text-white w-8 h-8 relative z-10" />
                   </div>
                   <div>
-                    <h2 className="font-display text-2xl font-bold text-bone uppercase tracking-wide">
-                      Authorize Entry
+                    <h2 className="font-display text-3xl font-black text-white uppercase italic tracking-tighter">
+                      Secure Pit Spot
                     </h2>
-                    <p className="text-sm text-bone/60">Real-time queue synchronization active</p>
+                    <p className="text-xs text-chrome/60 font-black uppercase tracking-widest mt-1">Real-time Bay Synchronization Active</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
                   <button 
                     disabled={joining}
                     onClick={handleCheckIn}
-                    className="group relative px-6 py-5 bg-red-crimson hover:bg-red-crimson/90 text-bone font-bold rounded-2xl transition-all duration-300 flex items-center justify-center gap-3 overflow-hidden"
+                    className="group relative px-8 py-6 bg-neon-red hover:bg-racing-red text-white font-display text-xl font-black rounded-xl transition-all duration-300 flex items-center justify-center gap-4 overflow-hidden shadow-neon-red"
                   >
                     {joining ? (
-                      <Loader2 className="w-6 h-6 animate-spin" />
+                      <Loader2 className="w-8 h-8 animate-spin" />
                     ) : (
                       <>
-                        <span className="relative z-10 italic">CHECK IN</span>
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                        <span className="relative z-10 italic uppercase tracking-widest">ENTER PIT LANE</span>
+                        <div className="absolute inset-0 bg-white/10 skew-x-[-20deg] -translate-x-full group-hover:translate-x-[250%] transition-transform duration-700" />
                       </>
                     )}
                   </button>
                   <button 
-                    className="px-6 py-5 bg-slate/50 hover:bg-slate/80 text-bone/70 hover:text-bone font-bold rounded-2xl transition-all duration-300 border border-gold-champagne/10 italic"
+                    className="px-8 py-6 bg-white/5 hover:bg-white/10 text-chrome font-black rounded-xl transition-all duration-300 border border-white/10 italic uppercase tracking-widest text-sm"
                   >
-                    SCHEDULE LATER
+                    RESERVE SESSION
                   </button>
                 </div>
                 
-                <p className="mt-6 text-[10px] text-center text-bone/40 uppercase tracking-widest font-bold">
-                  Membership Barbershop Operating System v1.0
+                <p className="mt-10 text-[10px] text-center text-chrome/30 font-black uppercase tracking-[0.4em] italic">
+                  MAN CAVE GARAGE ENGINE v1.0
                 </p>
               </motion.div>
             )}
