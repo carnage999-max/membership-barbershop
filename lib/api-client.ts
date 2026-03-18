@@ -1,7 +1,7 @@
 // API Client for Frontend
 // Helper functions to call backend API endpoints
 
-const API_BASE = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+const API_BASE = process.env.NEXT_PUBLIC_APP_URL || '';
 
 interface ApiOptions {
   method?: string;
