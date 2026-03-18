@@ -12,9 +12,9 @@ export default function Footer() {
       <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
       
       <div className="container mx-auto grid grid-cols-2 md:grid-cols-4 gap-12 relative z-10">
-        <div className="col-span-2 md:col-span-1">
-          <Image src="/images/new-logo.png" alt="Man Cave Logo" width={180} height={60} className="mb-6 h-10 w-auto" />
-          <h4 className="font-display text-4xl font-black text-white mb-4 uppercase italic tracking-tighter leading-none">Man Cave <span className="chrome-text">Barber Shops</span></h4>
+        <div className="col-span-2 md:col-span-3">
+          <Image src="/images/new-logo.png" alt="Mancave Logo" width={180} height={60} className="mb-6 h-10 w-auto" />
+          <h4 className="font-display text-4xl md:text-5xl font-black text-white mb-4 uppercase italic tracking-tighter leading-none pr-[0.4em] overflow-visible w-fit">Mancave <span className="chrome-text">Barbershops{"\u00A0"}</span></h4>
           <p className="text-chrome/50 text-sm italic">High Performance Haircuts. Engineered Aesthetics.</p>
         </div>
         <div>

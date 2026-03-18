@@ -32,8 +32,8 @@ export default function PricingComparison() {
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="font-display text-4xl md:text-7xl font-black text-white mb-4 uppercase italic tracking-tighter">
-            Choose Your <span className="neon-text-red">Driving Style</span>
+          <h2 className="font-display text-4xl md:text-7xl font-black text-white mb-4 uppercase italic tracking-tighter pr-[0.4em] overflow-visible lg:inline-block">
+            Choose Your <span className="neon-text-red">Driving Style{"\u00A0"}</span>
           </h2>
           <p className="text-chrome/60 text-lg max-w-2xl mx-auto italic font-body">
             Whether you're a standard commuter or a high-performance track day regular, we have the setup for your grooming regimen.

@@ -41,34 +41,34 @@ const racingSansOne = Racing_Sans_One({
 
 export const metadata: Metadata = {
   title: {
-    default: "Man Cave Barber Shops | High Performance Haircuts",
-    template: "%s | Man Cave Barber Shops"
+    default: "Mancave Barbershops | High Performance Haircuts",
+    template: "%s | Mancave Barbershops"
   },
-  description: "Experience high-performance grooming at Man Cave Barber Shops. Engineered for speed and precision with an automotive performance theme.",
-  keywords: ["barbershop", "man cave", "performance haircuts", "automotive theme", "grooming garage", "precision grooming", "mancave", "tuning shop"],
-  authors: [{ name: "Man Cave Barber Shops" }],
-  creator: "Man Cave Barber Shops",
+  description: "Experience high-performance grooming at Mancave Barbershops. Engineered for speed and precision with an automotive performance theme.",
+  keywords: ["barbershop", "mancave", "performance haircuts", "automotive theme", "grooming garage", "precision grooming", "tuning shop"],
+  authors: [{ name: "Mancave Barbershops" }],
+  creator: "Mancave Barbershops",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://mancavebarbershops.com"),
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "/",
-    siteName: "Man Cave Barber Shops",
-    title: "Man Cave Barber Shops | High Performance Haircuts",
-    description: "High speed, high precision grooming. Engineered for the modern driver.",
+    siteName: "Mancave Barbershops",
+    title: "Mancave Barbershops | High Performance Haircuts",
+    description: "High speed, high precision grooming at Mancave Barbershops. Engineered for the modern driver.",
     images: [
       {
         url: "/images/high-performance-haircuts-branded-design.png",
         width: 1200,
         height: 630,
-        alt: "Man Cave Barber Shops",
+        alt: "Mancave Barbershops",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Man Cave Barber Shops | High Performance Haircuts",
-    description: "High speed, high precision grooming.",
+    title: "Mancave Barbershops | High Performance Haircuts",
+    description: "High speed, high precision grooming at Mancave Barbershops. Engineered for the modern driver.",
     images: ["/images/high-performance-haircuts-branded-design.png"],
   },
   robots: {

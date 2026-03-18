@@ -30,12 +30,12 @@ export default function DesktopNav() {
           height={60}
           className="h-10 w-auto transition-transform duration-300 group-hover:scale-105"
         />
-        <div className="flex flex-col justify-center">
-          <span className="font-display text-2xl lg:text-3xl font-black text-white italic tracking-tighter leading-[0.8] group-hover:text-neon-red transition-colors duration-300">
-            MAN CAVE
+        <div className="flex flex-col justify-center w-max pr-[0.5em]">
+          <span className="font-display text-2xl lg:text-3xl font-black text-white italic tracking-tighter leading-[0.8] group-hover:text-neon-red transition-colors duration-300 overflow-visible">
+            MAN CAVE{"\u00A0"}
           </span>
-          <span className="text-[10px] font-black text-neon-red italic tracking-[0.3em] mt-1">
-            BARBER SHOPS
+          <span className="text-[12px] font-black text-neon-red italic tracking-[0.35em] mt-1 uppercase text-right overflow-visible">
+            BARBER SHOPS{"\u00A0"}
           </span>
         </div>
       </Link>

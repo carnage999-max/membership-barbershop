@@ -76,8 +76,8 @@ export default function MembershipPage() {
 
          <div className="container mx-auto px-4 relative z-10">
             <div className="text-center">
-               <h1 className="font-display text-6xl md:text-8xl font-black text-white italic tracking-tighter uppercase mb-6">
-                 High Performance <span className="chrome-text">Memberships</span>
+               <h1 className="font-display text-6xl md:text-8xl font-black text-white italic tracking-tighter uppercase mb-6 pr-4">
+                 High Performance <span className="chrome-text">Memberships{"\u00A0"}</span>
                </h1>
                <p className="text-chrome/60 text-xl max-w-2xl mx-auto italic font-body">
                  Engineered for the recurring client. Members save an average of 40% compared to standard pricing.

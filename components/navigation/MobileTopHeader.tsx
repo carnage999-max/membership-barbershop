@@ -19,12 +19,12 @@ export default function MobileTopHeader() {
             height={40}
             className="h-8 w-auto object-contain flex-shrink-0"
           />
-          <div className="flex flex-col justify-center">
-            <span className="font-display text-xl font-black text-white italic tracking-tighter leading-[0.8]">
-              MAN CAVE
+          <div className="flex flex-col justify-center w-max pr-[0.4em]">
+            <span className="font-display text-2xl font-black text-white italic tracking-tighter leading-[0.8] overflow-visible">
+              MAN CAVE{"\u00A0"}
             </span>
-            <span className="text-[8px] font-black text-neon-red italic tracking-[0.2em] mt-0.5">
-              BARBER SHOPS
+            <span className="text-[10px] font-black text-neon-red italic tracking-[0.25em] mt-0.5 uppercase text-right overflow-visible">
+              BARBER SHOPS{"\u00A0"}
             </span>
           </div>
         </Link>

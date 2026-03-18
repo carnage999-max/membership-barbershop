@@ -101,8 +101,8 @@ export default function Home() {
         
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl md:text-7xl font-black text-white mb-4 uppercase italic tracking-tighter">
-              The <span className="neon-text-red">Build Process</span>
+            <h2 className="font-display text-4xl md:text-7xl font-black text-white mb-4 uppercase italic tracking-tighter pr-[0.4em] overflow-visible lg:inline-block">
+              The <span className="neon-text-red text-shadow-neon">Build Process{"\u00A0"}</span>
             </h2>
             <p className="text-chrome/60 text-lg max-w-2xl mx-auto italic font-body">
               Precision engineering for your profile. Every visit follows our rigorous performance protocol.
@@ -152,8 +152,8 @@ export default function Home() {
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 mb-8">
                   <span className="text-[10px] text-chrome font-black uppercase tracking-[0.3em]">Operational Philosophy</span>
                 </div>
-                <h2 className="font-display text-5xl md:text-7xl font-black text-white mb-8 uppercase italic tracking-tighter leading-none">
-                  The <span className="chrome-text">Garage</span>
+                <h2 className="font-display text-5xl md:text-7xl font-black text-white mb-8 uppercase italic tracking-tighter leading-none pr-[0.4em] overflow-visible w-fit">
+                  The <span className="chrome-text">Garage{"\u00A0"}</span>
                 </h2>
                 <p className="text-chrome/70 text-xl italic font-body mb-8 leading-relaxed">
                   We don't just cut hair; we engineer aesthetics. Our shops are designed as high-performance havens where the tools are sharp, the technicians are experts, and the atmosphere is pure adrenaline. 
@@ -195,8 +195,8 @@ export default function Home() {
       <section className="py-24 bg-carbon relative">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl md:text-7xl font-black text-white mb-4 italic uppercase tracking-tighter">
-              The <span className="neon-text-red">Pit Crew</span>
+            <h2 className="font-display text-4xl md:text-7xl font-black text-white mb-4 italic uppercase tracking-tighter pr-[0.4em] overflow-visible lg:inline-block">
+              The <span className="neon-text-red text-shadow-neon">Pit Crew{"\u00A0"}</span>
             </h2>
             <p className="text-chrome/60 text-lg max-w-2xl mx-auto italic">
               Meet our master technicians. Highly trained specialists ready to calibrate your specific style.
@@ -231,8 +231,8 @@ export default function Home() {
       <section className="py-24 bg-obsidian relative border-t border-white/5">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="font-display text-4xl md:text-7xl font-black text-white mb-4 uppercase italic tracking-tighter">
-              Performance <span className="chrome-text">Hubs</span>
+            <h2 className="font-display text-4xl md:text-7xl font-black text-white mb-4 uppercase italic tracking-tighter pr-[0.5em] overflow-visible lg:inline-block">
+              Performance <span className="chrome-text">Hubs{"\u00A0"}</span>
             </h2>
             <p className="text-chrome/60 text-lg">
               Real-time availability at our regional garages.

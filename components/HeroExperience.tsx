@@ -14,43 +14,38 @@ export default function HeroExperience() {
           src="/images/high-performance-haircuts-branded-design.png"
           alt="High Performance Garage"
           fill
-          className="object-cover object-center"
+          className="object-cover object-[80%_center] md:object-center opacity-100 transition-all duration-1000"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/80 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-obsidian/50" />
+        <div className="absolute inset-0 bg-gradient-to-r from-obsidian/90 via-transparent md:via-obsidian/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-obsidian/90 via-transparent to-transparent" />
       </div>
 
       {/* Red Neon Accent Line */}
       <div className="absolute bottom-0 left-0 right-0 h-1 bg-neon-red shadow-neon-red z-20" />
 
-      <div className="container mx-auto px-4 relative z-10 pt-20">
-        <div className="max-w-3xl">
+      <div className="container mx-auto px-4 relative z-10 pt-10 md:pt-20">
+        <div className="max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="space-y-6"
           >
-            <div className="flex items-center gap-3 mb-8">
-               <div className="h-0.5 w-12 bg-neon-red" />
-               <span className="text-neon-red font-display tracking-[0.3em] uppercase text-sm font-bold">
-                 Est. Precision 2026
-               </span>
+            <div className="flex justify-center md:justify-start mb-8 md:mb-10 w-full">
+              <Image
+                src="/images/new-logo.png"
+                alt="Man Cave Barber Shops"
+                width={400}
+                height={120}
+                className="h-32 sm:h-40 md:h-32 w-auto drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] rounded-2xl"
+                priority
+              />
             </div>
 
-            <Image
-              src="/images/new-logo.png"
-              alt="Man Cave Barber Shops"
-              width={400}
-              height={120}
-              className="h-24 md:h-32 w-auto mb-8 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]"
-              priority
-            />
-
-            <h1 className="font-display text-5xl md:text-8xl font-black text-white leading-[0.9] uppercase italic tracking-tighter">
-              High Performance<br />
-              <span className="chrome-text">Haircuts</span>
+            <h1 className="font-display text-5xl md:text-8xl font-black text-white leading-[0.9] uppercase italic tracking-tighter pr-[0.5em] overflow-visible w-fit lg:inline-block">
+              High Performance{"\u00A0"}<br />
+              <span className="chrome-text">Haircuts{"\u00A0"}</span>
             </h1>
 
             <p className="text-chrome/80 text-xl md:text-2xl font-body max-w-xl italic">

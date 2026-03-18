@@ -68,8 +68,8 @@ export default function ServicesPage() {
 
       <div className="container mx-auto px-4 py-16 relative z-10">
         <div className="text-center mb-16">
-          <h1 className="font-display text-5xl md:text-8xl font-black text-white mb-4 uppercase italic tracking-tighter leading-none">
-            Service <span className="text-neon-red">Bay</span>
+          <h1 className="font-display text-5xl md:text-8xl font-black text-white mb-4 uppercase italic tracking-tighter leading-none pr-[0.4em] overflow-visible w-fit lg:inline-block">
+            Service <span className="text-neon-red">Bay{"\u00A0"}</span>
           </h1>
           <p className="text-chrome/60 text-lg italic uppercase tracking-widest font-bold max-w-2xl mx-auto">
             Configure your build. High pressure treatments for maximum performance.
