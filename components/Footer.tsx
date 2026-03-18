@@ -43,8 +43,24 @@ export default function Footer() {
             )}
           </ul>
         </div>
-        <div className="col-span-2 md:col-span-1 flex flex-col justify-end">
+        <div className="col-span-2 md:col-span-1 flex flex-col justify-end mt-8 md:mt-0">
           <p className="text-chrome/20 text-[10px] font-bold uppercase tracking-[0.1em]">© {new Date().getFullYear()} Man Cave Barber Shops. All Rights Reserved. Engineered by V8 Digital.</p>
+        </div>
+
+        {/* Merch Image - Bottom Right */}
+        <div className="col-span-2 md:col-span-2 flex justify-center md:justify-end items-end mt-12 md:mt-0">
+          <Link href="/merch" className="group">
+            <Image 
+              src="/images/merch.png" 
+              alt="Mancave Merch" 
+              width={250} 
+              height={250} 
+              className="w-48 md:w-56 h-auto object-contain drop-shadow-[0_10px_20px_rgba(255,49,49,0.15)] group-hover:scale-105 group-hover:drop-shadow-[0_10px_25px_rgba(255,49,49,0.3)] transition-all duration-500" 
+            />
+            <p className="text-center md:text-right text-neon-red font-display italic uppercase text-[10px] tracking-widest mt-4 group-hover:text-racing-red transition-colors">
+              Cop the Uniform {"\u2192"}
+            </p>
+          </Link>
         </div>
       </div>
     </footer>
