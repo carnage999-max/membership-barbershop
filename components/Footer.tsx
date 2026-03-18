@@ -30,10 +30,10 @@ export default function Footer() {
           <h4 className="font-display font-black text-white mb-6 uppercase tracking-[0.2em] text-[10px] italic">Dashboard</h4>
           <ul className="space-y-4 text-xs font-bold uppercase tracking-widest text-chrome/60">
             {user && (
-              <li><Link href="/account" className="hover:text-neon-red transition-colors italic">Driver Account</Link></li>
+              <li><Link href="/account" className="hover:text-neon-red transition-colors italic">My Account</Link></li>
             )}
             {isAdmin && (
-              <li><Link href="/admin" className="hover:text-neon-red transition-colors italic">Mission Control</Link></li>
+              <li><Link href="/admin" className="hover:text-neon-red transition-colors italic">Site Management</Link></li>
             )}
             {!user && (
               <>
@@ -44,7 +44,7 @@ export default function Footer() {
           </ul>
         </div>
         <div className="col-span-2 md:col-span-1 flex flex-col justify-end mt-8 md:mt-0">
-          <p className="text-chrome/20 text-[10px] font-bold uppercase tracking-[0.1em]">© {new Date().getFullYear()} Man Cave Barber Shops. All Rights Reserved. Engineered by V8 Digital.</p>
+          <p className="text-white text-[10px] font-bold uppercase tracking-[0.1em]">© {new Date().getFullYear()} Man Cave Barber Shops. All Rights Reserved.</p>
         </div>
 
         {/* Merch Image - Bottom Right */}

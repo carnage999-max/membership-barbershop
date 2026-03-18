@@ -332,7 +332,7 @@ export default function AdminDashboard() {
               Administrative Domain
             </div>
             <h1 className="font-display text-5xl md:text-7xl font-bold text-bone uppercase italic tracking-tighter">
-              Command <span className="text-gold-champagne">Center</span>
+              Site <span className="text-gold-champagne">Management</span>
             </h1>
           </div>
           
@@ -349,7 +349,7 @@ export default function AdminDashboard() {
                 onClick={() => setActiveTab(tab.id as Tab)}
                 className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-sm transition-all ${
                   activeTab === tab.id 
-                  ? "bg-gold-champagne text-ink shadow-lg shadow-gold-champagne/20" 
+                  ? "bg-gold-champagne text-black shadow-lg shadow-gold-champagne/20" 
                   : "text-bone/40 hover:text-bone/80 hover:bg-slate/50"
                 }`}
               >
@@ -500,7 +500,7 @@ export default function AdminDashboard() {
                         <td className="py-4 px-2 text-bone/50 text-xs">{u.email}</td>
                         <td className="py-4 px-2">
                           <span className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider ${
-                            u.role === "ADMIN" ? "bg-gold-champagne text-ink" : 
+                            u.role === "ADMIN" ? "bg-gold-champagne text-black" : 
                             u.role === "STAFF" ? "bg-slate text-bone border border-gold-champagne/40" : 
                             "bg-obsidian text-bone/40"
                           }`}>

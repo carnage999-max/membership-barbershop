@@ -33,7 +33,7 @@ export default function RegisterPage() {
     return (
       <div className="min-h-screen bg-obsidian flex flex-col items-center justify-center">
         <div className="w-16 h-16 border-4 border-neon-red/20 border-t-neon-red rounded-full animate-spin mb-6 shadow-neon-red" />
-        <p className="text-chrome/50 font-black italic uppercase tracking-[0.3em] text-xs animate-pulse">Syncing Driver Data...</p>
+        <p className="text-chrome/50 font-black italic uppercase tracking-[0.3em] text-xs animate-pulse">Syncing Data...</p>
       </div>
     );
   }
@@ -61,11 +61,11 @@ export default function RegisterPage() {
       session.setCurrentUser(result.user);
 
       // Redirect to membership selection
-      toast.success("Driver Registered. Welcome to the Garage!");
+      toast.success("Account Registered. Welcome to the Shop!");
       router.push("/membership");
     } catch (err: any) {
       setError(err.message || "Diagnostics failed");
-      toast.error(err.message || "Failed to register driver");
+      toast.error(err.message || "Failed to register account");
       setLoading(false);
     }
   };
@@ -84,7 +84,7 @@ export default function RegisterPage() {
           >
             <div className="text-center mb-12">
               <h1 className="font-display text-5xl md:text-7xl font-black text-white mb-4 uppercase italic tracking-tighter">
-                Driver <span className="text-neon-red">Registration</span>
+                User <span className="text-neon-red">Registration</span>
               </h1>
               <p className="text-chrome/60 font-black uppercase tracking-widest text-xs italic">
                 Initialize your profile for pit lane access
@@ -103,7 +103,7 @@ export default function RegisterPage() {
               <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="firstName" className="block text-chrome/40 text-[10px] uppercase font-black tracking-widest mb-2 italic">
+                    <label htmlFor="firstName" className="block text-white text-[10px] uppercase font-black tracking-widest mb-2 italic">
                       First Name
                     </label>
                     <input
@@ -119,7 +119,7 @@ export default function RegisterPage() {
                   </div>
 
                   <div>
-                    <label htmlFor="lastName" className="block text-chrome/40 text-[10px] uppercase font-black tracking-widest mb-2 italic">
+                    <label htmlFor="lastName" className="block text-white text-[10px] uppercase font-black tracking-widest mb-2 italic">
                       Last Name
                     </label>
                     <input
@@ -136,8 +136,8 @@ export default function RegisterPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-chrome/40 text-[10px] uppercase font-black tracking-widest mb-2 italic">
-                    Driver Email
+                  <label htmlFor="email" className="block text-white text-[10px] uppercase font-black tracking-widest mb-2 italic">
+                    Email
                   </label>
                   <input
                     type="email"
@@ -152,7 +152,7 @@ export default function RegisterPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="phone" className="block text-chrome/40 text-[10px] uppercase font-black tracking-widest mb-2 italic">
+                  <label htmlFor="phone" className="block text-white text-[10px] uppercase font-black tracking-widest mb-2 italic">
                     Phone (Optional)
                   </label>
                   <input
@@ -167,8 +167,8 @@ export default function RegisterPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="password" className="block text-chrome/40 text-[10px] uppercase font-black tracking-widest mb-2 italic">
-                    Access Code
+                  <label htmlFor="password" className="block text-white text-[10px] uppercase font-black tracking-widest mb-2 italic">
+                    Password
                   </label>
                   <div className="relative">
                     <input
@@ -200,7 +200,7 @@ export default function RegisterPage() {
                 >
                   <div className="absolute inset-0 bg-white/10 skew-x-[-20deg] -translate-x-full group-hover:translate-x-[300%] transition-transform duration-700" />
                   <span className="relative z-10 italic uppercase tracking-widest">
-                    {loading ? "INITIALIZING..." : "JOIN THE GARAGE"}
+                    {loading ? "INITIALIZING..." : "REGISTER"}
                   </span>
                 </button>
               </form>
@@ -212,7 +212,7 @@ export default function RegisterPage() {
                     href="/login"
                     className="text-white hover:text-neon-red transition-colors ml-1"
                   >
-                    Start Engine
+                    Login
                   </Link>
                 </p>
               </div>

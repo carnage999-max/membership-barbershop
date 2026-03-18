@@ -28,7 +28,7 @@ export default function LoginPage() {
     return (
       <div className="min-h-screen bg-obsidian flex flex-col items-center justify-center">
         <div className="w-16 h-16 border-4 border-neon-red/20 border-t-neon-red rounded-full animate-spin mb-6 shadow-neon-red" />
-        <p className="text-chrome/50 font-black italic uppercase tracking-[0.3em] text-xs animate-pulse">Syncing Driver Data...</p>
+        <p className="text-chrome/50 font-black italic uppercase tracking-[0.3em] text-xs animate-pulse">Syncing Data...</p>
       </div>
     );
   }
@@ -53,7 +53,7 @@ export default function LoginPage() {
       router.push("/account");
     } catch (err: any) {
       setError(err.message || "Diagnostics failed");
-      toast.error(err.message || "Failed to start engine");
+      toast.error(err.message || "Failed to login");
       setLoading(false);
     }
   };
@@ -72,7 +72,7 @@ export default function LoginPage() {
           >
             <div className="text-center mb-12">
               <h1 className="font-display text-5xl md:text-7xl font-black text-white mb-4 uppercase italic tracking-tighter">
-                Driver <span className="text-neon-red">Portal</span>
+                User <span className="text-neon-red">Portal</span>
               </h1>
               <p className="text-chrome/60 font-black uppercase tracking-widest text-xs italic">
                 Authentication Required for Pit Lane Access
@@ -90,8 +90,8 @@ export default function LoginPage() {
 
               <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
                 <div>
-                  <label htmlFor="email" className="block text-chrome/40 text-[10px] uppercase font-black tracking-widest mb-2 italic">
-                    Driver Email
+                  <label htmlFor="email" className="block text-white text-[10px] uppercase font-black tracking-widest mb-2 italic">
+                    Email
                   </label>
                   <input
                     type="email"
@@ -105,8 +105,8 @@ export default function LoginPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="password" className="block text-chrome/40 text-[10px] uppercase font-black tracking-widest mb-2 italic">
-                    Access Code
+                  <label htmlFor="password" className="block text-white text-[10px] uppercase font-black tracking-widest mb-2 italic">
+                    Password
                   </label>
                   <div className="relative">
                     <input
@@ -136,19 +136,19 @@ export default function LoginPage() {
                 >
                   <div className="absolute inset-0 bg-white/10 skew-x-[-20deg] -translate-x-full group-hover:translate-x-[300%] transition-transform duration-700" />
                   <span className="relative z-10 italic uppercase tracking-widest">
-                    {loading ? "INITIALIZING..." : "START ENGINE"}
+                    {loading ? "INITIALIZING..." : "LOGIN"}
                   </span>
                 </button>
               </form>
 
               <div className="mt-10 text-center relative z-10">
                 <p className="text-chrome/30 text-[10px] uppercase font-black tracking-widest italic">
-                  Not a driver yet?{" "}
+                  Not registered yet?{" "}
                   <Link
                     href="/register"
                     className="text-white hover:text-neon-red transition-colors ml-1"
                   >
-                    Join the Garage
+                    Join the Shop
                   </Link>
                 </p>
               </div>

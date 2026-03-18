@@ -100,7 +100,7 @@ export default function AccountPage() {
       <main className="min-h-screen pt-[60px] md:pt-0 bg-obsidian pb-32">
         <div className="container mx-auto px-4 py-12 text-center">
           <div className="w-16 h-16 border-4 border-neon-red/20 border-t-neon-red rounded-full animate-spin mx-auto mb-6 shadow-neon-red"></div>
-          <p className="text-chrome/50 font-black italic uppercase tracking-widest text-sm animate-pulse">Syncing Drive Data...</p>
+          <p className="text-chrome/50 font-black italic uppercase tracking-widest text-sm animate-pulse">Syncing Data...</p>
         </div>
       </main>
     );
@@ -114,7 +114,7 @@ export default function AccountPage() {
         <div className="mb-16 flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>
             <h1 className="font-display text-5xl md:text-8xl font-black text-white mb-4 uppercase italic tracking-tighter leading-none">
-              Driver Dashboard
+              My Dashboard
             </h1>
             <p className="text-chrome/60 text-lg italic uppercase tracking-widest font-bold">
               Welcome back, <span className="text-neon-red">{user?.firstName || 'Racer'}</span>
@@ -246,35 +246,6 @@ export default function AccountPage() {
             </Link>
           </motion.div>
 
-          {/* Service Log */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-steel-dark/50 backdrop-blur-md rounded-2xl p-8 border border-white/5"
-          >
-            <div className="flex items-center gap-4 mb-8">
-              <Clock className="w-8 h-8 text-chrome" />
-              <h2 className="font-display text-3xl font-black text-white italic uppercase tracking-tighter">
-                Service Log
-              </h2>
-            </div>
-            {visitHistory.length > 0 ? (
-              <div className="space-y-4 mb-8">
-                {visitHistory.slice(0, 3).map((visit: any) => (
-                  <div key={visit.id} className="flex justify-between items-center bg-obsidian/40 p-4 rounded-xl border border-white/5">
-                    <span className="text-chrome/60 text-xs font-bold uppercase italic">{new Date(visit.checkInTime).toLocaleDateString()}</span>
-                    <span className="text-white font-black italic uppercase tracking-tighter">{visit.location.name}</span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-chrome/40 italic mb-8">No past service cycles recorded.</p>
-            )}
-            <button className="w-full py-4 bg-white/5 text-chrome/30 font-black uppercase italic tracking-widest rounded-xl border border-white/5 cursor-not-allowed text-xs">
-              Archive Locked (V2 ONLY)
-            </button>
-          </motion.div>
 
           {/* Mission Control - Only for Admins */}
           {isAdmin && (
@@ -290,10 +261,10 @@ export default function AccountPage() {
                   <Shield className="w-12 h-12 text-neon-red shadow-neon-red" />
                   <div>
                     <h2 className="font-display text-4xl font-black text-white italic uppercase tracking-tighter">
-                      Mission Control
+                      Site Management
                     </h2>
                     <p className="text-white/60 text-sm mt-1 font-bold italic uppercase tracking-widest">
-                      Shift Lead Operations Center
+                      Admin Operations Center
                     </p>
                   </div>
                 </div>
