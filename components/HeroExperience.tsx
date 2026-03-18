@@ -8,17 +8,20 @@ import Link from "next/link";
 export default function HeroExperience() {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/high-performance-haircuts-branded-design.png"
-          alt="High Performance Garage"
-          fill
-          className="object-cover object-[80%_center] md:object-center opacity-100 transition-all duration-1000"
-          priority
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-obsidian/90 via-transparent md:via-obsidian/80 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-obsidian/90 via-transparent to-transparent" />
+      {/* Background Video */}
+      <div className="absolute inset-0 z-0 bg-obsidian">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute top-0 left-0 w-full h-[70vh] md:h-full object-cover opacity-80"
+        >
+          <source src="/video.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-r from-obsidian/90 via-transparent md:via-obsidian/80 to-transparent z-10" />
+        {/* Gradients for smooth fade into the background */}
+        <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/80 to-transparent md:via-transparent z-10" />
       </div>
 
       {/* Red Neon Accent Line */}
@@ -36,9 +39,9 @@ export default function HeroExperience() {
               <Image
                 src="/images/new-logo.png"
                 alt="Man Cave Barber Shops"
-                width={400}
-                height={120}
-                className="h-32 sm:h-40 md:h-32 w-auto drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] rounded-2xl"
+                width={500}
+                height={150}
+                className="w-[90%] max-w-[360px] md:max-w-none md:w-auto h-auto md:h-32 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] rounded-2xl"
                 priority
               />
             </div>
