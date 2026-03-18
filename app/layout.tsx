@@ -94,7 +94,7 @@ export default function RootLayout({
           <div className="min-h-screen">
             {children}
           </div>
-          <Script src="https://now-hiring-eta.vercel.app/widget.js" strategy="afterInteractive" />
+          <Script src="https://now-hiring-eta.vercel.app/widget.js" strategy="afterInteractive" data-icon="Scissors" />
           <Footer />
           <MobileNav />
         </ConfirmationProvider>
